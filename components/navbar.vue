@@ -12,7 +12,7 @@
 navbarHeight = 70px // height of navbar content
 
 .navbar
-  background-color: #222
+  background-color: #fff
   height: navbarHeight // - 2 for border width
 
 img

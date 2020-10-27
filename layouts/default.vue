@@ -1,6 +1,8 @@
 <template>
   <el-container class="frame-container">
-    <el-aside width="250px">Aside</el-aside>
+    <el-aside width="250px">
+      <sidebar />
+    </el-aside>
     <el-container>
       <el-header height="70px">
         <navbar />
@@ -13,4 +15,7 @@
 </template>
 
 <style lang="stylus">
+.frame-container
+  width: 100vw
+  height: 100vh
 </style>
