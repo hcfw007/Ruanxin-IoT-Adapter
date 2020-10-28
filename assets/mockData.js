@@ -4,35 +4,35 @@ export const productList = [
     name: '中移物联网有限公司测试用产品名称字段',
     tags: ['行业-产品类别', '行业2-产品类别2'],
     IID: 34567890,
-    protol: 'MQTT',
+    protocol: 'MQTT',
     created: '2020-09-09 14:00:09'
   }, {
-    id: 0,
+    id: 1,
     name: '中移物联网有限公司测试用产品名称字段',
     tags: ['行业-产品类别', '行业2-产品类别2'],
     IID: 34567890,
-    protol: 'MQTT',
+    protocol: 'MQTT',
     created: '2020-09-09 14:00:09'
   }, {
-    id: 0,
+    id: 2,
     name: '中移物联网有限公司测试用产品名称字段',
     tags: ['行业-产品类别', '行业2-产品类别2'],
     IID: 34567890,
-    protol: 'MQTT',
+    protocol: 'MQTT',
     created: '2020-09-09 14:00:09'
   }, {
-    id: 0,
+    id: 3,
     name: '中移物联网有限公司测试用产品名称字段',
     tags: ['行业-产品类别', '行业2-产品类别2'],
     IID: 34567890,
-    protol: 'MQTT',
+    protocol: 'MQTT',
     created: '2020-09-09 14:00:09'
   }, {
-    id: 0,
+    id: 4,
     name: '中移物联网有限公司测试用产品名称字段',
     tags: ['行业-产品类别', '行业2-产品类别2'],
     IID: 34567890,
-    protol: 'MQTT',
+    protocol: 'MQTT',
     created: '2020-09-09 14:00:09'
   }
 ]

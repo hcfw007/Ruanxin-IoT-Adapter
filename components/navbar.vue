@@ -2,7 +2,7 @@
   <div class="navbar">
     <el-row class="nav-row">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index">
+        <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index" :to="item.link">
           {{ item.name }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -33,7 +33,7 @@ export default {
       }]
       while (p < paths.length && tree.children) {
         for (let item of tree.children) {
-          if (item.name === paths[p]) {
+          if (item.id === paths[p]) {
             path.push({
               name: item.name,
               link: item.addr
