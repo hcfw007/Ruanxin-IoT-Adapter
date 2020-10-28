@@ -18,6 +18,7 @@ module.exports = {
     'vue/singleline-html-element-content-newline': 0,
     'space-before-function-paren': 0,
     'prefer-const': 0,
-    'template-curly-spacing': 0
+    'template-curly-spacing': 0,
+    'no-unused-vars': 1
   }
 }
