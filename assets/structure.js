@@ -1,3 +1,8 @@
+import deviceAccessIcon from '~/static/images/icons/deviceAccess.png'
+import deviceManagementIcon from '~/static/images/icons/deviceManagement.png'
+import dataManagementIcon from '~/static/images/icons/dataManagement.png'
+import unifiedServiceIcon from '~/static/images/icons/unifiedService.png'
+
 export const menuStructure = {
   id: 'root',
   addr: '/index',
@@ -7,6 +12,7 @@ export const menuStructure = {
       id: 'deviceAccess',
       addr: '/deviceAccess',
       name: '设备接入',
+      icon: deviceAccessIcon,
       children: [
         {
           id: 'productList',
@@ -38,6 +44,7 @@ export const menuStructure = {
       id: 'deviceManagement',
       addr: '/deviceManagement',
       name: '设备管理',
+      icon: deviceManagementIcon,
       children: [
         {
           id: 'deviceList',
@@ -60,11 +67,13 @@ export const menuStructure = {
     }, {
       id: 'dataManagement',
       addr: '/dataManagement',
-      name: '数据管理'
+      name: '数据管理',
+      icon: dataManagementIcon
     }, {
       id: 'unifiedService',
       addr: '/unifiedService',
       name: '统一服务',
+      icon: unifiedServiceIcon,
       children: [
         {
           id: 'deviceTypeManagement',
