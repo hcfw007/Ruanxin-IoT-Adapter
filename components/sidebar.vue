@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { menuStructure } from '@/assets/structure'
+import { menuStructure } from '@/assets/config'
 
 export default {
   data() {

@@ -1,9 +1,27 @@
 body
   margin: 0
   background-color: rgb(240, 242, 245)
+  --default-link-color: rgb(63, 144, 247)
 
 *
   box-sizing: border-box
 
 a, a:visited
   text-decoration: none
+  color: var(--default-link-color)
+
+.block-white
+  background-color: #fff
+
+.block-round
+  border-radius: 25px
+
+.all-along-row
+  padding: 40px
+
+.seperator
+  min-height: 80px
+  width: 0
+  border: solid 1px #CCC
+
+

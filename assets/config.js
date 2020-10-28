@@ -84,3 +84,35 @@ export const menuStructure = {
     }
   ]
 }
+
+const backgroundColors = ['#ECF4FE', '#F1FCF8', '#FFF6F7', '#FFFAED']
+const fontColors = ['#3F90F7', '#21B8C7', 'FF4C61', '#FFB800']
+const arrayIndexOutOfBoundsHandler = {
+  get(obj, prop) {
+    return prop in obj ? obj[prop] : obj[prop % obj.length]
+  }
+}
+export const colors = {
+  'background-colors': new Proxy(backgroundColors, arrayIndexOutOfBoundsHandler),
+  'font-colors': new Proxy(fontColors, arrayIndexOutOfBoundsHandler)
+}
+
+// 标准协议快速开发指南 步骤
+export const rapidDevelopStep = [
+  {
+    index: 1,
+    name: '创建产品'
+  }, {
+    index: 2,
+    name: '添加功能点'
+  }, {
+    index: 3,
+    name: '下载SDK'
+  }, {
+    index: 4,
+    name: '添加设备'
+  }, {
+    index: 5,
+    name: '设备调试'
+  }
+]
