@@ -9,3 +9,6 @@ const mockDataGetter = (name) => {
 export const getProductList = mockDataGetter('productList')
 export const getProduct = mockDataGetter('product')
 export const getDeviceData = mockDataGetter('deviceData')
+export const getProjectData = mockDataGetter('projectData')
+export const getActiveDeviceDbDData = mockDataGetter('activeDeviceDbD')
+export const getSilentDeviceDbDData = mockDataGetter('silentDeviceDbD')

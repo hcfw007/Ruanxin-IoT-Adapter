@@ -39,9 +39,51 @@ export const productList = [
 
 export const product = productList[0]
 
+let onlineDevice = Math.floor((Math.random() * 100000) + 1)
+let offlineDevice = Math.floor((Math.random() * 100000) + 1)
+let activeDevice = Math.floor((Math.random() * onlineDevice) + 1)
+let totalDevice = onlineDevice + offlineDevice
+let silentDevice = totalDevice - activeDevice
 export const deviceData = {
-  totalDevice: 110999,
-  onlineDevice: 20999,
-  activeDevice: 110999,
-  silentDevice: 20999
+  totalDevice,
+  onlineDevice,
+  activeDevice,
+  silentDevice
 }
+
+export const projectData = [
+  {
+    name: '项目A',
+    value: Math.floor((Math.random() * 1000000) + 1)
+  }, {
+    name: '项目B',
+    value: Math.floor((Math.random() * 1000000) + 1)
+  }, {
+    name: '项目C',
+    value: Math.floor((Math.random() * 1000000) + 1)
+  }, {
+    name: '项目D',
+    value: Math.floor((Math.random() * 1000000) + 1)
+  }, {
+    name: '其他',
+    value: Math.floor((Math.random() * 1000000) + 1)
+  }
+]
+
+const activeDeviceDbD = []
+const silentDeviceDbD = []
+const today = new Date()
+for (let i = 0; i < 30; i++) {
+  let day = new Date(today - i * 24 * 60 * 60 * 1000)
+  let activeDeviceThisDay = Math.floor((Math.random() * totalDevice) + 1)
+  activeDeviceDbD.push({
+    date: day,
+    value: activeDeviceThisDay
+  })
+  silentDeviceDbD.push({
+    date: day,
+    value: totalDevice - activeDeviceThisDay
+  })
+}
+
+export { activeDeviceDbD, silentDeviceDbD }

@@ -87,6 +87,7 @@ export const menuStructure = {
 
 const backgroundColors = ['#ECF4FE', '#F1FCF8', '#FFF6F7', '#FFFAED']
 const fontColors = ['#3F90F7', '#21B8C7', 'FF4C61', '#FFB800']
+const chartColors = ['#3DA0F8', '#FBDB6D', '#E36E7E', '#6FDEDF', '#3C7CCF']
 const arrayIndexOutOfBoundsHandler = {
   get(obj, prop) {
     return prop in obj ? obj[prop] : obj[prop % obj.length]
@@ -94,7 +95,8 @@ const arrayIndexOutOfBoundsHandler = {
 }
 export const colors = {
   'background-colors': new Proxy(backgroundColors, arrayIndexOutOfBoundsHandler),
-  'font-colors': new Proxy(fontColors, arrayIndexOutOfBoundsHandler)
+  'font-colors': new Proxy(fontColors, arrayIndexOutOfBoundsHandler),
+  'chart-colors': new Proxy(chartColors, arrayIndexOutOfBoundsHandler)
 }
 
 // 标准协议快速开发指南 步骤
