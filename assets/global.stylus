@@ -16,12 +16,19 @@ a, a:visited
 .block-round
   border-radius: 25px
 
-.all-along-row
+.main-content>.el-row
   padding: 40px
+
+.no-padding
+  padding: 0 !important
 
 .seperator
   min-height: 80px
   width: 0
   border: solid 1px #CCC
+
+.clickable-text
+  color: var(--default-link-color)
+  cursor: pointer
 
 

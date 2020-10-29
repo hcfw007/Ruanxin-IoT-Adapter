@@ -1,5 +1,5 @@
 <template>
-  <div class="productList main-content">
+  <div class="product-list main-content">
     <el-row>
       <el-col :span="24" class="page-title-row">
         <h3 class="page-title">
@@ -13,7 +13,7 @@
         </span>
       </el-col>
     </el-row>
-    <el-row>
+    <el-row class="no-padding">
       <el-col :span="24" class="develop-step-row">
         <div v-for="(item, index) in rapidDevelopStep" :key="'step' + index" class="develop-step-block block-white block-round">
           <div class="develop-step-index" :style="{'background-color': colors['background-colors'][index], 'color': colors['font-colors'][index]}">{{ index + 1 }}</div>
@@ -21,7 +21,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class="product-general-info-row block-white block-round all-along-row">
+    <el-row class="product-general-info-row block-white block-round">
       <el-col :span="4">
         <div class="product-number">
           <div class="product-number-label">
@@ -47,7 +47,7 @@
         <el-button type="primary" class="add-product">添加产品</el-button>
       </el-col>
     </el-row>
-    <el-row class="product-list-row block-white block-round all-along-row">
+    <el-row class="product-list-row block-white block-round">
       <el-col :span="24">
         <el-row v-for="product in productList" :key="'product' + product.id" class="product-block">
           <el-col :span="8" class="product-general-info">
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style lang="stylus">
-.productList
+.product-list
   .develop-step-row
     display: flex
     justify-content: space-between
