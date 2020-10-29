@@ -7,3 +7,5 @@ const mockDataGetter = (name) => {
 }
 
 export const getProductList = mockDataGetter('productList')
+export const getProduct = mockDataGetter('product')
+export const getDeviceData = mockDataGetter('deviceData')

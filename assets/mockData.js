@@ -36,3 +36,12 @@ export const productList = [
     created: '2020-09-09 14:00:09'
   }
 ]
+
+export const product = productList[0]
+
+export const deviceData = {
+  totalDevice: 110999,
+  onlineDevice: 20999,
+  activeDevice: 110999,
+  silentDevice: 20999
+}
