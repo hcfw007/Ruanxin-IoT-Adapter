@@ -1,3 +1,5 @@
+line-chart-color = #AAD0FF
+
 body
   margin: 0
   background-color: rgb(240, 242, 245)
@@ -31,4 +33,21 @@ a, a:visited
   color: var(--default-link-color)
   cursor: pointer
 
+h3
+  margin: 0
 
+.block-title-row
+  height: 40px
+  lien-height: 40px
+
+  h3, span
+    line-height: 40px
+
+.line-chart-dot
+  height: 15px
+  width: 15px
+  border-radius: 100px
+  background-color: line-chart-color
+  display: inline-block
+  vertical-align: middle
+  margin-right: 15px
