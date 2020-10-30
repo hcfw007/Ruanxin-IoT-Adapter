@@ -159,11 +159,7 @@ export default {
     color: #666
 
   .add-product
-    padding: 10px
-    width: 200px
-    height: 60px
-    font-size: 18px
-    border-radius: 15px
+    margin-top: 15px
 
   .product-name
     font-size: 20px
