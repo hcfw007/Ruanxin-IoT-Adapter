@@ -175,3 +175,22 @@ export const systemFunctionList = [
     transferType: ['up', 'down']
   }
 ]
+
+export const messageLogList = [
+  {
+    id: 0,
+    time: new Date(new Date() - 24 * 60 * 60 * 1000),
+    result: 'false',
+    message: 'errMsg: rpc error: code = Unknow desc = command'
+  }, {
+    id: 1,
+    time: new Date(new Date() - 25 * 60 * 60 * 1000),
+    result: 'false',
+    message: 'errMsg: rpc error: code = Unknow desc = whatever'
+  }, {
+    id: 2,
+    time: new Date(new Date() - 26 * 60 * 60 * 1000),
+    result: 'false',
+    message: 'errMsg: rpc error: code = Unknow desc = cannot make up more of this crap'
+  }
+]

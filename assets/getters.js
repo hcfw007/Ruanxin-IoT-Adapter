@@ -15,3 +15,5 @@ export const getSilentDeviceDbDData = mockDataGetter('silentDeviceDbD')
 
 export const getDeviceFunctionList = mockDataGetter('deviceFunctionList')
 export const getSystemFunctionList = mockDataGetter('systemFunctionList')
+
+export const getMessageLogList = mockDataGetter('messageLogList')
