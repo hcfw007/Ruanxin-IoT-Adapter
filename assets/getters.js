@@ -17,3 +17,5 @@ export const getDeviceFunctionList = mockDataGetter('deviceFunctionList')
 export const getSystemFunctionList = mockDataGetter('systemFunctionList')
 
 export const getMessageLogList = mockDataGetter('messageLogList')
+
+export const getSubProductList = mockDataGetter('subProductList')

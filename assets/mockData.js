@@ -194,3 +194,31 @@ export const messageLogList = [
     message: 'errMsg: rpc error: code = Unknow desc = cannot make up more of this crap'
   }
 ]
+
+export const subProductList = [
+  {
+    id: 1,
+    joinDateTime: new Date(new Date() - 24 * 60 * 60 * 1000),
+    name: '子设备产品1'
+  }, {
+    id: 2,
+    joinDateTime: new Date(new Date() - 25 * 60 * 60 * 1000),
+    name: '子设备产品2'
+  }, {
+    id: 3,
+    joinDateTime: new Date(new Date() - 26 * 60 * 60 * 1000),
+    name: '子设备产品3'
+  }, {
+    id: 4,
+    joinDateTime: new Date(new Date() - 27 * 60 * 60 * 1000),
+    name: '子设备产品4'
+  }, {
+    id: 5,
+    joinDateTime: new Date(new Date() - 28 * 60 * 60 * 1000),
+    name: '子设备产品5'
+  }, {
+    id: 6,
+    joinDateTime: new Date(new Date() - 29 * 60 * 60 * 1000),
+    name: '子设备产品6'
+  }
+]
