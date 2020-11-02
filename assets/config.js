@@ -36,7 +36,7 @@ export const menuStructure = {
           name: '设备调试'
         }, {
           id: 'subProductManagement',
-          addr: 'deviceAccess/subProductManagement',
+          addr: '/deviceAccess/subProductManagement',
           name: '子设备产品管理'
         }
       ]
