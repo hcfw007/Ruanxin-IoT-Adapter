@@ -33,7 +33,8 @@ export default {
   */
   plugins: [
     '@/plugins/element-ui',
-    '@/plugins/awesome-swiper'
+    '@/plugins/awesome-swiper',
+    '@/plugins/filters'
   ],
   /*
   ** Auto import components
