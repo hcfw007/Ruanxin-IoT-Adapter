@@ -20,7 +20,7 @@
           20999
         </div>
       </el-col>
-      <el-col :span="14" class="function-info-operators">
+      <el-col :span="14" class="function-info-operators text-right">
         <el-button>导入功能点</el-button>
         <el-button>导出功能点</el-button>
         <el-button type="primary">下载SDK</el-button>
@@ -39,7 +39,7 @@
                   标准功能无法满足你的需求时，你可以添加自定义功能
                 </span>
               </el-col>
-              <el-col :span="6" style="text-align: right">
+              <el-col :span="6" class="text-right">
                 <div class="add-function-button">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">标准功能点</div>
@@ -91,7 +91,7 @@
               标准功能无法满足你的需求时，你可以添加自定义功能
             </span>
           </el-col>
-          <el-col :span="6" style="text-align: right">
+          <el-col :span="6" class="text-right">
             <div class="add-function-button">
               <div class="add-function-icon">+</div>
               <div class="add-function-text">标准功能点</div>
@@ -196,7 +196,6 @@ export default {
     margin-top: 10px
 
   .function-info-operators
-    text-align: right
     .el-button:not(:first-child)
       margin-left: 30px
 

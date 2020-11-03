@@ -6,7 +6,7 @@
           子产品设备管理
         </h3>
       </el-col>
-      <el-col :span="12" style="text-align: right">
+      <el-col :span="12" class="text-right">
         <el-button type="primary">管理子设备产品</el-button>
       </el-col>
     </el-row>

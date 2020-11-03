@@ -121,7 +121,7 @@
               end-placeholder="结束日期"
             />
           </el-col>
-          <el-col :span="5" style="text-align: right">
+          <el-col :span="5" class="text-right">
             <div class="line-chart-dot" />
             活跃设备数
           </el-col>
@@ -148,7 +148,7 @@
               end-placeholder="结束日期"
             />
           </el-col>
-          <el-col :span="5" style="text-align: right">
+          <el-col :span="5" class="text-right">
             <div class="line-chart-dot" />
             沉默设备数
           </el-col>

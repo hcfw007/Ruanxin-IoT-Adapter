@@ -31,7 +31,7 @@
               <el-option label="循环发送" value="loop" />
             </el-select>
           </el-form-item>
-          <el-form-item style="text-align: right">
+          <el-form-item class="text-right">
             <el-button type="primary">发送</el-button>
             <el-button>重置</el-button>
           </el-form-item>
@@ -42,7 +42,7 @@
           <el-col :span="12">
             <span class="message-log-title">消息日志</span>
           </el-col>
-          <el-col :span="12" style="text-align: right">
+          <el-col :span="12" class="text-right">
             <span class="clickable-text">清屏</span>
           </el-col>
         </el-row>
