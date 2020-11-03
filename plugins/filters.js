@@ -3,7 +3,8 @@ import Vue from 'vue'
 const filters = [
   {
     name: 'dateTimeFilter',
-    filter: (date, str) => {
+    filter: (date, str = 'yyyy-MM-dd hh:mm:ss') => {
+      if (!(date instanceof Date)) { return 'N/A' }
       let dateObj = {
         'M+': date.getMonth() + 1,
         'd+': date.getDate(),
