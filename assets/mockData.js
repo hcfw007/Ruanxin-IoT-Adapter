@@ -222,3 +222,43 @@ export const subProductList = [
     name: '子设备产品6'
   }
 ]
+
+export const deviceList = [
+  {
+    id: 0,
+    name: '设备0',
+    identifier: '1234567890',
+    onlineStatus: 'online',
+    activateStatus: 'activated',
+    createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
+    activateTime: new Date(new Date() - 29 * 60 * 60 * 1000),
+    usageStatus: 'in-use'
+  }, {
+    id: 1,
+    name: '设备1',
+    identifier: '1234567890',
+    onlineStatus: 'offline',
+    activateStatus: 'activated',
+    createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
+    activateTime: new Date(new Date() - 27 * 60 * 60 * 1000),
+    usageStatus: 'in-use'
+  }, {
+    id: 2,
+    name: '设备2',
+    identifier: '1234567890',
+    onlineStatus: 'online',
+    activateStatus: 'deactivated',
+    createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
+    activateTime: '',
+    usageStatus: 'in-use'
+  }, {
+    id: 3,
+    name: '设备3',
+    identifier: '1234567890',
+    onlineStatus: 'online',
+    activateStatus: 'activated',
+    createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
+    activateTime: new Date(new Date() - 29 * 60 * 60 * 1000),
+    usageStatus: 'disabled'
+  }
+]
