@@ -32,10 +32,10 @@
           <el-tab-pane label="基础功能点" name="basic-function">
             <el-row>
               <el-col :span="18">
-                <span class="function-info-title">
+                <span class="block-info-title">
                   设备功能
                 </span>
-                <span class="function-info-hint">
+                <span class="block-info-hint">
                   标准功能无法满足你的需求时，你可以添加自定义功能
                 </span>
               </el-col>
@@ -84,10 +84,10 @@
       <el-col :span="24">
         <el-row>
           <el-col :span="18">
-            <span class="function-info-title">
+            <span class="block-info-title">
               设备功能
             </span>
-            <span class="function-info-hint">
+            <span class="block-info-hint">
               标准功能无法满足你的需求时，你可以添加自定义功能
             </span>
           </el-col>
@@ -199,14 +199,6 @@ export default {
     text-align: right
     .el-button:not(:first-child)
       margin-left: 30px
-
-  .function-info-title
-    font-size: 20px
-
-  .function-info-hint
-    margin-left: 15px
-    color: #666
-    font-size: 14px
 
   .add-function-button
     display: inline-block

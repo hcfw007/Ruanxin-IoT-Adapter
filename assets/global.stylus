@@ -56,3 +56,12 @@ h3
   min-width: 160px
   min-height: 50px
   border-radius: 15px
+
+.main-content
+  .block-info-title
+    font-size: 20px
+
+  .block-info-hint
+    margin-left: 15px
+    color: #666
+    font-size: 14px
