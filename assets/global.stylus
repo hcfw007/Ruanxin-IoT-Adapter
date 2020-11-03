@@ -33,6 +33,9 @@ a, a:visited
   color: var(--default-link-color)
   cursor: pointer
 
+  &.gray
+    color: #999
+
 h3
   margin: 0
 
@@ -68,3 +71,9 @@ h3
 
 .text-right
   text-align: right
+
+.el-date-editor *
+  box-sizing: content-box
+
+.el-select, .el-input
+  vertical-align: middle
