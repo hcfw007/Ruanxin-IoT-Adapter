@@ -1,0 +1,19 @@
+.indicator
+  &.positive
+    color: var(--default-link-color)
+    .dot
+      background-color: var(--default-link-color)
+
+  &.negative
+    color: #333
+    .dot
+      background-color: #333
+
+  .dot
+    height: 5px
+    width: 5px
+    border-radius: 100px
+    display: inline-block
+    vertical-align: middle
+    margin-right: 10px
+    background-color: #F00

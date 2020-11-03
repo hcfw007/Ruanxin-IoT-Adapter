@@ -192,6 +192,8 @@ export default {
 </script>
 
 <style lang="stylus">
+@import '~assets/deviceInfo/style.stylus'
+
 .device-list
   .el-select .el-input
     width: 130px
@@ -218,23 +220,4 @@ export default {
     i
       margin-right: 10px
 
-  .indicator
-    &.positive
-      color: var(--default-link-color)
-      .dot
-        background-color: var(--default-link-color)
-
-    &.negative
-      color: #333
-      .dot
-        background-color: #333
-
-    .dot
-      height: 5px
-      width: 5px
-      border-radius: 100px
-      display: inline-block
-      vertical-align: middle
-      margin-right: 10px
-      background-color: #F00
 </style>

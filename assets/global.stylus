@@ -64,6 +64,10 @@ h3
   min-height: 50px
   border-radius: 15px
 
+  &.btn-transparent
+    color: var(--default-link-color)
+    border-color: var(--default-link-color)
+
 .main-content
   .block-info-title
     font-size: 20px
