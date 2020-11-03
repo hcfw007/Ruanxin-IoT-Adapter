@@ -6,6 +6,18 @@ const mockDataGetter = (name) => {
   })
 }
 
+const findDataById = (name) => {
+  return id => new Promise((resolve, reject) => {
+    let list = mockData[name]
+    for (let item of list) {
+      if (item.id === id) {
+        resolve(item)
+      }
+    }
+    reject(new Error('fail to find required data'))
+  })
+}
+
 export const getProductList = mockDataGetter('productList')
 export const getProduct = mockDataGetter('product')
 export const getDeviceData = mockDataGetter('deviceData')
@@ -21,3 +33,4 @@ export const getMessageLogList = mockDataGetter('messageLogList')
 export const getSubProductList = mockDataGetter('subProductList')
 
 export const getDeviceList = mockDataGetter('deviceList')
+export const getDeviceDetail = findDataById('deviceList')

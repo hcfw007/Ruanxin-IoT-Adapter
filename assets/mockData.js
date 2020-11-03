@@ -232,7 +232,13 @@ export const deviceList = [
     activateStatus: 'activated',
     createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
     activateTime: new Date(new Date() - 29 * 60 * 60 * 1000),
-    usageStatus: 'in-use'
+    usageStatus: 'in-use',
+    softwareVersion: 'V123',
+    firmwareVersion: 'V223',
+    coords: [116.348897, 39.970685],
+    productName: '产品',
+    subDeviceNum: 65536,
+    key: '4fd3da401531a204e029f2ecaf399fae'
   }, {
     id: 1,
     name: '设备1',
@@ -241,7 +247,13 @@ export const deviceList = [
     activateStatus: 'activated',
     createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
     activateTime: new Date(new Date() - 27 * 60 * 60 * 1000),
-    usageStatus: 'in-use'
+    usageStatus: 'in-use',
+    softwareVersion: 'V123',
+    firmwareVersion: 'V223',
+    coords: [116.348897, 39.970685],
+    productName: '产品',
+    subDeviceNum: 65536,
+    key: '4fd3da401531a204e029f2ecaf399fae'
   }, {
     id: 2,
     name: '设备2',
@@ -250,7 +262,13 @@ export const deviceList = [
     activateStatus: 'deactivated',
     createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
     activateTime: '',
-    usageStatus: 'in-use'
+    usageStatus: 'in-use',
+    softwareVersion: 'V123',
+    firmwareVersion: 'V223',
+    coords: [116.348897, 39.970685],
+    productName: '产品',
+    subDeviceNum: 65536,
+    key: '4fd3da401531a204e029f2ecaf399fae'
   }, {
     id: 3,
     name: '设备3',
@@ -259,6 +277,12 @@ export const deviceList = [
     activateStatus: 'activated',
     createTime: new Date(new Date() - 30 * 60 * 60 * 1000),
     activateTime: new Date(new Date() - 29 * 60 * 60 * 1000),
-    usageStatus: 'disabled'
+    usageStatus: 'disabled',
+    softwareVersion: 'V123',
+    firmwareVersion: 'V223',
+    coords: [116.348897, 39.970685],
+    productName: '产品',
+    subDeviceNum: 65536,
+    key: '4fd3da401531a204e029f2ecaf399fae'
   }
 ]
