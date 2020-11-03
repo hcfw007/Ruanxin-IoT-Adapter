@@ -33,6 +33,10 @@ a, a:visited
   color: var(--default-link-color)
   cursor: pointer
 
+  &.disabled
+    color: #666
+    cursor: not-allowed
+
   &.gray
     color: #999
 
