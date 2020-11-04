@@ -77,6 +77,10 @@ h3
     color: #666
     font-size: 14px
 
+  .filter-label
+    margin-right: 15px
+
+
 .text-right
   text-align: right
 

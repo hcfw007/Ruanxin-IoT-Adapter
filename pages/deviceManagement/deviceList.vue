@@ -180,9 +180,6 @@ export default {
     .el-button
       color: #fff
 
-  .filter-label
-    margin-right: 15px
-
     &:not(:first-child)
       margin-left: 30px
 
