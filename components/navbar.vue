@@ -1,11 +1,22 @@
 <template>
   <div class="navbar">
     <el-row class="nav-row">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index" :to="item.link">
-          {{ item.name }}
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <el-col :span="12" style="margin-top: 30px">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index" :to="item.link">
+            {{ item.name }}
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </el-col>
+      <el-col :span="12" class="text-right" style="margin-top: 18px">
+        <i class="el-icon-search" />
+        <el-badge :value="5" class="item">
+          <i class="el-icon-message-solid" />
+        </el-badge>
+        <el-divider direction="vertical" />
+        <span class="username">admin</span>
+        <el-avatar icon="el-icon-user-solid" />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -56,11 +67,16 @@ navbarHeight = 70px // height of navbar content
 .navbar
   background-color: #fff
   height: navbarHeight // - 2 for border width
+  padding: 0 40px
 
   .nav-row
     height: 100%
-    padding: 30px
 
+  span, div
+    vertical-align: baseline
+
+  .el-avatar
+    vertical-align: middle
 img
   display: inline-block
 </style>
