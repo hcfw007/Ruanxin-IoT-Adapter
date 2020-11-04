@@ -93,9 +93,76 @@
                 <baidu-map class="map" ak="RT5aKMh66gEXwCnjjRF6yZbE8hEh5t3m" :zoom="zoom" :center="center" @ready="mapHandler" />
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-row>
+                  <el-col :span="24">
+                    <span class="block-info-title">
+                      网关设备信息
+                    </span>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24" class="device-info-container">
+                    <div class="device-info">
+                      网关产品名称：{{ deviceDetail.name }}
+                    </div>
+                    <div class="device-info">
+                      网关产品ID：{{ deviceDetail.id }}
+                    </div>
+                    <div class="device-info">
+                      网关设备标识：{{ deviceDetail.identifier }}
+                    </div>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="在线记录" name="online-record">
-            在线记录
+            <el-row>
+              <el-col :span="24">
+                <span class="block-info-title">
+                  在线记录
+                </span>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <span class="filter-label">创建时间</span>
+                <el-date-picker
+                  v-model="filterTimeRange"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                />
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <timerange-bar :activate-date-range="onlineStatusBar" :start="filterTimeRange[0]" :end="filterTimeRange[1]" />
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-table
+                  ref="onlineStatusTable"
+                  :data="onlineStatusList"
+                >
+                  <el-table-column label="在线状态" width="200">
+                    <template slot-scope="scope">
+                      <div :class="{'positive': scope.row.status === 'online', 'negative': scope.row.status === 'offline'}" class="indicator">
+                        <div class="dot" />
+                        {{ scope.row.status | onlineStatusFilter }}
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="时间">
+                    <template slot-scope="scope">{{ scope.row.date | dateTimeFilter }}</template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="功能点数据" name="function-info">
             功能点数据
@@ -106,36 +173,12 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-row class="block-white block-round">
-      <el-col :span="24">
-        <el-row>
-          <el-col :span="24">
-            <span class="block-info-title">
-              网关设备信息
-            </span>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24" class="device-info-container">
-            <div class="device-info">
-              网关产品名称：{{ deviceDetail.name }}
-            </div>
-            <div class="device-info">
-              网关产品ID：{{ deviceDetail.id }}
-            </div>
-            <div class="device-info">
-              网关设备标识：{{ deviceDetail.identifier }}
-            </div>
-          </el-col>
-        </el-row>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
 import BaiduMap from 'vue-baidu-map/components/map/Map'
-import { getDeviceDetail } from '~/assets/getters'
+import { getDeviceDetail, getOnlineStatusBar, getOnlineStatusList } from '~/assets/getters'
 import { filters } from '~/assets/deviceInfo/filters'
 
 export default {
@@ -152,16 +195,28 @@ export default {
         lng: 0,
         lat: 0
       },
-      locationInfo: ''
+      locationInfo: '',
+      filterTimeRange: [new Date(new Date() - 30 * 24 * 60 * 60 * 1000), new Date()],
+      onlineStatusList: [],
+      onlineStatusBar: []
     }
   },
   created() {
     this.getDeviceDetail()
+    this.getOnlineStatus()
   },
   methods: {
     getDeviceDetail() {
       getDeviceDetail(Number(this.$route.params.id)).then((data) => {
         this.deviceDetail = data
+      })
+    },
+    getOnlineStatus() {
+      getOnlineStatusBar().then((data) => {
+        this.onlineStatusBar = data
+      })
+      getOnlineStatusList().then((data) => {
+        this.onlineStatusList = data
       })
     },
     mapHandler({ BMap }) {
