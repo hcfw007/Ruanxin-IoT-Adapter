@@ -286,3 +286,37 @@ export const deviceList = [
     key: '4fd3da401531a204e029f2ecaf399fae'
   }
 ]
+
+export const onlineStatusBar = [
+  {
+    start: new Date(new Date() - 25 * 24 * 60 * 60 * 1000),
+    end: new Date(new Date() - 21 * 24 * 60 * 60 * 1000)
+  }, {
+    start: new Date(new Date() - 13 * 24 * 60 * 60 * 1000),
+    end: new Date(new Date() - 12 * 24 * 60 * 60 * 1000)
+  }, {
+    start: new Date(new Date() - 4 * 24 * 60 * 60 * 1000),
+    end: new Date(new Date() - 0 * 24 * 60 * 60 * 1000)
+  }
+]
+
+export const onlineStatusList = [
+  {
+    status: 'online',
+    date: new Date(new Date() - 25 * 24 * 60 * 60 * 1000)
+  },
+  {
+    status: 'offline',
+    date: new Date(new Date() - 21 * 24 * 60 * 60 * 1000)
+  }, {
+    status: 'online',
+    date: new Date(new Date() - 13 * 24 * 60 * 60 * 1000)
+  },
+  {
+    status: 'offline',
+    date: new Date(new Date() - 12 * 24 * 60 * 60 * 1000)
+  }, {
+    status: 'online',
+    date: new Date(new Date() - 4 * 24 * 60 * 60 * 1000)
+  }
+]
