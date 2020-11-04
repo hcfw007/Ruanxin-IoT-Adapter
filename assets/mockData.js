@@ -320,3 +320,11 @@ export const onlineStatusList = [
     date: new Date(new Date() - 4 * 24 * 60 * 60 * 1000)
   }
 ]
+
+export const industryList = [
+  '工业', '农业', '商业'
+]
+
+export const productTypeList = [
+  '手机', '冰箱', '洗衣机'
+]

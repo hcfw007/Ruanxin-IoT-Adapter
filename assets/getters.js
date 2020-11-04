@@ -37,3 +37,6 @@ export const getDeviceDetail = findDataById('deviceList')
 
 export const getOnlineStatusBar = mockDataGetter('onlineStatusBar')
 export const getOnlineStatusList = mockDataGetter('onlineStatusList')
+
+export const getIndustryList = mockDataGetter('industryList')
+export const getProductTypeList = mockDataGetter('productTypeList')
