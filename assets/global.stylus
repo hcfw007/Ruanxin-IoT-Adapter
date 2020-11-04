@@ -63,10 +63,17 @@ h3
   min-width: 160px
   min-height: 50px
   border-radius: 15px
+  position: relative
+  top: -10px
 
   &.btn-transparent
     color: var(--default-link-color)
     border-color: var(--default-link-color)
+
+  &.btn-gray
+    color: white
+    background-color: #AAA
+    border-color: transparent
 
 .main-content
   .block-info-title
