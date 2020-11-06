@@ -76,9 +76,13 @@ export const menuStructure = {
       icon: unifiedServiceIcon,
       children: [
         {
-          id: 'deviceTypeManagement',
-          addr: '/unifiedService/deviceTypeManagement',
-          name: '设备类别管理'
+          id: 'ruleEngine',
+          addr: '/unifiedService/ruleEngine',
+          name: '规则引擎'
+        }, {
+          id: 'pushService',
+          addr: '/unifiedService/pushService',
+          name: '推送服务'
         }
       ]
     }

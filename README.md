@@ -1,6 +1,6 @@
-# Web-Admin
+# Web-Client
 
-管理端的前段代码工程
+客户端的前端代码工程
 
 
 ## Build Setup
