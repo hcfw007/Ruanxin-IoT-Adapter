@@ -61,10 +61,8 @@ h3
 
 .el-button
   min-width: 160px
-  min-height: 50px
+  min-height: 40px
   border-radius: 15px
-  position: relative
-  top: -10px
 
   &.btn-transparent
     color: var(--default-link-color)
