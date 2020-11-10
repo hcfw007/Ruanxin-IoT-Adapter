@@ -179,13 +179,11 @@
 <script>
 import BaiduMap from 'vue-baidu-map/components/map/Map'
 import { getDeviceDetail, getOnlineStatusBar, getOnlineStatusList } from '~/assets/getters'
-import { filters } from '~/assets/deviceInfo/filters'
 
 export default {
   components: {
     BaiduMap
   },
-  filters,
   data() {
     return {
       deviceDetail: {},
@@ -233,8 +231,6 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '~assets/deviceInfo/style.stylus'
-
 .device-detail
   .device-info-container
     display: flex

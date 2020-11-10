@@ -16,7 +16,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="16">
+          <el-col :span="12">
             <el-input v-model="searchInput" placeholder="请输入内容" class="search-with-select">
               <el-select slot="prepend" v-model="searchType" placeholder="请选择">
                 <el-option label="完整设备" value="1" />
@@ -136,10 +136,8 @@
 
 <script>
 import { getDeviceList } from '~/assets/getters'
-import { filters } from '~/assets/deviceInfo/filters'
 
 export default {
-  filters,
   data() {
     return {
       searchInput: '',
@@ -165,8 +163,6 @@ export default {
 </script>
 
 <style lang="stylus">
-@import '~assets/deviceInfo/style.stylus'
-
 .device-list
   .device-control
     span
