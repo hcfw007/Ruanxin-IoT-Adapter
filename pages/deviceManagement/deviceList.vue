@@ -17,7 +17,7 @@
         </el-row>
         <el-row>
           <el-col :span="16">
-            <el-input v-model="searchInput" placeholder="请输入内容" class="input-with-select">
+            <el-input v-model="searchInput" placeholder="请输入内容" class="search-with-select">
               <el-select slot="prepend" v-model="searchType" placeholder="请选择">
                 <el-option label="完整设备" value="1" />
               </el-select>
@@ -168,21 +168,6 @@ export default {
 @import '~assets/deviceInfo/style.stylus'
 
 .device-list
-  .el-select .el-input
-    width: 130px
-
-  .el-input-group__prepend
-    background-color: transparent !important
-
-  .el-input-group__append
-    background-color: var(--default-link-color) !important
-
-    .el-button
-      color: #fff
-
-    &:not(:first-child)
-      margin-left: 30px
-
   .device-control
     span
       margin-left: 20px
