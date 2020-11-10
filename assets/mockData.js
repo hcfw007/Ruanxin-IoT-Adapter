@@ -328,3 +328,27 @@ export const industryList = [
 export const productTypeList = [
   '手机', '冰箱', '洗衣机'
 ]
+
+export const instanceList = [
+  {
+    instanceId: 'UUID-0',
+    instanceName: '实例0',
+    adapterName: '适配器0',
+    productName: '产品0',
+    deviceCount: 32768,
+    SDKName: 'SDK0',
+    IP: '192.168.0.0',
+    connectionStatus: 'disconnected',
+    registerTime: new Date(new Date() - 40 * 24 * 60 * 60 * 1000)
+  }, {
+    instanceId: 'UUID-1',
+    instanceName: '实例1',
+    adapterName: '适配器1',
+    productName: '产品1',
+    deviceCount: 65535,
+    SDKName: 'SDK1',
+    IP: '192.168.0.1',
+    connectionStatus: 'connected',
+    registerTime: new Date(new Date() - 30 * 24 * 60 * 60 * 1000)
+  }
+]

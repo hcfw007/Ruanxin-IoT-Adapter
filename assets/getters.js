@@ -40,3 +40,5 @@ export const getOnlineStatusList = mockDataGetter('onlineStatusList')
 
 export const getIndustryList = mockDataGetter('industryList')
 export const getProductTypeList = mockDataGetter('productTypeList')
+
+export const getInstanceList = mockDataGetter('instanceList')
