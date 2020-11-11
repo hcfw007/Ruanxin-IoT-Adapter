@@ -44,7 +44,7 @@
         </div>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" class="add-product">添加产品</el-button>
+        <el-button type="primary" class="add-product" @click="creatingProduct = true">添加产品</el-button>
       </el-col>
     </el-row>
     <el-row class="product-list-row block-white block-round">
@@ -90,29 +90,119 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-drawer
+      title="添加产品"
+      :visible.sync="creatingProduct"
+      direction="rtl"
+    >
+      <div class="drawer-content">
+        <el-form :model="newProduct" label-width="120px">
+          <el-form-item label="产品名称" required>
+            <el-input v-model="newProduct.productName" placeholder="请输入产品名称" />
+          </el-form-item>
+          <el-form-item label="行业-产品类别" required>
+            <el-select v-model="newProduct.industryId" placeholder="请选择行业" style="width: 49%">
+              <el-option v-for="(industry, index) in industryList" :key="'industry' + index" :label="industry.name" :value="industry.id" />
+            </el-select>
+            <el-select v-model="newProduct.categoryId" placeholder="请选择类别" style="width: 49%; margin-left: 1%">
+              <el-option v-for="(category, index) in categoryList" :key="'category' + index" :label="category.name" :value="category.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="设备节点" required>
+            <el-select v-model="newProduct.deviceNode" placeholder="请选择设备节点类型">
+              <el-option label="直连设备" value="直连设备" />
+              <el-option label="网关设备" value="网关设备" />
+              <el-option label="子设备" value="子设备" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="联网方式" required>
+            <el-select v-model="newProduct.connectionType" placeholder="请选择连接方式">
+              <el-option label="2G" value="2G" />
+              <el-option label="4G" value="4G" />
+              <el-option label="NBIoT" value="NBIoT" />
+              <el-option label="Wifi" value="Wifi" />
+              <el-option label="以太网接入" value="以太网接入" />
+              <el-option label="其他" value="其他" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="产品型号">
+            <el-input v-model="newProduct.productModel" placeholder="请输入产品型号" />
+          </el-form-item>
+          <el-divider />
+          <el-form-item class="text-right">
+            <el-button type="primary" :loading="postingNewProduct" @click="createProduct()">添加</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import { colors, rapidDevelopStep } from '~/assets/config'
 import { getProductList } from '~/assets/getters'
+import { getIndustryList, getCategoryList, postNewProduct } from '~/assets/ajax'
 
 export default {
   data() {
     return {
       colors,
       rapidDevelopStep,
-      productList: []
+      productList: [],
+      industryList: [],
+      categoryList: [],
+      creatingProduct: false,
+      newProduct: {
+        productName: '',
+        categoryId: '',
+        industryId: '',
+        deviceNode: '',
+        protocol: '',
+        connectionType: '',
+        productModel: ''
+      },
+      postingNewProduct: false
     }
   },
   created() {
     this.getProductList()
+    this.getStaticList()
   },
   methods: {
+    getStaticList() {
+      getIndustryList(this, 'industryList')
+      getCategoryList(this, 'categoryList')
+    },
     getProductList() {
       getProductList().then((data) => {
         this.productList = data
       })
+    },
+    createProduct() {
+      let data = this.newProduct
+      let productObj = {
+        name: data.productName,
+        category_id: data.categoryId,
+        industry_id: data.industryId,
+        connection: data.conectionType,
+        device_node: data.deviceNode,
+        model: data.productModel,
+        protocol: data.protocol
+      }
+      postNewProduct(this, productObj)
+    },
+    clearProduct() {
+      this.newProduct = {
+        productName: '',
+        categoryId: '',
+        industryId: '',
+        deviceNode: '',
+        protocol: '',
+        connectionType: '',
+        productModel: ''
+      }
+      this.creatingProduct = false
     }
   }
 }
