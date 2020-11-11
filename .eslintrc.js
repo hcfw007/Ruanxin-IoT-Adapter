@@ -19,6 +19,7 @@ module.exports = {
     'space-before-function-paren': 0,
     'prefer-const': 0,
     'template-curly-spacing': 0,
-    'vue/no-unused-vars': 1
+    'vue/no-unused-vars': 1,
+    'no-unused-vars': 1
   }
 }

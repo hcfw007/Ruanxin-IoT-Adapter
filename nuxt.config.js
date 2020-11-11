@@ -34,7 +34,8 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/awesome-swiper',
-    '@/plugins/filters'
+    '@/plugins/filters',
+    '@/plugins/toast'
   ],
   /*
   ** Auto import components
