@@ -25,8 +25,8 @@ const getRequestFactory = url => data => new Promise((resolve, reject) => {
   })
 })
 
-const postRequestFactory = url => (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败') => {
-  instance.post(url, { data }).then((response) => {
+const postRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败') => {
+  await instance.post(url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -46,6 +46,13 @@ const postRequestFactory = url => (vueObj, data = {}, successToastMessage = '成
         }
       })
     }
+  }).catch((err) => {
+    vueObj.$toast(successToastMessage + '，消息为' + err.msg, {
+      customCss: {
+        'background-color': '#E6A23C',
+        color: '#fff'
+      }
+    })
   })
 }
 
@@ -68,4 +75,7 @@ export const getIndustryList = vueDataObjectGetterFactory('/industry/select')
 // 获取类型列表
 export const getCategoryList = vueDataObjectGetterFactory('/product_categories')
 
+// 添加新产品
 export const postNewProduct = postRequestFactory('/products/create')
+// 获取产品列表
+export const getProductList = vueDataObjectGetterFactory('/products/select')
