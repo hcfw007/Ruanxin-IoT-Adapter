@@ -28,7 +28,7 @@
             产品数量（个）
           </div>
           <div class="product-number-value">
-            110999
+            {{ productList.length }}
           </div>
         </div>
       </el-col>
@@ -79,7 +79,7 @@
               创建时间
             </div>
             <div class="product-created-value product-value">
-              {{ product.created }}
+              {{ product.created_at | dateTimeFilter }}
             </div>
           </el-col>
           <el-col :span="4" class="product-operators">
@@ -94,6 +94,8 @@
       title="添加产品"
       :visible.sync="creatingProduct"
       direction="rtl"
+      :modal="false"
+      :before-close="clearProduct"
     >
       <div class="drawer-content">
         <el-form :model="newProduct" label-width="120px">
@@ -131,7 +133,7 @@
           <el-divider />
           <el-form-item class="text-right">
             <el-button type="primary" :loading="postingNewProduct" @click="createProduct()">添加</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="creatingProduct = false">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -141,8 +143,7 @@
 
 <script>
 import { colors, rapidDevelopStep } from '~/assets/config'
-import { getProductList } from '~/assets/getters'
-import { getIndustryList, getCategoryList, postNewProduct } from '~/assets/ajax'
+import { getIndustryList, getCategoryList, postNewProduct, getProductList } from '~/assets/ajax'
 
 export default {
   data() {
@@ -158,7 +159,6 @@ export default {
         categoryId: '',
         industryId: '',
         deviceNode: '',
-        protocol: '',
         connectionType: '',
         productModel: ''
       },
@@ -175,11 +175,9 @@ export default {
       getCategoryList(this, 'categoryList')
     },
     getProductList() {
-      getProductList().then((data) => {
-        this.productList = data
-      })
+      getProductList(this, 'productList')
     },
-    createProduct() {
+    async createProduct() {
       let data = this.newProduct
       let productObj = {
         name: data.productName,
@@ -187,12 +185,14 @@ export default {
         industry_id: data.industryId,
         connection: data.conectionType,
         device_node: data.deviceNode,
-        model: data.productModel,
-        protocol: data.protocol
+        model: data.productModel
       }
-      postNewProduct(this, productObj)
+      this.postingNewProduct = true
+      await postNewProduct(this, productObj, '添加产品成功', '添加产品失败')
+      this.postingNewProduct = false
+      this.creatingProduct = false
     },
-    clearProduct() {
+    clearProduct(done) {
       this.newProduct = {
         productName: '',
         categoryId: '',
@@ -202,7 +202,7 @@ export default {
         connectionType: '',
         productModel: ''
       }
-      this.creatingProduct = false
+      done()
     }
   }
 }
