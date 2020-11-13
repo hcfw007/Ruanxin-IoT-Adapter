@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'http://10.10.20.134:8082/'
+const baseURL = 'http://10.10.20.163:8082/'
 const headers = {
   Authorization: 'test'
 }
@@ -56,7 +56,10 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
   })
 }
 
-const vueDataObjectGetterFactory = url => (vueObj, dataItemName, data = {}) => {
+const vueDataObjectGetterFactory = url => (vueObj, dataItemName, data = {}, urlReplacementItem = {}) => {
+  for (let item in urlReplacementItem) {
+    url.replace('${' + urlReplacementItem[item] + '}', urlReplacementItem[item])
+  }
   instance.get(url, { data }).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
@@ -79,3 +82,6 @@ export const getCategoryList = vueDataObjectGetterFactory('/product_categories')
 export const postNewProduct = postRequestFactory('/products/create')
 // 获取产品列表
 export const getProductList = vueDataObjectGetterFactory('/products/select')
+
+// 获取产品的功能点
+export const getProductFunctionList = vueDataObjectGetterFactory('/products/${id}/functions')

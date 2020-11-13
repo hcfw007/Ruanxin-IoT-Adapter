@@ -134,6 +134,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
+import { getProductFunctionList } from '~/assets/ajax'
 
 export default {
   filters: {
@@ -166,14 +167,22 @@ export default {
     return {
       currentDeviceFunctionTab: 'basic-function',
       deviceFunctionList: [],
-      systemFunctionList: []
+      systemFunctionList: [],
+      productFunctionList: {
+        count: 0,
+        functions: []
+      }
     }
   },
   created() {
     this.checkProduct()
     this.getFunctionList()
+    this.getProductFunctionList()
   },
   methods: {
+    getProductFunctionList() {
+      getProductFunctionList(this, 'productFunctionList', null, { id: this.currentProduct.id })
+    },
     getFunctionList() {
       getDeviceFunctionList().then((data) => {
         this.deviceFunctionList = data
