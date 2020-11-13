@@ -11,6 +11,8 @@ Vue.mixin({
           }
         })
         this.$router.push('/deviceAccess/productList')
+      } else {
+        this.currentProduct = JSON.parse(localStorage.getItem('currentProduct'))
       }
     }
   }
