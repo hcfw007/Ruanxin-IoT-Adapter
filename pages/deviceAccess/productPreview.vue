@@ -3,10 +3,10 @@
     <el-row class="product-block block-white block-round">
       <el-col :span="9" class="product-general-info">
         <div class="product-name">
-          {{ product.name }}
+          {{ currentProduct.name }}
         </div>
         <div class="product-tags">
-          <el-tag v-for="(tag, index) in product.tags" :key="'product' + product.id + 'tag' + index" effect="dark">{{ tag }}</el-tag>
+          <el-tag v-for="(tag, index) in currentProduct.tags" :key="'product' + product.id + 'tag' + index" effect="dark">{{ tag }}</el-tag>
         </div>
       </el-col>
       <el-col :span="3">
@@ -14,7 +14,7 @@
           产品IID
         </div>
         <div class="product-IID-value product-value">
-          {{ product.IID }}
+          {{ currentProduct.IID }}
         </div>
       </el-col>
       <el-col :span="3">
@@ -30,7 +30,7 @@
           设备接入协议
         </div>
         <div class="product-protocol-value product-value">
-          {{ product.protocol }}
+          {{ currentProduct.protocol }}
         </div>
       </el-col>
       <el-col :span="3">
@@ -38,15 +38,15 @@
           联网方式
         </div>
         <div class="product-network-value product-value">
-          4G
+          {{ currentProduct.connection_type }}
         </div>
       </el-col>
       <el-col :span="3">
         <div class="product-subdevice-biding-code-label product-label">
-          子设备绑定吗
+          子设备绑定码
         </div>
         <div class="product-subdevice-biding-code-value product-value clickable-text">
-          查看
+          {{ currentProduct.access_code }}
         </div>
       </el-col>
     </el-row>
@@ -56,7 +56,7 @@
           设备总数
         </div>
         <div class="device-data-value">
-          {{ deviceData.totalDevice }}
+          {{ productList.length }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -164,9 +164,10 @@
 </template>
 
 <script>
-import { getProduct, getDeviceData, getProjectData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/getters'
+import { getDeviceData, getProjectData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/getters'
 import { colors } from '~/assets/config'
 import { dateComparer } from '~/assets/util'
+import { getProductList } from '~/assets/ajax'
 
 export default {
   data() {
@@ -179,7 +180,9 @@ export default {
       originalSilentDeviceDbDData: {},
       activeDeviceDateRange: '',
       silentDeviceDateRange: '',
-      totalValue: 0
+      totalValue: 0,
+      currentProduct: null,
+      productList: []
     }
   },
   computed: {
@@ -192,7 +195,7 @@ export default {
   },
   created() {
     this.checkProduct()
-    this.getProduct()
+    this.getProductList()
     this.getDeviceData()
     this.getProjectData()
     this.getDeviceDbDData()
@@ -233,10 +236,8 @@ export default {
       }
       return lineChartData
     },
-    getProduct() {
-      getProduct().then((data) => {
-        this.product = data
-      })
+    getProductList() {
+      getProductList(this, 'productList')
     },
     getDeviceData() {
       getDeviceData().then((data) => {
