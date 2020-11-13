@@ -170,6 +170,7 @@ export default {
     }
   },
   created() {
+    this.checkProduct()
     this.getFunctionList()
   },
   methods: {

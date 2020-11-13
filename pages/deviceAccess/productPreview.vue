@@ -191,6 +191,7 @@ export default {
     }
   },
   created() {
+    this.checkProduct()
     this.getProduct()
     this.getDeviceData()
     this.getProjectData()

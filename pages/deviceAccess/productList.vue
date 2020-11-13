@@ -83,7 +83,7 @@
             </div>
           </el-col>
           <el-col :span="4" class="product-operators">
-            <span class="product-operator">查看</span>
+            <span class="product-operator" @click="setAndView(product)">查看</span>
             <span class="product-operator">编辑</span>
             <span class="product-operator">删除</span>
           </el-col>
@@ -203,6 +203,10 @@ export default {
         productModel: ''
       }
       done()
+    },
+    setAndView(product) {
+      localStorage.setItem('currentProduct', JSON.stringify(product))
+      this.$router.push('/deviceAccess/productPreview')
     }
   }
 }

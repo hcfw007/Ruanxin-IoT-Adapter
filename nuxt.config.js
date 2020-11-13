@@ -35,7 +35,8 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/awesome-swiper',
     '@/plugins/filters',
-    '@/plugins/toast'
+    '@/plugins/toast',
+    '@/plugins/mixins'
   ],
   /*
   ** Auto import components
