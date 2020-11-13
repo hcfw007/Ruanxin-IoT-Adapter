@@ -20,6 +20,7 @@ module.exports = {
     'prefer-const': 0,
     'template-curly-spacing': 0,
     'vue/no-unused-vars': 1,
-    'no-unused-vars': 1
+    'no-unused-vars': 1,
+    'no-template-curly-in-string': 0
   }
 }
