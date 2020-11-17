@@ -76,6 +76,39 @@ const vueDataObjectGetterFactory = url => (vueObj, dataItemName, data = {}, urlR
   })
 }
 
+const deleteRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
+  for (let item in urlReplacementItem) {
+    url = url.replace('${' + item + '}', urlReplacementItem[item])
+  }
+  await instance.delete(url, data).then((response) => {
+    let responseData = response.data
+    if (typeof responseData === 'string') {
+      responseData = JSON.parse(responseData)
+    }
+    if (responseData.code === 200) {
+      vueObj.$toast(successToastMessage, {
+        customCss: {
+          'background-color': '#67C23A',
+          color: '#fff'
+        }
+      })
+    } else {
+      vueObj.$toast(failedToastMessage + '，消息为' + responseData.message, {
+        customCss: {
+          'background-color': '#E6A23C',
+          color: '#fff'
+        }
+      })
+    }
+  }).catch((err) => {
+    vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
+      customCss: {
+        'background-color': '#E6A23C',
+        color: '#fff'
+      }
+    })
+  })
+}
 // 获取行业列表
 export const getIndustryList = vueDataObjectGetterFactory('/industry/select')
 // 获取类型列表
@@ -89,6 +122,10 @@ export const getProductList = vueDataObjectGetterFactory('/products/select')
 // 获取产品的功能点
 export const getProductFunctionList = vueDataObjectGetterFactory('/products/${id}/functions')
 // 获取所有标准功能点
+
+// 功能点添加到产品之后，对于这个combination会产生一个新的id
 export const getFunctionList = vueDataObjectGetterFactory('/functions/standard')
 // 保存功能点
 export const postProductFunctionList = postRequestFactory('/products/${id}/functions/standard')
+// 删除功能点（根据combination id）
+export const deleteProductFunction = deleteRequestFactory('/functions/${id}')

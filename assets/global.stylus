@@ -59,7 +59,7 @@ h3
   vertical-align: middle
   margin-right: 15px
 
-.el-button:not(.el-transfer__button)
+.el-button:not(.el-transfer__button, .el-button--mini)
   min-width: 160px
   min-height: 40px
   border-radius: 15px

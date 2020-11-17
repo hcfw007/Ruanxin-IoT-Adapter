@@ -69,8 +69,12 @@
                     </template>
                   </el-table-column>
                   <el-table-column label="操作">
-                    <span class="clickable-text">编辑</span>
-                    <span class="clickable-text">删除</span>
+                    <template slot-scope="scope">
+                      <span class="clickable-text">编辑</span>
+                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id)">
+                        <span slot="reference" class="clickable-text">删除</span>
+                      </el-popconfirm>
+                    </template>
                   </el-table-column>
                 </el-table>
               </el-col>
@@ -155,7 +159,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction } from '~/assets/ajax'
 
 export default {
   filters: {
@@ -246,6 +250,10 @@ export default {
       // 发送请求
       await postProductFunctionList(this, { function_ids: functionList }, '添加功能点成功！', '添加功能点失败', { id: productId })
       this.addingFunction = false
+      this.getProductFunctionList()
+    },
+    async deleteFunction(id) {
+      await deleteProductFunction(this, null, '删除功能点成功！', '删除功能点失败', { id })
       this.getProductFunctionList()
     }
   }
