@@ -138,3 +138,6 @@ h3
 
 .drawer-content
   padding: 20px
+
+  .el-input, .el-select
+    width: 100%

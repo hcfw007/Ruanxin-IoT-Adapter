@@ -44,7 +44,7 @@
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">标准功能点</div>
                 </div>
-                <div class="add-function-button">
+                <div class="add-function-button" @click="addCustomFunction()">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">自定义功能点</div>
                 </div>
@@ -60,12 +60,11 @@
                     </template>
                   </el-table-column>
                   <el-table-column prop="name" label="功能点名称" />
-                  <el-table-column prop="params[0].name" label="字段名称" />
-                  <el-table-column prop="params[0].type" label="数据类型" />
-                  <el-table-column prop="params[0].subject" label="数据值定义" />
+                  <el-table-column prop="subject" label="字段名称" />
+                  <el-table-column prop="type" label="数据类型" />
                   <el-table-column label="传输类型">
                     <template slot-scope="scope">
-                      {{ scope.row.transferType | transferTypeFilter }}
+                      {{ transferTypeTransfer(scope.row.up, scope.row.down) }}
                     </template>
                   </el-table-column>
                   <el-table-column label="操作">
@@ -112,7 +111,7 @@
               <el-table-column prop="id" label="功能ID" />
               <el-table-column label="功能点类型">
                 <template slot-scope="scope">
-                  {{ scope.row.functionType | functionTypeFilter }}
+                  1
                 </template>
               </el-table-column>
               <el-table-column prop="functionName" label="功能点名称" />
@@ -121,7 +120,7 @@
               <el-table-column prop="dataDescription" label="数据值定义" />
               <el-table-column label="传输类型">
                 <template slot-scope="scope">
-                  {{ scope.row.transferType | transferTypeFilter }}
+                  2
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -148,10 +147,58 @@
         </el-row>
         <el-row>
           <el-col :span="24" class="text-right">
-            <el-button type="primary" @click="saveFunctions()">保存</el-button>
+            <el-button type="primary" :loading="postingFunction" @click="saveFunctions()">添加</el-button>
             <el-button @click="addingFunction = false">取消</el-button>
           </el-col>
         </el-row>
+      </div>
+    </el-drawer>
+    <el-drawer
+      title="添加自定义功能点"
+      :visible.sync="addingCustomFunction"
+      direction="rtl"
+      :modal="false"
+    >
+      <div class="drawer-content">
+        <el-form :model="customFunction" label-width="120px">
+          <el-form-item label="功能类型" required>
+            <el-select v-model="customFunction.fn_type" placeholder="请选择功能类型">
+              <el-option label="属性类型" value="COMMON" />
+              <el-option label="事件类型" value="EVENT" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="功能点名称" required>
+            <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="字段名称" required>
+            <el-input v-model="customFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="数据类型" required>
+            <el-select v-model="customFunction.type" placeholder="请选择数据类型">
+              <el-option label="布尔型" value="BOOLEAN" />
+              <el-option label="数值型" value="NUMBER" />
+              <el-option label="枚举型" value="ENUM" />
+              <el-option label="故障型" value="EXCEPTION" />
+              <el-option label="字符串型" value="STRING" />
+              <el-option label="透传型" value="BUFFER" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="传输类型" required>
+            <el-select v-model="customFunctionTransferType" placeholder="请选择数据类型">
+              <el-option label="可下发可上报" value="up, down" />
+              <el-option label="只可下发" value="down" />
+              <el-option label="只可上报" value="up" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注">
+            <el-input v-model="customFunction.remark" type="textarea" maxlength="100" placeholder="最多100个字符" show-word-limit />
+          </el-form-item>
+          <el-divider />
+          <el-form-item class="text-right">
+            <el-button type="primary" :loading="postingCustomFunction" @click="saveCustomFunction()">添加</el-button>
+            <el-button @click="creatingProduct = false">取消</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </el-drawer>
   </div>
@@ -159,44 +206,33 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction } from '~/assets/ajax'
 
 export default {
   filters: {
-    transferTypeFilter(value) {
-      if (value == null || value.length === 0) {
-        return 'N/A'
-      }
-      let str = ''
-      for (let i = 0; i < value.length; i++) {
-        if (i > 0) {
-          str += '，'
-        }
-        if (value[i] === 'up') {
-          str += '上报'
-        }
-        if (value[i] === 'down') {
-          str += '下发'
-        }
-      }
-      return str
-    },
     functionTypeFilter(value) {
       if (value == null || value.length === 0) {
         return 'N/A'
       }
       if (value === 'COMMON') {
-        return '属性'
+        return '属性类型'
       }
       if (value === 'EVENT') {
-        return '事件'
+        return '事件类型'
       }
       return '未知类型'
     }
   },
   data() {
     return {
+      customFunctionTransferType: 'up, down',
       addingFunction: false,
+      addingCustomFunction: false,
+      postingCustomFunction: false,
+      postingFunction: false,
+      customFunction: {
+        fn_type: 'COMMON'
+      },
       addedFunctions: [],
       currentDeviceFunctionTab: 'basic-function',
       deviceFunctionList: [],
@@ -218,6 +254,18 @@ export default {
     this.getProductFunctionList()
   },
   methods: {
+    transferTypeTransfer(up, down) {
+      if (up && down) {
+        return '可上报可下发'
+      }
+      if (up) {
+        return '只上报'
+      }
+      if (down) {
+        return '只下发'
+      }
+      return '未知'
+    },
     getProductFunctionList() {
       getProductFunctionList(this, 'productFunctionList', null, { id: this.currentProduct.id })
     },
@@ -242,7 +290,25 @@ export default {
       // 展示添加标准功能点drawer
       this.addingFunction = true
     },
+    addCustomFunction() {
+      // 点击添加自定义功能点
+      // 初始化自定义功能点数据结构
+      let customFunctionProto = {
+        name: '', // 名字
+        fn_type: 'COMMON', // 功能点类型
+        subject: '', // 字段
+        type: 'BOOLEAN', // 数据类型
+        remark: '', // 备注
+        up: true,
+        down: true
+      }
+      this.customFunction = customFunctionProto
+      // 显示添加自定义功能点的drawer
+      this.addingCustomFunction = true
+    },
     async saveFunctions() {
+      this.postingFunction = true
+
       // 获取产品id、功能点列表
       let productId = this.currentProduct.id
       let functionList = this.addedFunctions
@@ -250,10 +316,26 @@ export default {
       // 发送请求
       await postProductFunctionList(this, { function_ids: functionList }, '添加功能点成功！', '添加功能点失败', { id: productId })
       this.addingFunction = false
+      this.postingFunction = false
       this.getProductFunctionList()
     },
     async deleteFunction(id) {
       await deleteProductFunction(this, null, '删除功能点成功！', '删除功能点失败', { id })
+      this.getProductFunctionList()
+    },
+    async saveCustomFunction() {
+      // 按钮载入动画
+      this.postingCustomFunction = true
+      // 获取产品id、功能点信息
+      let customFunction = this.customFunction
+      let productId = this.currentProduct.id
+
+      // 发送请求
+      await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })
+
+      // 关闭载入动画、drawer，拉取新列表
+      this.addingCustomFunction = false
+      this.postingCustomFunction = false
       this.getProductFunctionList()
     }
   }

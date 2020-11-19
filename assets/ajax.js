@@ -125,7 +125,9 @@ export const getProductFunctionList = vueDataObjectGetterFactory('/products/${id
 
 // 功能点添加到产品之后，对于这个combination会产生一个新的id
 export const getFunctionList = vueDataObjectGetterFactory('/functions/standard')
-// 保存功能点
+// 保存标准功能点
 export const postProductFunctionList = postRequestFactory('/products/${id}/functions/standard')
+// 保存自定义功能点
+export const postProductCustomFunction = postRequestFactory('/products/${id}/functions/custom')
 // 删除功能点（根据combination id）
 export const deleteProductFunction = deleteRequestFactory('/functions/${id}')
