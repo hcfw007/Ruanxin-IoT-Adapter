@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = 'http://10.10.20.163:8082/'
+const baseURL = '/bu-thing-model-server'
 const headers = {
   Authorization: 'test'
 }

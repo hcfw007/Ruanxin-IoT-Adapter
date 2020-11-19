@@ -55,7 +55,8 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
   ],
   /*
   ** Axios module configuration
@@ -68,5 +69,11 @@ export default {
   */
   build: {
     transpile: [/^element-ui/]
+  },
+  proxy: {
+    '/bu-thing-model-server': {
+      changeOrigin: true,
+      target: 'http://10.10.20.85:8765/'
+    }
   }
 }
