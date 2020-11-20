@@ -42,7 +42,7 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
         }
       })
     } else {
-      vueObj.$toast(failedToastMessage + '，消息为' + responseData.message, {
+      vueObj.$toast(failedToastMessage + '，消息为' + responseData.msg, {
         customCss: {
           'background-color': '#E6A23C',
           color: '#fff'
@@ -93,7 +93,7 @@ const deleteRequestFactory = url => async (vueObj, data = {}, successToastMessag
         }
       })
     } else {
-      vueObj.$toast(failedToastMessage + '，消息为' + responseData.message, {
+      vueObj.$toast(failedToastMessage + '，消息为' + responseData.msg, {
         customCss: {
           'background-color': '#E6A23C',
           color: '#fff'
