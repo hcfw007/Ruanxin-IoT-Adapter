@@ -183,6 +183,48 @@
               <el-option label="透传型" value="BUFFER" />
             </el-select>
           </el-form-item>
+
+          <section v-if="customFunction.fn_type === 'COMMON'">
+            <section v-if="customFunction.type === 'BOOLEAN'" />
+            <section v-if="customFunction.type === 'NUMBER'">
+              <el-form-item label="取值范围" required>
+                <el-col :span="11">
+                  <el-input v-model="functionSpecFieldsByType.number.min" placeholder="最小值" />
+                </el-col>
+                <el-col :span="2" class="text-center">-</el-col>
+                <el-col :span="11">
+                  <el-input v-model="functionSpecFieldsByType.number.max" placeholder="最大值" />
+                </el-col>
+              </el-form-item>
+              <el-form-item label="间距" required>
+                <el-input v-model="functionSpecFieldsByType.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+              </el-form-item>
+              <el-form-item label="单位">
+                <el-input v-model="functionSpecFieldsByType.number.unit" placeholder="请输入单位" />
+              </el-form-item>
+            </section>
+            <section v-if="customFunction.type === 'ENUM'">
+              <el-form-item label="枚举值" required>
+                <enum-editor v-model="functionSpecFieldsByType.enum.items" />
+              </el-form-item>
+            </section>
+            <section v-if="customFunction.type === 'EXCEPTION'">
+              <el-form-item label="枚举值" required>
+                <enum-editor v-model="functionSpecFieldsByType.exception.items" />
+              </el-form-item>
+            </section>
+            <section v-if="customFunction.type === 'STRING'">
+              <el-form-item label="最大长度">
+                <span>最大长度不超过255字节</span>
+              </el-form-item>
+            </section>
+            <section v-if="customFunction.type === 'BUFFER'">
+              <el-form-item label="最大长度">
+                <span>最大长度不超过255字节</span>
+              </el-form-item>
+            </section>
+          </section>
+
           <el-form-item label="传输类型" required>
             <el-select v-model="customFunctionTransferType" placeholder="请选择数据类型">
               <el-option label="可下发可上报" value="up, down" />
@@ -207,6 +249,7 @@
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction } from '~/assets/ajax'
+import { functionConfig } from '~/assets/config'
 
 export default {
   filters: {
@@ -232,6 +275,20 @@ export default {
       postingFunction: false,
       customFunction: {
         fn_type: 'COMMON'
+      },
+      functionSpecFieldsByType: {
+        number: {
+          min: 0,
+          max: 100,
+          step: 0.1,
+          unit: ''
+        },
+        enum: {
+          items: []
+        },
+        exception: {
+          items: []
+        }
       },
       addedFunctions: [],
       currentDeviceFunctionTab: 'basic-function',
@@ -293,16 +350,8 @@ export default {
     addCustomFunction() {
       // 点击添加自定义功能点
       // 初始化自定义功能点数据结构
-      let customFunctionProto = {
-        name: '', // 名字
-        fn_type: 'COMMON', // 功能点类型
-        subject: '', // 字段
-        type: 'BOOLEAN', // 数据类型
-        remark: '', // 备注
-        up: true,
-        down: true
-      }
-      this.customFunction = customFunctionProto
+      this.customFunction = functionConfig.customFunctionProto
+      this.functionSpecFieldsByType = functionConfig.functionSpecFieldsByTypeProto
       // 显示添加自定义功能点的drawer
       this.addingCustomFunction = true
     },
@@ -329,6 +378,12 @@ export default {
       // 获取产品id、功能点信息
       let customFunction = this.customFunction
       let productId = this.currentProduct.id
+
+      // 获取特定数据类型的特殊信息
+      let type = customFunction.type.toLowerCase()
+      if (type in functionConfig.functionSpecFieldsByTypeProto) {
+        customFunction[type] = this.functionSpecFieldsByType[type]
+      }
 
       // 发送请求
       await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })

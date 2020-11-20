@@ -118,3 +118,63 @@ export const rapidDevelopStep = [
     name: '设备调试'
   }
 ]
+
+export const functionConfig = {
+  customFunctionProto: {
+    name: '', // 名字
+    fn_type: 'COMMON', // 功能点类型
+    subject: '', // 字段
+    type: 'BOOLEAN', // 数据类型
+    remark: '', // 备注
+    up: true,
+    down: true
+  },
+  functionSpecFieldsByTypeProto: {
+    // 数值型
+    number: {
+      min: 0, // 最小值
+      max: 100, // 最大值
+      step: 0.1, // 步长
+      unit: '' // 单位
+    },
+    enum: {
+      items: [] // 枚举值
+    },
+    exception: {
+      items: [] // 枚举值
+    }
+  },
+  upDownList: {
+    boolean: {
+      up: true,
+      down: true,
+      both: true
+    },
+    number: {
+      up: true,
+      down: true,
+      both: true
+    },
+    enum: {
+      up: true,
+      down: true,
+      both: true
+    },
+    exception: {
+      up: true,
+      down: false,
+      both: false
+    },
+    string: {
+      up: true,
+      down: true,
+      both: true
+    },
+    buffer: {
+      up: true,
+      down: false,
+      both: true
+    }
+  }
+
+}
