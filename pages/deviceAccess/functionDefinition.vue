@@ -173,18 +173,18 @@
           <el-form-item label="字段名称" required>
             <el-input v-model="customFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
           </el-form-item>
-          <el-form-item label="数据类型" required>
-            <el-select v-model="customFunction.type" placeholder="请选择数据类型">
-              <el-option label="布尔型" value="BOOLEAN" />
-              <el-option label="数值型" value="NUMBER" />
-              <el-option label="枚举型" value="ENUM" />
-              <el-option label="故障型" value="EXCEPTION" />
-              <el-option label="字符串型" value="STRING" />
-              <el-option label="透传型" value="BUFFER" />
-            </el-select>
-          </el-form-item>
 
           <section v-if="customFunction.fn_type === 'COMMON'">
+            <el-form-item label="数据类型" required>
+              <el-select v-model="customFunction.type" placeholder="请选择数据类型" @change="customFunctionTypeChangeHandler($event)">
+                <el-option label="布尔型" value="BOOLEAN" />
+                <el-option label="数值型" value="NUMBER" />
+                <el-option label="枚举型" value="ENUM" />
+                <el-option label="故障型" value="EXCEPTION" />
+                <el-option label="字符串型" value="STRING" />
+                <el-option label="透传型" value="BUFFER" />
+              </el-select>
+            </el-form-item>
             <section v-if="customFunction.type === 'BOOLEAN'" />
             <section v-if="customFunction.type === 'NUMBER'">
               <el-form-item label="取值范围" required>
@@ -225,10 +225,36 @@
             </section>
           </section>
 
+          <section v-if="customFunction.fn_type === 'EVENT'">
+            <el-form-item label="事件类型" required>
+              <el-select v-model="customFunction.event_type" placeholder="请选择事件类型">
+                <el-option label="信息型" value="INFO" />
+                <el-option label="告警型" value="WARNING" />
+                <el-option label="故障型" value="FAULT" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="输出参数" required>
+              <el-row v-for="(param, index) in customFunction.params" :key="'param' + String(index)" class="param-row">
+                <el-col :span="18">
+                  {{ param.name }}
+                </el-col>
+                <el-col :span="6" class="text-right">
+                  <span class="clickable-text">编辑</span>
+                  <span class="clickable-text" @click="customFunction.params.slice(index, 1)">删除</span>
+                </el-col>
+              </el-row>
+              <el-row class="add-param-row">
+                <span class="clickable-text" @click="addParam">
+                  +添加输出参数
+                </span>
+              </el-row>
+            </el-form-item>
+          </section>
+
           <el-form-item label="传输类型" required>
             <el-select v-model="customFunctionTransferType" placeholder="请选择数据类型">
-              <el-option label="可下发可上报" value="up, down" />
-              <el-option label="只可下发" value="down" />
+              <el-option v-if="customFunction.type !== 'EXCEPTION'" label="可下发可上报" value="up, down" />
+              <el-option v-if="customFunction.type !== 'EXCEPTION' && customFunction.type !== 'BUFFER'" label="只可下发" value="down" />
               <el-option label="只可上报" value="up" />
             </el-select>
           </el-form-item>
@@ -238,7 +264,65 @@
           <el-divider />
           <el-form-item class="text-right">
             <el-button type="primary" :loading="postingCustomFunction" @click="saveCustomFunction()">添加</el-button>
-            <el-button @click="creatingProduct = false">取消</el-button>
+            <el-button @click="addingCustomFunction = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-drawer>
+    <el-drawer
+      title="添加输出参数"
+      :visible.sync="addingParam"
+      direction="rtl"
+      :modal="false"
+    >
+      <div class="drawer-content">
+        <el-form :model="param" label-width="120px">
+          <el-form-item label="参数名称" required>
+            <el-input v-model="param.name" placeholder="不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="参数字段" required>
+            <el-input v-model="param.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="数据类型" required>
+            <el-select v-model="param.type" placeholder="请选择数据类型" required>
+              <el-option label="布尔型" value="BOOLEAN" />
+              <el-option label="数值型" value="NUMBER" />
+              <el-option label="枚举型" value="ENUM" />
+              <el-option label="字符串型" value="STRING" />
+            </el-select>
+          </el-form-item>
+          <section v-if="param.type === 'BOOLEAN'" />
+          <section v-if="param.type === 'NUMBER'">
+            <el-form-item label="取值范围" required>
+              <el-col :span="11">
+                <el-input v-model="param.number.min" placeholder="最小值" />
+              </el-col>
+              <el-col :span="2" class="text-center">-</el-col>
+              <el-col :span="11">
+                <el-input v-model="param.number.max" placeholder="最大值" />
+              </el-col>
+            </el-form-item>
+            <el-form-item label="间距" required>
+              <el-input v-model="param.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+            </el-form-item>
+            <el-form-item label="单位">
+              <el-input v-model="param.number.unit" placeholder="请输入单位" />
+            </el-form-item>
+          </section>
+          <section v-if="param.type === 'ENUM'">
+            <el-form-item label="枚举值" required>
+              <enum-editor v-model="param.enum.items" />
+            </el-form-item>
+          </section>
+          <section v-if="param.type === 'STRING'">
+            <el-form-item label="最大长度">
+              <span>最大长度不超过255字节</span>
+            </el-form-item>
+          </section>
+          <el-divider />
+          <el-form-item class="text-right">
+            <el-button type="primary" :loading="postingCustomFunction" @click="saveParam()">添加</el-button>
+            <el-button @click="addingParam = false">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -273,6 +357,9 @@ export default {
       addingCustomFunction: false,
       postingCustomFunction: false,
       postingFunction: false,
+      addingParam: false,
+      param: {
+      },
       customFunction: {
         fn_type: 'COMMON'
       },
@@ -335,6 +422,25 @@ export default {
         this.systemFunctionList = data
       })
     },
+    addParam() {
+      // 点击添加参数
+      // 初始化param
+      let param = {
+        name: '',
+        type: 'BOOLEAN',
+        subject: ''
+      }
+      param = Object.assign(param, functionConfig.functionSpecFieldsByTypeProto)
+      param.exception = undefined // 参数没有故障型
+      this.param = param
+      // 显示drawer
+      this.addingParam = true
+    },
+    saveParam() {
+      let param = this.param
+      this.customFunction.params.push(param)
+      this.addingParam = false
+    },
     addFunction() {
       // 点击添加标准功能点
       let functionList = this.productFunctionList.functions
@@ -385,6 +491,18 @@ export default {
         customFunction[type] = this.functionSpecFieldsByType[type]
       }
 
+      // 映射传输类型
+      if (this.customFunctionTransferType.indexOf('up')) {
+        customFunction.up = true
+      } else {
+        customFunction.up = false
+      }
+      if (this.customFunctionTransferType.indexOf('down')) {
+        customFunction.down = true
+      } else {
+        customFunction.down = false
+      }
+
       // 发送请求
       await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })
 
@@ -392,6 +510,16 @@ export default {
       this.addingCustomFunction = false
       this.postingCustomFunction = false
       this.getProductFunctionList()
+    },
+    customFunctionTypeChangeHandler(value) {
+      // 故障型只能上传
+      if (value === 'EXCEPTION') {
+        this.customFunctionTransferType = 'up'
+      }
+      // 透传型不能只下发
+      if (value === 'BUFFER' && this.customFunctionTransferType === 'down') {
+        this.customFunctionTransferType = 'up, down'
+      }
     }
   }
 }
@@ -434,4 +562,10 @@ export default {
     .add-function-text
       display: inline-block
       margin-left: 15px
+
+  .param-row
+    background-color: #eee
+    padding: 0 10px
+    &:not(:first-child)
+      margin-top: 5px !important
 </style>

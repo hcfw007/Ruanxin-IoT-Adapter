@@ -124,10 +124,10 @@ export const functionConfig = {
     name: '', // 名字
     fn_type: 'COMMON', // 功能点类型
     subject: '', // 字段
-    type: 'BOOLEAN', // 数据类型
+    type: 'BOOLEAN', // 属性功能点数据类型
+    event_type: 'INFO',
     remark: '', // 备注
-    up: true,
-    down: true
+    params: [] // 事件功能点输出参数
   },
   functionSpecFieldsByTypeProto: {
     // 数值型
@@ -143,38 +143,5 @@ export const functionConfig = {
     exception: {
       items: [] // 枚举值
     }
-  },
-  upDownList: {
-    boolean: {
-      up: true,
-      down: true,
-      both: true
-    },
-    number: {
-      up: true,
-      down: true,
-      both: true
-    },
-    enum: {
-      up: true,
-      down: true,
-      both: true
-    },
-    exception: {
-      up: true,
-      down: false,
-      both: false
-    },
-    string: {
-      up: true,
-      down: true,
-      both: true
-    },
-    buffer: {
-      up: true,
-      down: false,
-      both: true
-    }
   }
-
 }
