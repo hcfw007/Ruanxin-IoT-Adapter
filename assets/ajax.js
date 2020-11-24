@@ -13,10 +13,11 @@ const instance = axios.create({
 
 const putRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
   let flag = 'origin'
+  let _url = url
   for (let item in urlReplacementItem) {
-    url = url.replace('${' + item + '}', urlReplacementItem[item])
+    _url = _url.replace('${' + item + '}', urlReplacementItem[item])
   }
-  await instance.put(url, data).then((response) => {
+  await instance.put(_url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -52,10 +53,11 @@ const putRequestFactory = url => async (vueObj, data = {}, successToastMessage =
 
 const postRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
   let flag = 'origin'
+  let _url = url
   for (let item in urlReplacementItem) {
-    url = url.replace('${' + item + '}', urlReplacementItem[item])
+    _url = _url.replace('${' + item + '}', urlReplacementItem[item])
   }
-  await instance.post(url, data).then((response) => {
+  await instance.post(_url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -91,10 +93,11 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
 
 const getRequestFactory = url => async (vueObj, dataItemName, data = {}, urlReplacementItem = {}) => {
   let flag = 'origin'
+  let _url = url
   for (let item in urlReplacementItem) {
-    url = url.replace('${' + item + '}', urlReplacementItem[item])
+    _url = _url.replace('${' + item + '}', urlReplacementItem[item])
   }
-  await instance.get(url, { data }).then((response) => {
+  await instance.get(_url, { data }).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -120,10 +123,11 @@ const getRequestFactory = url => async (vueObj, dataItemName, data = {}, urlRepl
 
 const deleteRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
   let flag = 'origin'
+  let _url = url
   for (let item in urlReplacementItem) {
-    url = url.replace('${' + item + '}', urlReplacementItem[item])
+    _url = _url.replace('${' + item + '}', urlReplacementItem[item])
   }
-  await instance.delete(url, data).then((response) => {
+  await instance.delete(_url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -167,18 +171,18 @@ export const postNewProduct = postRequestFactory('/products/create')
 export const getProductList = getRequestFactory('/products/select')
 
 // 获取产品的功能点
-export const getProductFunctionList = getRequestFactory('/products/${id}/functions')
+export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions')
 // 获取产品的组合功能点
-export const getCombinedFunctionList = getRequestFactory('/products/${id}/combine_functions/list')
+export const getCombinedFunctionList = getRequestFactory('/products/${productPid}/combine_functions/list')
 
 // 获取所有标准功能点
 // 功能点添加到产品之后，对于这个combination会产生一个新的id
 export const getFunctionList = getRequestFactory('/functions/standard')
 // 保存标准功能点
-export const postProductFunctionList = postRequestFactory('/products/${id}/functions/standard')
+export const postProductFunctionList = postRequestFactory('/products/${productPid}/functions/standard')
 // 保存自定义功能点
-export const postProductCustomFunction = postRequestFactory('/products/${id}/functions/custom')
+export const postProductCustomFunction = postRequestFactory('/products/${productPid}/functions/custom')
 // 删除功能点（根据combination id）
-export const deleteProductFunction = deleteRequestFactory('/functions/${id}')
+export const deleteProductFunction = deleteRequestFactory('/functions/${combinationId}')
 // 修改自定义功能点
-export const editProductFunction = putRequestFactory('/functions/custom/${id}')
+export const editProductFunction = putRequestFactory('/functions/custom/${combinationId}')
