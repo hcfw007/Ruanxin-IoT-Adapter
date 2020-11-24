@@ -332,7 +332,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -381,6 +381,7 @@ export default {
       currentDeviceFunctionTab: 'basic-function',
       deviceFunctionList: [],
       systemFunctionList: [],
+      combinedFunctionList: {},
       functionList: {
         count: 0,
         functions: []
@@ -435,6 +436,7 @@ export default {
     },
     getFunctionList() {
       getFunctionList(this, 'functionList')
+      getCombinedFunctionList(this, 'combinedFunctionList')
       getDeviceFunctionList().then((data) => {
         this.deviceFunctionList = data
       })

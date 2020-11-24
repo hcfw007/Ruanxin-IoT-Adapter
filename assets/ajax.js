@@ -75,7 +75,7 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
           color: '#fff'
         }
       })
-      flage = false
+      flag = false
     }
   }).catch((err) => {
     vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
@@ -168,8 +168,10 @@ export const getProductList = getRequestFactory('/products/select')
 
 // 获取产品的功能点
 export const getProductFunctionList = getRequestFactory('/products/${id}/functions')
-// 获取所有标准功能点
+// 获取产品的组合功能点
+export const getCombinedFunctionList = getRequestFactory('/products/${id}/combine_functions/list')
 
+// 获取所有标准功能点
 // 功能点添加到产品之后，对于这个combination会产生一个新的id
 export const getFunctionList = getRequestFactory('/functions/standard')
 // 保存标准功能点
