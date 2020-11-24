@@ -70,7 +70,7 @@
                   <el-table-column label="操作">
                     <template slot-scope="scope">
                       <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
-                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id)">
+                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id, scope.row)">
                         <span slot="reference" class="clickable-text">删除</span>
                       </el-popconfirm>
                     </template>
@@ -381,7 +381,10 @@ export default {
       currentDeviceFunctionTab: 'basic-function',
       deviceFunctionList: [],
       systemFunctionList: [],
-      combinedFunctionList: {},
+      combinedFunctionList: {
+        count: 0,
+        items: []
+      },
       functionList: {
         count: 0,
         functions: []
@@ -432,11 +435,11 @@ export default {
       this.addingCustomFunction = true
     },
     getProductFunctionList() {
-      getProductFunctionList(this, 'productFunctionList', null, { id: this.currentProduct.id })
+      getProductFunctionList(this, 'productFunctionList', null, { productPid: this.currentProduct.pid })
+      getCombinedFunctionList(this, 'combinedFunctionList', null, { productPid: this.currentProduct.pid })
     },
     getFunctionList() {
       getFunctionList(this, 'functionList')
-      getCombinedFunctionList(this, 'combinedFunctionList')
       getDeviceFunctionList().then((data) => {
         this.deviceFunctionList = data
       })
@@ -477,7 +480,7 @@ export default {
     },
     addFunction() {
       // 点击添加标准功能点
-      let functionList = this.productFunctionList.functions
+      // let functionList = this.productFunctionList.functions
       let functionIdList = []
       // 将已有功能点的id存入addedFunctions供穿梭框使用
       // 根据设计，尽管是用穿梭框实现，但添加标准功能点只承担添加作用，不能删除编辑。因此无需载入已有的功能点。
@@ -500,31 +503,30 @@ export default {
     async saveFunctions() {
       this.postingFunction = true
 
-      // 获取产品id、功能点列表
-      let productId = this.currentProduct.id
+      // 获取功能点列表
       let functionList = this.addedFunctions
 
       // 发送请求
-      await postProductFunctionList(this, { function_ids: functionList }, '添加功能点成功！', '添加功能点失败', { id: productId })
+      await postProductFunctionList(this, { function_ids: functionList }, '添加功能点成功！', '添加功能点失败', { productPid: this.currentProduct.pid })
       this.addingFunction = false
       this.postingFunction = false
       this.getProductFunctionList()
     },
-    async deleteFunction(id) {
-      await deleteProductFunction(this, null, '删除功能点成功！', '删除功能点失败', { id })
+    async deleteFunction(id, row) {
+      console.log(id, row)
+      await deleteProductFunction(this, null, '删除功能点成功！', '删除功能点失败', { combinationId: id })
       this.getProductFunctionList()
     },
     async saveCustomFunction() {
       // 按钮载入动画
       this.postingCustomFunction = true
-      // 获取产品id、功能点信息
+      // 获取功能点信息
       let customFunction = {}
       for (let item in functionConfig.customFunctionProto) {
         if (item in this.customFunction) {
           customFunction[item] = this.customFunction[item]
         }
       }
-      let productId = this.currentProduct.id
 
       // 获取特定数据类型的特殊信息
       let type = customFunction.type.toLowerCase()
@@ -547,14 +549,14 @@ export default {
       // 判断编辑还是新增，并发送请求
       if (this.customFunctionDrawerMode === '编辑') {
         customFunction.id = this.customFunction.id
-        result = await editProductFunction(this, customFunction, '编辑功能点成功！', '编辑功能点失败', { id: this.customFunction.id })
+        result = await editProductFunction(this, customFunction, '编辑功能点成功！', '编辑功能点失败', { combinationId: this.customFunction.id })
       } else {
-        result = await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })
+        result = await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { productPid: this.currentProduct.pid })
       }
 
       // 关闭载入动画、drawer，拉取新列表
       // 失败就不关闭drawer
-      if (!result) { this.addingCustomFunction = false }
+      if (result) { this.addingCustomFunction = false }
       this.postingCustomFunction = false
       this.getProductFunctionList()
     },
