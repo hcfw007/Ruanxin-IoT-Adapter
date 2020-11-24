@@ -456,8 +456,8 @@ export default {
     addCustomFunction() {
       // 点击添加自定义功能点
       // 初始化自定义功能点数据结构
-      this.customFunction = functionConfig.customFunctionProto
-      this.functionSpecFieldsByType = functionConfig.functionSpecFieldsByTypeProto
+      this.customFunction = Object.assign({}, functionConfig.customFunctionProto)
+      this.functionSpecFieldsByType = Object.assign({}, functionConfig.functionSpecFieldsByTypeProto)
       // 显示添加自定义功能点的drawer
       this.addingCustomFunction = true
     },
