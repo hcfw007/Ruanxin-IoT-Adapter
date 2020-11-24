@@ -69,7 +69,7 @@
                   </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                      <span class="clickable-text">编辑</span>
+                      <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
                       <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id)">
                         <span slot="reference" class="clickable-text">删除</span>
                       </el-popconfirm>
@@ -147,14 +147,14 @@
         </el-row>
         <el-row>
           <el-col :span="24" class="text-right">
-            <el-button type="primary" :loading="postingFunction" @click="saveFunctions()">添加</el-button>
+            <el-button type="primary" :loading="postingFunction" @click="saveFunctions()">保存</el-button>
             <el-button @click="addingFunction = false">取消</el-button>
           </el-col>
         </el-row>
       </div>
     </el-drawer>
     <el-drawer
-      title="添加自定义功能点"
+      :title="customFunctionDrawerMode + '自定义功能点'"
       :visible.sync="addingCustomFunction"
       direction="rtl"
       :modal="false"
@@ -239,7 +239,7 @@
                   {{ param.name }}
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <span class="clickable-text">编辑</span>
+                  <span class="clickable-text" @click="editParam(param)">编辑</span>
                   <span class="clickable-text" @click="customFunction.params.slice(index, 1)">删除</span>
                 </el-col>
               </el-row>
@@ -263,65 +263,65 @@
           </el-form-item>
           <el-divider />
           <el-form-item class="text-right">
-            <el-button type="primary" :loading="postingCustomFunction" @click="saveCustomFunction()">添加</el-button>
+            <el-button type="primary" :loading="postingCustomFunction" @click="saveCustomFunction()">保存</el-button>
             <el-button @click="addingCustomFunction = false">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-drawer>
     <el-drawer
-      title="添加输出参数"
+      :title="paramDrawerMode + '输出参数'"
       :visible.sync="addingParam"
       direction="rtl"
       :modal="false"
     >
       <div class="drawer-content">
-        <el-form :model="param" label-width="120px">
+        <el-form :model="currentParam" label-width="120px">
           <el-form-item label="参数名称" required>
-            <el-input v-model="param.name" placeholder="不超过20个字符" maxlength="20" />
+            <el-input v-model="currentParam.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="参数字段" required>
-            <el-input v-model="param.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
+            <el-input v-model="currentParam.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="数据类型" required>
-            <el-select v-model="param.type" placeholder="请选择数据类型" required>
+            <el-select v-model="currentParam.type" placeholder="请选择数据类型" required>
               <el-option label="布尔型" value="BOOLEAN" />
               <el-option label="数值型" value="NUMBER" />
               <el-option label="枚举型" value="ENUM" />
               <el-option label="字符串型" value="STRING" />
             </el-select>
           </el-form-item>
-          <section v-if="param.type === 'BOOLEAN'" />
-          <section v-if="param.type === 'NUMBER'">
+          <section v-if="currentParam.type === 'BOOLEAN'" />
+          <section v-if="currentParam.type === 'NUMBER'">
             <el-form-item label="取值范围" required>
               <el-col :span="11">
-                <el-input v-model="param.number.min" placeholder="最小值" />
+                <el-input v-model="currentParam.number.min" placeholder="最小值" />
               </el-col>
               <el-col :span="2" class="text-center">-</el-col>
               <el-col :span="11">
-                <el-input v-model="param.number.max" placeholder="最大值" />
+                <el-input v-model="currentParam.number.max" placeholder="最大值" />
               </el-col>
             </el-form-item>
             <el-form-item label="间距" required>
-              <el-input v-model="param.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+              <el-input v-model="currentParam.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
             </el-form-item>
             <el-form-item label="单位">
-              <el-input v-model="param.number.unit" placeholder="请输入单位" />
+              <el-input v-model="currentParam.number.unit" placeholder="请输入单位" />
             </el-form-item>
           </section>
-          <section v-if="param.type === 'ENUM'">
+          <section v-if="currentParam.type === 'ENUM'">
             <el-form-item label="枚举值" required>
-              <enum-editor v-model="param.enum.items" />
+              <enum-editor v-model="currentParam.enum.items" />
             </el-form-item>
           </section>
-          <section v-if="param.type === 'STRING'">
+          <section v-if="currentParam.type === 'STRING'">
             <el-form-item label="最大长度">
               <span>最大长度不超过255字节</span>
             </el-form-item>
           </section>
           <el-divider />
           <el-form-item class="text-right">
-            <el-button type="primary" :loading="postingCustomFunction" @click="saveParam()">添加</el-button>
+            <el-button type="primary" :loading="postingCustomFunction" @click="saveParam()">保存</el-button>
             <el-button @click="addingParam = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -332,7 +332,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -358,7 +358,7 @@ export default {
       postingCustomFunction: false,
       postingFunction: false,
       addingParam: false,
-      param: {
+      currentParam: {
       },
       customFunction: {
         fn_type: 'COMMON'
@@ -389,7 +389,9 @@ export default {
         count: 0,
         functions: []
       },
-      currentProduct: {}
+      currentProduct: {},
+      customFunctionDrawerMode: '添加',
+      paramDrawerMode: '添加'
     }
   },
   created() {
@@ -409,6 +411,24 @@ export default {
         return '只下发'
       }
       return '未知'
+    },
+    editFunction(row) {
+      // 编辑功能点（无论是自定义还是标准）
+      let fun = Object.assign({}, row)
+      let transferType
+      if (fun.up && fun.down) {
+        transferType = 'up, down'
+      } else if (fun.up) {
+        transferType = 'up'
+      } else {
+        transferType = 'down'
+      }
+      // 写入功能点内容
+      this.customFunctionTransferType = transferType
+      this.customFunction = fun
+      // 修改并展示drawer
+      this.customFunctionDrawerMode = '编辑'
+      this.addingCustomFunction = true
     },
     getProductFunctionList() {
       getProductFunctionList(this, 'productFunctionList', null, { id: this.currentProduct.id })
@@ -432,12 +452,24 @@ export default {
       }
       param = Object.assign(param, functionConfig.functionSpecFieldsByTypeProto)
       param.exception = undefined // 参数没有故障型
-      this.param = param
+      this.currentParam = param
       // 显示drawer
+      this.paramDrawerMode = '添加'
+      this.addingParam = true
+    },
+    editParam(param) {
+      // 编辑参数
+      this.currentParam = param
+      this.paramDrawerMode = '编辑'
       this.addingParam = true
     },
     saveParam() {
-      let param = this.param
+      // 如果是编辑，直接关闭窗口返回即可，因为直接编辑的是param对象
+      if (this.paramDrawerMode === '编辑') {
+        this.addingParam = false
+        return
+      }
+      let param = this.currentParam
       this.customFunction.params.push(param)
       this.addingParam = false
     },
@@ -446,9 +478,10 @@ export default {
       let functionList = this.productFunctionList.functions
       let functionIdList = []
       // 将已有功能点的id存入addedFunctions供穿梭框使用
-      for (let item of functionList) {
-        if (item.function_id) { functionIdList.push(item.function_id) }
-      }
+      // 根据设计，尽管是用穿梭框实现，但添加标准功能点只承担添加作用，不能删除编辑。因此无需载入已有的功能点。
+      // for (let item of functionList) {
+      //   if (item.function_id) { functionIdList.push(item.function_id) }
+      // }
       this.addedFunctions = functionIdList
       // 展示添加标准功能点drawer
       this.addingFunction = true
@@ -459,6 +492,7 @@ export default {
       this.customFunction = Object.assign({}, functionConfig.customFunctionProto)
       this.functionSpecFieldsByType = Object.assign({}, functionConfig.functionSpecFieldsByTypeProto)
       // 显示添加自定义功能点的drawer
+      this.customFunctionDrawerMode = '添加'
       this.addingCustomFunction = true
     },
     async saveFunctions() {
@@ -482,7 +516,12 @@ export default {
       // 按钮载入动画
       this.postingCustomFunction = true
       // 获取产品id、功能点信息
-      let customFunction = this.customFunction
+      let customFunction = {}
+      for (let item in functionConfig.customFunctionProto) {
+        if (item in this.customFunction) {
+          customFunction[item] = this.customFunction[item]
+        }
+      }
       let productId = this.currentProduct.id
 
       // 获取特定数据类型的特殊信息
@@ -502,12 +541,18 @@ export default {
       } else {
         customFunction.down = false
       }
-
-      // 发送请求
-      await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })
+      let result
+      // 判断编辑还是新增，并发送请求
+      if (this.customFunctionDrawerMode === '编辑') {
+        customFunction.id = this.customFunction.id
+        result = await editProductFunction(this, customFunction, '编辑功能点成功！', '编辑功能点失败', { id: this.customFunction.id })
+      } else {
+        result = await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { id: productId })
+      }
 
       // 关闭载入动画、drawer，拉取新列表
-      this.addingCustomFunction = false
+      // 失败就不关闭drawer
+      if (!result) { this.addingCustomFunction = false }
       this.postingCustomFunction = false
       this.getProductFunctionList()
     },

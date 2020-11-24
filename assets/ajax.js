@@ -11,19 +11,44 @@ const instance = axios.create({
   headers
 })
 
-const getRequestFactory = url => data => new Promise((resolve, reject) => {
-  instance.get(url, { data }).then((response) => {
+const putRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
+  let flag = 'origin'
+  for (let item in urlReplacementItem) {
+    url = url.replace('${' + item + '}', urlReplacementItem[item])
+  }
+  await instance.put(url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
     }
     if (responseData.code === 200) {
-      resolve(responseData.data)
+      vueObj.$toast(successToastMessage, {
+        customCss: {
+          'background-color': '#67C23A',
+          color: '#fff'
+        }
+      })
+      flag = true
     } else {
-      reject(new Error(responseData.msg))
+      vueObj.$toast(failedToastMessage + '，消息为' + responseData.msg, {
+        customCss: {
+          'background-color': '#E6A23C',
+          color: '#fff'
+        }
+      })
+      flag = false
     }
+  }).catch((err) => {
+    vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
+      customCss: {
+        'background-color': '#E6A23C',
+        color: '#fff'
+      }
+    })
+    flag = false
   })
-})
+  return flag
+}
 
 const postRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
   for (let item in urlReplacementItem) {
@@ -131,3 +156,5 @@ export const postProductFunctionList = postRequestFactory('/products/${id}/funct
 export const postProductCustomFunction = postRequestFactory('/products/${id}/functions/custom')
 // 删除功能点（根据combination id）
 export const deleteProductFunction = deleteRequestFactory('/functions/${id}')
+// 修改自定义功能点
+export const editProductFunction = putRequestFactory('/functions/custom/${id}')
