@@ -186,3 +186,5 @@ export const postProductCustomFunction = postRequestFactory('/products/${product
 export const deleteProductFunction = deleteRequestFactory('/functions/${combinationId}')
 // 修改自定义功能点
 export const editProductFunction = putRequestFactory('/functions/custom/${combinationId}')
+// 创建组合功能点
+export const postCombinedFunction = postRequestFactory('/functions/combine')

@@ -129,6 +129,13 @@ export const functionConfig = {
     remark: '', // 备注
     params: [] // 事件功能点输出参数
   },
+  combinedFunctionProto: {
+    product_id: '', // 产品id
+    name: '', // 名字
+    fn_type: 'COMMON', // 功能点类型
+    subject: '', // 字段
+    combination: [] // 事件功能点输出参数
+  },
   functionSpecFieldsByTypeProto: {
     // 数值型
     number: {

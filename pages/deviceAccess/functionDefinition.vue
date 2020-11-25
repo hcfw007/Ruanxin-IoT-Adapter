@@ -79,7 +79,51 @@
               </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane label="组合功能点" name="combined-function" />
+          <el-tab-pane label="组合功能点" name="combined-function">
+            <el-row>
+              <el-col :span="18">
+                <span class="block-info-title">
+                  组合功能点
+                </span>
+                <span class="block-info-hint">
+                  可以将多个独立功能点组合，进行上报或者下发。
+                </span>
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <div class="add-function-button" @click="addCombinedFunction()">
+                  <div class="add-function-icon">+</div>
+                  <div class="add-function-text">组合功能点</div>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-table :data="combinedFunctionList.items">
+                  <el-table-column prop="id" label="功能ID" />
+                  <el-table-column label="功能类型">
+                    <template slot-scope="scope">
+                      {{ scope.row.fn_type | functionTypeFilter }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="name" label="功能点名称" />
+                  <el-table-column prop="subject" label="字段名称" />
+                  <el-table-column label="传输类型">
+                    <template slot-scope="scope">
+                      {{ transferTypeTransfer(scope.row.up, scope.row.down) }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作">
+                    <template slot-scope="scope">
+                      <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
+                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id, scope.row)">
+                        <span slot="reference" class="clickable-text">删除</span>
+                      </el-popconfirm>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
@@ -133,7 +177,7 @@
       </el-col>
     </el-row>
     <el-drawer
-      title="添加产品"
+      title="添加标准功能点"
       :visible.sync="addingFunction"
       direction="rtl"
       :modal="false"
@@ -142,7 +186,7 @@
       <div class="drawer-content">
         <el-row>
           <el-col :span="24">
-            <el-transfer v-model="addedFunctions" filterable :data="functionList.functions" :props="{key: 'id', label: 'name'}" />
+            <el-transfer v-model="addedFunctions" filterable :data="functionList.functions" :props="{key: 'id', label: 'name'}" :titles="['功能点列表', '要添加的功能']" />
           </el-col>
         </el-row>
         <el-row>
@@ -327,12 +371,54 @@
         </el-form>
       </div>
     </el-drawer>
+    <el-drawer
+      :title="combinedFunctionDrawerMode + '组合功能点'"
+      :visible.sync="addingCombinedFunction"
+      direction="rtl"
+      :modal="false"
+      size="600"
+    >
+      <div class="drawer-content">
+        <el-form :model="combinedFunction" label-width="120px">
+          <el-form-item label="功能点名称" required>
+            <el-input v-model="combinedFunction.name" placeholder="不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="字段名称" required>
+            <el-input v-model="combinedFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
+          </el-form-item>
+          <el-form-item label="功能类型" required>
+            <el-select v-model="combinedFunction.fn_type" placeholder="请选择功能类型">
+              <el-option label="属性类型" value="COMMON" />
+              <el-option label="事件类型" value="EVENT" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="传输类型" required>
+            <el-select v-model="combinedFunctionTransferType" placeholder="请选择数据类型" @change="combinedFunction.combination = []">
+              <el-option label="可下发可上报" value="up, down" />
+              <el-option label="只可下发" value="down" />
+              <el-option label="只可上报" value="up" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <el-row>
+          <el-col :span="24">
+            <el-transfer v-model="combinedFunction.combination" filterable :data="functionListFilteredByCombinedTransferType" :props="{key: 'id', label: 'name'}" :titles="['独立功能点', '组合功能点']" />
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24" class="text-right">
+            <el-button type="primary" :loading="postingCombinedFunction" @click="saveCombinedFunction()">保存</el-button>
+            <el-button @click="addingCombinedFunction = false">取消</el-button>
+          </el-col>
+        </el-row>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -353,9 +439,13 @@ export default {
   data() {
     return {
       customFunctionTransferType: 'up, down',
+      combinedFunctionTransferType: 'up, down',
       addingFunction: false,
       addingCustomFunction: false,
+      addingCombinedFunction: false,
+      combinedFunction: {},
       postingCustomFunction: false,
+      postingCombinedFunction: false,
       postingFunction: false,
       addingParam: false,
       currentParam: {
@@ -395,7 +485,21 @@ export default {
       },
       currentProduct: {},
       customFunctionDrawerMode: '添加',
-      paramDrawerMode: '添加'
+      paramDrawerMode: '添加',
+      combinedFunctionDrawerMode: '添加'
+      // functionListFilteredByCombinedTransferType: []
+    }
+  },
+  computed: {
+    functionListFilteredByCombinedTransferType() {
+      let [up, down] = [false, false]
+      if (this.combinedFunctionTransferType.includes('up')) {
+        up = true
+      }
+      if (this.combinedFunctionTransferType.includes('down')) {
+        down = true
+      }
+      return this.functionList.functions.filter(ele => (ele.up === up && ele.down === down))
     }
   },
   created() {
@@ -415,6 +519,13 @@ export default {
         return '只下发'
       }
       return '未知'
+    },
+    addCombinedFunction() {
+      // 添加组合功能点
+      let combinedFunction = Object.assign({}, functionConfig.combinedFunctionProto)
+      this.combinedFunction = combinedFunction
+      this.combinedFunctionDrawerMode = '添加'
+      this.addingCombinedFunction = true
     },
     editFunction(row) {
       // 编辑功能点（无论是自定义还是标准）
@@ -569,6 +680,55 @@ export default {
       if (value === 'BUFFER' && this.customFunctionTransferType === 'down') {
         this.customFunctionTransferType = 'up, down'
       }
+    },
+    async saveCombinedFunction() {
+      // 按钮载入动画
+      this.postingCombinedFunction = true
+      // 获取功能点信息
+      let combinedFunction = {}
+      for (let item in functionConfig.combinedFunctionProto) {
+        if (item in this.combinedFunction) {
+          combinedFunction[item] = this.combinedFunction[item]
+        }
+      }
+
+      // 产品id
+      combinedFunction.product_id = this.currentProduct.pid
+
+      // 映射传输类型
+      combinedFunction.type = 'None'
+      if (this.combinedFunctionTransferType.includes('up')) {
+        combinedFunction.type = 'UP'
+      }
+      if (this.combinedFunctionTransferType.includes('down')) {
+        if (combinedFunction.type === 'UP') {
+          combinedFunction.type = 'BOTH'
+        } else {
+          combinedFunction.type = 'DOWN'
+        }
+      }
+
+      // 添加组合信息（根据id获取index）
+      let combination = []
+      for (let item of this.combinedFunction.combination) {
+        for (let fn of this.functionList.functions) {
+          if (fn.id === item) {
+            combination.push({
+              id: fn.id,
+              index: fn.index
+            })
+            break
+          }
+        }
+      }
+      combinedFunction.combination = combination
+
+      let result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败')
+      // 关闭载入动画、drawer，拉取新列表
+      // 失败就不关闭drawer
+      if (result) { this.addingCombinedFunction = false }
+      this.postingCombinedFunction = false
+      this.getProductFunctionList()
     }
   }
 }
