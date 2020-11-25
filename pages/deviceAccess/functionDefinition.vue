@@ -70,7 +70,7 @@
                   <el-table-column label="操作">
                     <template slot-scope="scope">
                       <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
-                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id, scope.row)">
+                      <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id)">
                         <span slot="reference" class="clickable-text">删除</span>
                       </el-popconfirm>
                     </template>
@@ -114,7 +114,7 @@
                   </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                      <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
+                      <span class="clickable-text" @click="editCombinedFunction(scope.row)">编辑</span>
                       <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id, scope.row)">
                         <span slot="reference" class="clickable-text">删除</span>
                       </el-popconfirm>
@@ -527,6 +527,25 @@ export default {
       this.combinedFunctionDrawerMode = '添加'
       this.addingCombinedFunction = true
     },
+    editCombinedFunction(row) {
+      // 编辑组合功能点
+      let fun = Object.assign({}, row)
+      let transferType
+      if (fun.up && fun.down) {
+        transferType = 'up, down'
+      } else if (fun.up) {
+        transferType = 'up'
+      } else {
+        transferType = 'down'
+      }
+
+      // 写入功能点内容
+      this.combinedFunctionTransferType = transferType
+      this.combinedFunction = fun
+
+      this.combinedFunctionDrawerMode = '编辑'
+      this.addingCombinedFunction = true
+    },
     editFunction(row) {
       // 编辑功能点（无论是自定义还是标准）
       let fun = Object.assign({}, row)
@@ -623,8 +642,7 @@ export default {
       this.postingFunction = false
       this.getProductFunctionList()
     },
-    async deleteFunction(id, row) {
-      console.log(id, row)
+    async deleteFunction(id) {
       await deleteProductFunction(this, null, '删除功能点成功！', '删除功能点失败', { combinationId: id })
       this.getProductFunctionList()
     },
