@@ -22,7 +22,7 @@
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
         <el-button>导入功能点</el-button>
-        <el-button>导出功能点</el-button>
+        <el-button @click="exportFunction">导出功能点</el-button>
         <el-button type="primary">下载SDK</el-button>
       </el-col>
     </el-row>
@@ -418,7 +418,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -508,6 +508,18 @@ export default {
     this.getProductFunctionList()
   },
   methods: {
+    exportFunction() {
+      let pid = this.currentProduct.pid
+      exportFunction(pid).catch((err) => {
+        console.log(err)
+        this.$toast('导出失败，消息为' + err.msg, {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+      })
+    },
     transferTypeTransfer(up, down) {
       if (up && down) {
         return '可上报可下发'

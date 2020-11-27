@@ -188,3 +188,17 @@ export const deleteProductFunction = deleteRequestFactory('/functions/${combinat
 export const editProductFunction = putRequestFactory('/functions/custom/${combinationId}')
 // 创建组合功能点
 export const postCombinedFunction = postRequestFactory('/functions/combine')
+
+// 导出功能点并下载
+export const exportFunction = pid =>
+  instance.get('/functions/export/' + pid, {
+    responseType: 'blob'
+  }).then((response) => {
+    let data = response.data
+    let url = window.URL.createObjectURL(data)
+    let download = document.createElement('a')
+    download.href = url
+    download.download = 'functions.json'
+    download.click()
+    window.URL.revokeObjectURL(download.href)
+  })
