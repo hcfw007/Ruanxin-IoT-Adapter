@@ -21,9 +21,10 @@
         </div>
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
-        <el-button>导入功能点</el-button>
+        <el-button :loading="uploadingImportedFile" @click="chooseImportFile">导入功能点</el-button>
         <el-button @click="exportFunction">导出功能点</el-button>
         <el-button type="primary">下载SDK</el-button>
+        <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
       </el-col>
     </el-row>
     <el-row class="device-function-block block-white block-round">
@@ -418,7 +419,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -448,6 +449,7 @@ export default {
       postingCombinedFunction: false,
       postingFunction: false,
       addingParam: false,
+      uploadingImportedFile: false,
       currentParam: {
       },
       customFunction: {
@@ -511,7 +513,6 @@ export default {
     exportFunction() {
       let pid = this.currentProduct.pid
       exportFunction(pid).catch((err) => {
-        console.log(err)
         this.$toast('导出失败，消息为' + err.msg, {
           customCss: {
             'background-color': '#E6A23C',
@@ -519,6 +520,32 @@ export default {
           }
         })
       })
+    },
+    chooseImportFile() {
+      document.getElementById('import').click()
+    },
+    async handleImportUpload(event) {
+      this.uploadingImportedFile = true
+      let pid = this.currentProduct.pid
+      let file = event.target.files[0]
+      await importFunction(pid, file).then((response) => {
+        console.log(response)
+        this.$toast('导入成功', {
+          customCss: {
+            'background-color': '#67C23A',
+            color: '#fff'
+          }
+        })
+      }).catch((err) => {
+        console.log(err)
+        this.$toast('导入失败', {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+      })
+      this.uploadingImportedFile = false
     },
     transferTypeTransfer(up, down) {
       if (up && down) {

@@ -202,3 +202,11 @@ export const exportFunction = pid =>
     download.click()
     window.URL.revokeObjectURL(download.href)
   })
+
+// 导入功能点
+export const importFunction = (pid, file) =>
+  instance.post('/function/import/' + pid, file, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
