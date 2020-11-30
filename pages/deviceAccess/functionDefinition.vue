@@ -528,7 +528,7 @@ export default {
       this.uploadingImportedFile = true
       let pid = this.currentProduct.pid
       let file = event.target.files[0]
-      await importFunction(pid, file).then((response) => {
+      await importFunction(file).then((response) => {
         console.log(response)
         this.$toast('导入成功', {
           customCss: {

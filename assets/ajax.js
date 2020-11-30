@@ -204,8 +204,8 @@ export const exportFunction = pid =>
   })
 
 // 导入功能点
-export const importFunction = (pid, file) =>
-  instance.post('/function/import/' + pid, file, {
+export const importFunction = file =>
+  instance.post('/functions/import/', file, {
     headers: {
       'Content-Type': 'application/json'
     }
