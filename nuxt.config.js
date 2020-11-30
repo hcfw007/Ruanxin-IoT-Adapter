@@ -80,7 +80,7 @@ export default {
     }
   },
   router: {
-    base: '/client'
+    base: '/client/'
   },
   server: {
     host: '10.10.22.2',
