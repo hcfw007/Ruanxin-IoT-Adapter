@@ -119,6 +119,7 @@ export const rapidDevelopStep = [
   }
 ]
 
+// 功能点相关数据模型原型
 export const functionConfig = {
   customFunctionProto: {
     name: '', // 名字
@@ -150,5 +151,17 @@ export const functionConfig = {
     exception: {
       items: [] // 枚举值
     }
+  }
+}
+
+// 产品相关数据模型原型
+export const productConfig = {
+  productProto: {
+    name: '',
+    category_id: '',
+    industry_id: '',
+    device_node: '',
+    connection: '',
+    model: ''
   }
 }

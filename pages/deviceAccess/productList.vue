@@ -44,7 +44,7 @@
         </div>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" class="add-product" @click="creatingProduct = true">添加产品</el-button>
+        <el-button type="primary" class="add-product" @click="addProduct">添加产品</el-button>
       </el-col>
     </el-row>
     <el-row class="product-list-row block-white block-round">
@@ -83,42 +83,41 @@
             </div>
           </el-col>
           <el-col :span="4" class="product-operators">
-            <span class="product-operator" @click="setAndView(product)">查看</span>
-            <span class="product-operator">编辑</span>
-            <span class="product-operator">删除</span>
+            <span class="clickable-text" @click="setAndView(product)">查看</span>
+            <span class="clickable-text" @click="editProduct(product)">编辑</span>
+            <span class="clickable-text disabled">删除</span>
           </el-col>
         </el-row>
       </el-col>
     </el-row>
     <el-drawer
-      title="添加产品"
+      :title="productDrawerMode + '添加产品'"
       :visible.sync="creatingProduct"
       direction="rtl"
       :modal="false"
-      :before-close="clearProduct"
     >
       <div class="drawer-content">
         <el-form :model="newProduct" label-width="120px">
           <el-form-item label="产品名称" required>
-            <el-input v-model="newProduct.productName" placeholder="请输入产品名称" />
+            <el-input v-model="newProduct.name" placeholder="请输入产品名称" />
           </el-form-item>
           <el-form-item label="行业-产品类别" required>
-            <el-select v-model="newProduct.industryId" placeholder="请选择行业" style="width: 49%">
+            <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%">
               <el-option v-for="(industry, index) in industryList" :key="'industry' + index" :label="industry.name" :value="industry.id" />
             </el-select>
-            <el-select v-model="newProduct.categoryId" placeholder="请选择类别" style="width: 49%; margin-left: 1%">
+            <el-select v-model="newProduct.category_id" placeholder="请选择类别" style="width: 49%; margin-left: 1%">
               <el-option v-for="(category, index) in categoryList" :key="'category' + index" :label="category.name" :value="category.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="设备节点" required>
-            <el-select v-model="newProduct.deviceNode" placeholder="请选择设备节点类型">
+            <el-select v-model="newProduct.device_node" placeholder="请选择设备节点类型">
               <el-option label="直连设备" value="直连设备" />
               <el-option label="网关设备" value="网关设备" />
               <el-option label="子设备" value="子设备" />
             </el-select>
           </el-form-item>
           <el-form-item label="联网方式" required>
-            <el-select v-model="newProduct.connectionType" placeholder="请选择连接方式">
+            <el-select v-model="newProduct.connection" placeholder="请选择连接方式">
               <el-option label="2G" value="2G" />
               <el-option label="4G" value="4G" />
               <el-option label="NBIoT" value="NBIoT" />
@@ -128,11 +127,11 @@
             </el-select>
           </el-form-item>
           <el-form-item label="产品型号">
-            <el-input v-model="newProduct.productModel" placeholder="请输入产品型号" />
+            <el-input v-model="newProduct.model" placeholder="请输入产品型号" />
           </el-form-item>
           <el-divider />
           <el-form-item class="text-right">
-            <el-button type="primary" :loading="postingNewProduct" @click="createProduct()">添加</el-button>
+            <el-button type="primary" :loading="postingNewProduct" @click="saveProduct()">添加</el-button>
             <el-button @click="creatingProduct = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -142,8 +141,8 @@
 </template>
 
 <script>
-import { colors, rapidDevelopStep } from '~/assets/config'
-import { getIndustryList, getCategoryList, postNewProduct, getProductList } from '~/assets/ajax'
+import { colors, rapidDevelopStep, productConfig } from '~/assets/config'
+import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct } from '~/assets/ajax'
 
 export default {
   data() {
@@ -162,7 +161,8 @@ export default {
         connectionType: '',
         productModel: ''
       },
-      postingNewProduct: false
+      postingNewProduct: false,
+      productDrawerMode: '添加'
     }
   },
   created() {
@@ -177,32 +177,44 @@ export default {
     getProductList() {
       getProductList(this, 'productList')
     },
-    async createProduct() {
+    addProduct() {
+      let product = Object.assign({}, productConfig.productProto)
+      this.newProduct = product
+      this.productDrawerMode = '添加'
+      this.creatingProduct = true
+    },
+    editProduct(product) {
+      // 根据原型的项目取出所需数据
+      let _product = {}
+      for (let item in productConfig.productProto) {
+        _product[item] = product[item]
+      }
+      // 加入产品id信息
+      _product.pid = product.pid
+      _product.id = product.id
+      this.newProduct = _product
+
+      // 修改模式、显示抽屉
+      this.productDrawerMode = '编辑'
+      this.creatingProduct = true
+    },
+    async saveProduct() {
       let data = this.newProduct
       let productObj = {
-        name: data.productName,
-        category_id: data.categoryId,
-        industry_id: data.industryId,
-        connection: data.conectionType,
-        device_node: data.deviceNode,
-        model: data.productModel
+      }
+      for (let item in productConfig.productProto) {
+        productObj[item] = data[item]
       }
       this.postingNewProduct = true
-      await postNewProduct(this, productObj, '添加产品成功', '添加产品失败')
+      if (this.productDrawerMode === '添加') {
+        await postNewProduct(this, productObj, '添加产品成功！', '添加产品失败')
+      } else {
+        productObj.pid = this.newProduct.pid
+        productObj.id = this.newProduct.id
+        await editProduct(this, productObj, '修改产品成功！', '修改产品失败')
+      }
       this.postingNewProduct = false
       this.creatingProduct = false
-    },
-    clearProduct(done) {
-      this.newProduct = {
-        productName: '',
-        categoryId: '',
-        industryId: '',
-        deviceNode: '',
-        protocol: '',
-        connectionType: '',
-        productModel: ''
-      }
-      done()
     },
     setAndView(product) {
       localStorage.setItem('currentProduct', JSON.stringify(product))
@@ -284,10 +296,6 @@ export default {
     justify-content: space-between
     align-items: center
     font-size: 16px
-
-    .product-operator
-      color: var(--default-link-color)
-      cursor: pointer
 
   .product-block:not(:last-child)
     padding-bottom: 30px

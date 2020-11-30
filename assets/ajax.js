@@ -169,6 +169,8 @@ export const getCategoryList = getRequestFactory('/product_categories')
 export const postNewProduct = postRequestFactory('/products/create')
 // 获取产品列表
 export const getProductList = getRequestFactory('/products/select')
+// 修改产品
+export const editProduct = postRequestFactory('/products/update')
 
 // 获取产品的功能点
 export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions')
