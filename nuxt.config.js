@@ -78,5 +78,10 @@ export default {
         '/webadmin': ''
       }
     }
+  },
+  rootDir: '/client/',
+  server: {
+    host: '10.10.22.2',
+    port: 3000
   }
 }
