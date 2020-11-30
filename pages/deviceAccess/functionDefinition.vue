@@ -703,12 +703,12 @@ export default {
       }
 
       // 映射传输类型
-      if (this.customFunctionTransferType.indexOf('up')) {
+      if (this.customFunctionTransferType.includes('up')) {
         customFunction.up = true
       } else {
         customFunction.up = false
       }
-      if (this.customFunctionTransferType.indexOf('down')) {
+      if (this.customFunctionTransferType.includes('down')) {
         customFunction.down = true
       } else {
         customFunction.down = false
