@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = '/bu-thing-model-server'
+const baseURL = '/webadmin'
 const headers = {
   Authorization: 'test'
 }
@@ -161,7 +161,7 @@ const deleteRequestFactory = url => async (vueObj, data = {}, successToastMessag
   return flag
 }
 // 获取行业列表
-export const getIndustryList = getRequestFactory('/industry/select')
+export const getIndustryList = getRequestFactory('/industry')
 // 获取类型列表
 export const getCategoryList = getRequestFactory('/product_categories')
 

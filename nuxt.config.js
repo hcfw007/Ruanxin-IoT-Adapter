@@ -71,9 +71,12 @@ export default {
     transpile: [/^element-ui/]
   },
   proxy: {
-    '/bu-thing-model-server': {
+    '/webadmin': {
       changeOrigin: true,
-      target: 'http://10.10.20.85:8765/'
+      target: 'http://10.10.22.4:8765/bu-thing-model-server',
+      pathRewrite: {
+        '/webadmin': ''
+      }
     }
   }
 }
