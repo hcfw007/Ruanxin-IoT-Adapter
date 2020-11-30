@@ -91,7 +91,7 @@
       </el-col>
     </el-row>
     <el-drawer
-      :title="productDrawerMode + '添加产品'"
+      :title="productDrawerMode + '产品'"
       :visible.sync="creatingProduct"
       direction="rtl"
       :modal="false"
@@ -131,7 +131,7 @@
           </el-form-item>
           <el-divider />
           <el-form-item class="text-right">
-            <el-button type="primary" :loading="postingNewProduct" @click="saveProduct()">添加</el-button>
+            <el-button type="primary" :loading="postingNewProduct" @click="saveProduct()">保存</el-button>
             <el-button @click="creatingProduct = false">取消</el-button>
           </el-form-item>
         </el-form>
@@ -206,15 +206,18 @@ export default {
         productObj[item] = data[item]
       }
       this.postingNewProduct = true
+      let result
       if (this.productDrawerMode === '添加') {
-        await postNewProduct(this, productObj, '添加产品成功！', '添加产品失败')
+        result = await postNewProduct(this, productObj, '添加产品成功！', '添加产品失败')
       } else {
         productObj.pid = this.newProduct.pid
         productObj.id = this.newProduct.id
-        await editProduct(this, productObj, '修改产品成功！', '修改产品失败')
+        result = await editProduct(this, productObj, '修改产品成功！', '修改产品失败')
+      }
+      if (result) {
+        this.creatingProduct = false
       }
       this.postingNewProduct = false
-      this.creatingProduct = false
     },
     setAndView(product) {
       localStorage.setItem('currentProduct', JSON.stringify(product))
