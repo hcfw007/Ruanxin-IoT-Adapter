@@ -63,7 +63,7 @@
               产品IID
             </div>
             <div class="product-IID-value product-value">
-              {{ product.IID }}
+              {{ product.id }}
             </div>
           </el-col>
           <el-col :span="4">
