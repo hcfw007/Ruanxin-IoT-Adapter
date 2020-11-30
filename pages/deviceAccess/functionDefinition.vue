@@ -54,7 +54,7 @@
             <el-row>
               <el-col :span="24">
                 <el-table :data="productFunctionList.functions">
-                  <el-table-column prop="id" label="功能ID" />
+                  <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
                       {{ scope.row.fn_type | functionTypeFilter }}
