@@ -218,6 +218,7 @@ export default {
         this.creatingProduct = false
       }
       this.postingNewProduct = false
+      this.getProductList()
     },
     setAndView(product) {
       localStorage.setItem('currentProduct', JSON.stringify(product))
