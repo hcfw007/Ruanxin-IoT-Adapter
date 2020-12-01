@@ -11,10 +11,10 @@
       </el-col>
       <el-col :span="3">
         <div class="product-IID-label product-label">
-          产品IID
+          产品ID
         </div>
         <div class="product-IID-value product-value">
-          {{ currentProduct.IID }}
+          {{ currentProduct.pid }}
         </div>
       </el-col>
       <el-col :span="3">
