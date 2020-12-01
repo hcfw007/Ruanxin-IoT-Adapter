@@ -102,11 +102,11 @@
             <el-input v-model="newProduct.name" placeholder="请输入产品名称" />
           </el-form-item>
           <el-form-item label="行业-产品类别" required>
-            <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%">
+            <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%" @change="newProduct.category_id=''">
               <el-option v-for="(industry, index) in industryList" :key="'industry' + index" :label="industry.name" :value="industry.id" />
             </el-select>
             <el-select v-model="newProduct.category_id" placeholder="请选择类别" style="width: 49%; margin-left: 1%">
-              <el-option v-for="(category, index) in categoryList" :key="'category' + index" :label="category.name" :value="category.id" />
+              <el-option v-for="(category, index) in categoryFilteredByIndustry" :key="'category' + index" :label="category.name" :value="category.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="设备节点" required>
@@ -153,16 +153,14 @@ export default {
       industryList: [],
       categoryList: [],
       creatingProduct: false,
-      newProduct: {
-        productName: '',
-        categoryId: '',
-        industryId: '',
-        deviceNode: '',
-        connectionType: '',
-        productModel: ''
-      },
+      newProduct: {},
       postingNewProduct: false,
       productDrawerMode: '添加'
+    }
+  },
+  computed: {
+    categoryFilteredByIndustry() {
+      return this.categoryList.filter(ele => ele.industry === this.newProduct.industry_id)
     }
   },
   created() {
