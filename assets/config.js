@@ -202,5 +202,12 @@ export const productFormRule = {
       message: '请选择联网方式',
       trigger: 'blur'
     }
+  ],
+  protocol_type: [
+    {
+      required: true,
+      message: '请选择协议类型',
+      trigger: 'blur'
+    }
   ]
 }

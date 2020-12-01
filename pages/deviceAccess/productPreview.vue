@@ -37,7 +37,7 @@
           设备接入协议
         </div>
         <div class="product-protocol-value product-value">
-          {{ currentProduct.connection_type }}
+          {{ currentProduct.protocol_type }}
         </div>
       </el-col>
       <el-col :span="3">
@@ -45,7 +45,7 @@
           联网方式
         </div>
         <div class="product-network-value product-value">
-          {{ currentProduct.connection }}
+          {{ currentProduct.connection | connectionFilter }}
         </div>
       </el-col>
       <el-col v-if="currentProduct.device_node === '子设备'" :span="3">

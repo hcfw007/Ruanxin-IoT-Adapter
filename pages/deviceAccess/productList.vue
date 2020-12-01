@@ -71,7 +71,7 @@
               协议
             </div>
             <div class="product-protocol-value product-value">
-              {{ product.protocol }}
+              {{ product.protocol_type }}
             </div>
           </el-col>
           <el-col :span="4">
@@ -111,21 +111,30 @@
               <el-option v-for="(category, index) in categoryFilteredByIndustry" :key="'category' + index" :label="category.name" :value="category.id" />
             </el-select>
           </el-form-item>
+          <el-form-item label="协议类型" prop="protocol_type">
+            <el-select v-model="newProduct.protocol_type" placeholder="请选择设备协议类型">
+              <el-option label="MQTT协议" value="MQTT" />
+              <el-option label="CoAP协议" value="CoAP" />
+              <el-option label="Https协议" value="HTTPS" />
+              <el-option label="tcp协议" value="TCP" />
+              <el-option label="自定义协议" value="CUSTOM" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="设备节点" prop="device_node">
             <el-select v-model="newProduct.device_node" placeholder="请选择设备节点类型">
-              <el-option label="直连设备" value="直连设备" />
-              <el-option label="网关设备" value="网关设备" />
-              <el-option label="子设备" value="子设备" />
+              <el-option label="直连设备" value="DIRECT" />
+              <el-option label="网关设备" value="GATEWAY" />
+              <el-option label="子设备" value="CHILD" />
             </el-select>
           </el-form-item>
           <el-form-item label="联网方式" prop="connection">
             <el-select v-model="newProduct.connection" placeholder="请选择连接方式">
-              <el-option label="2G" value="2G" />
-              <el-option label="4G" value="4G" />
+              <el-option label="2G" value="_2G" />
+              <el-option label="4G" value="_4G" />
               <el-option label="NBIoT" value="NBIoT" />
-              <el-option label="Wifi" value="Wifi" />
-              <el-option label="以太网接入" value="以太网接入" />
-              <el-option label="其他" value="其他" />
+              <el-option label="Wifi" value="WIFI" />
+              <el-option label="以太网" value="ETHERNET" />
+              <el-option label="其他" value="OTHER" />
             </el-select>
           </el-form-item>
           <el-form-item label="产品型号">
