@@ -577,8 +577,13 @@ export default {
       } else {
         transferType = 'down'
       }
+      let combinations = []
+      for (let item of row.combination) {
+        combinations.push(item.id)
+      }
 
       // 写入功能点内容
+      fun.combination = combinations
       this.combinedFunctionTransferType = transferType
       this.combinedFunction = fun
 
@@ -777,7 +782,12 @@ export default {
           if (fn.id === item) {
             combination.push({
               id: fn.id,
-              index: fn.index
+              index: fn.index,
+              subject: fn.subject,
+              type: fn.type,
+              up: fn.up,
+              down: fn.down,
+              name: fn.name
             })
             break
           }
