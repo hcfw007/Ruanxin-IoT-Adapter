@@ -162,7 +162,8 @@ export const productConfig = {
     industry_id: '',
     device_node: '',
     connection: '',
-    model: ''
+    model: '',
+    protocol_type: ''
   }
 }
 
