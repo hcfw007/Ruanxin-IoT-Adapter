@@ -85,7 +85,9 @@
           <el-col :span="4" class="product-operators">
             <span class="clickable-text" @click="setAndView(product)">查看</span>
             <span class="clickable-text" @click="editProduct(product)">编辑</span>
-            <span class="clickable-text disabled">删除</span>
+            <el-popconfirm title="确定要删除吗？" @confirm="deleteProduct(product)">
+              <span slot="reference" class="clickable-text">删除</span>
+            </el-popconfirm>
           </el-col>
         </el-row>
       </el-col>
@@ -142,7 +144,7 @@
 
 <script>
 import { colors, rapidDevelopStep, productConfig, productFormRule } from '~/assets/config'
-import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct } from '~/assets/ajax'
+import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct, deleteProduct } from '~/assets/ajax'
 
 export default {
   data() {
@@ -227,6 +229,10 @@ export default {
     setAndView(product) {
       localStorage.setItem('currentProduct', JSON.stringify(product))
       this.$router.push('/deviceAccess/productPreview')
+    },
+    deleteProduct(product) {
+      let pid = product.pid
+      deleteProduct(this, null, '删除产品成功！', '删除产品失败', { id: pid })
     }
   }
 }
