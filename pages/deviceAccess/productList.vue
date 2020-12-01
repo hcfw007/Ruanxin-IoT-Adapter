@@ -97,11 +97,11 @@
       :modal="false"
     >
       <div class="drawer-content">
-        <el-form :model="newProduct" label-width="120px">
-          <el-form-item label="产品名称" required>
+        <el-form ref="productForm" :model="newProduct" label-width="120px" :rules="productFormRule">
+          <el-form-item label="产品名称" prop="name">
             <el-input v-model="newProduct.name" placeholder="请输入产品名称" />
           </el-form-item>
-          <el-form-item label="行业-产品类别" required>
+          <el-form-item label="行业-产品类别" prop="category_id">
             <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%" @change="newProduct.category_id=''">
               <el-option v-for="(industry, index) in industryList" :key="'industry' + index" :label="industry.name" :value="industry.id" />
             </el-select>
@@ -109,14 +109,14 @@
               <el-option v-for="(category, index) in categoryFilteredByIndustry" :key="'category' + index" :label="category.name" :value="category.id" />
             </el-select>
           </el-form-item>
-          <el-form-item label="设备节点" required>
+          <el-form-item label="设备节点" prop="device_node">
             <el-select v-model="newProduct.device_node" placeholder="请选择设备节点类型">
               <el-option label="直连设备" value="直连设备" />
               <el-option label="网关设备" value="网关设备" />
               <el-option label="子设备" value="子设备" />
             </el-select>
           </el-form-item>
-          <el-form-item label="联网方式" required>
+          <el-form-item label="联网方式" prop="connection">
             <el-select v-model="newProduct.connection" placeholder="请选择连接方式">
               <el-option label="2G" value="2G" />
               <el-option label="4G" value="4G" />
@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { colors, rapidDevelopStep, productConfig } from '~/assets/config'
+import { colors, rapidDevelopStep, productConfig, productFormRule } from '~/assets/config'
 import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct } from '~/assets/ajax'
 
 export default {
@@ -155,7 +155,8 @@ export default {
       creatingProduct: false,
       newProduct: {},
       postingNewProduct: false,
-      productDrawerMode: '添加'
+      productDrawerMode: '添加',
+      productFormRule
     }
   },
   computed: {
@@ -197,6 +198,11 @@ export default {
       this.creatingProduct = true
     },
     async saveProduct() {
+      let pass = true
+      await this.$refs.productForm.validate((valid) => {
+        pass = valid
+      })
+      if (!pass) { return }
       let data = this.newProduct
       let productObj = {
       }

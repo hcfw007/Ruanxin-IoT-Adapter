@@ -165,3 +165,42 @@ export const productConfig = {
     model: ''
   }
 }
+
+// 产品信息表单验证
+export const productFormRule = {
+  name: [
+    {
+      required: true,
+      message: '请输入产品名称',
+      trigger: 'blur'
+    }
+  ],
+  category_id: [
+    {
+      required: true,
+      message: '请选择产品行业和类别',
+      trigger: 'blur'
+    }
+  ],
+  // industry_id: [
+  //   {
+  //     required: true,
+  //     message: '请选择产品行业',
+  //     trigger: 'blur'
+  //   }
+  // ],
+  device_node: [
+    {
+      required: true,
+      message: '请选择节点类型',
+      trigger: 'blur'
+    }
+  ],
+  connection: [
+    {
+      required: true,
+      message: '请选择联网方式',
+      trigger: 'blur'
+    }
+  ]
+}
