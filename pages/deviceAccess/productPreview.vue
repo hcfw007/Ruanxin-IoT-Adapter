@@ -37,7 +37,7 @@
           设备接入协议
         </div>
         <div class="product-protocol-value product-value">
-          {{ currentProduct.protocol }}
+          {{ currentProduct.connection_type }}
         </div>
       </el-col>
       <el-col :span="3">
@@ -45,16 +45,23 @@
           联网方式
         </div>
         <div class="product-network-value product-value">
-          {{ currentProduct.connection_type }}
+          {{ currentProduct.connection }}
         </div>
       </el-col>
-      <el-col :span="3">
+      <el-col v-if="currentProduct.device_node === '子设备'" :span="3">
         <div class="product-subdevice-biding-code-label product-label">
           子设备绑定码
         </div>
-        <div class="product-subdevice-biding-code-value product-value clickable-text">
-          {{ currentProduct.access_code }}
-        </div>
+        <el-popover placement="bottom" title="AccessKey" width="200" trigger="click">
+          <div>
+            {{ currentProduct.access_code || '无' }}
+            <br>
+            <el-button v-if="currentProduct.access_code" type="primary" size="mini" @click="copyToClipboard(currentProduct.access_code)">复制</el-button>
+          </div>
+          <div slot="reference" class="product-subdevice-biding-code-value product-value clickable-text">
+            查看
+          </div>
+        </el-popover>
       </el-col>
     </el-row>
     <el-row class="device-data-block block-white block-round">
