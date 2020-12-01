@@ -21,9 +21,16 @@
         <div class="product-accesskey-label product-label">
           AccessKey
         </div>
-        <div class="product-accesskey-value product-value clickable-text">
-          查看
-        </div>
+        <el-popover placement="bottom" title="AccessKey" width="200" trigger="click">
+          <div>
+            {{ currentProduct.access_key || '无' }}
+            <br>
+            <el-button v-if="currentProduct.access_key" type="primary" size="mini" @click="copyToClipboard(currentProduct.access_key)">复制</el-button>
+          </div>
+          <div slot="reference" class="product-accesskey-value product-value clickable-text">
+            查看
+          </div>
+        </el-popover>
       </el-col>
       <el-col :span="3">
         <div class="product-protocol-label product-label">
@@ -280,6 +287,20 @@ export default {
           return a.date - b.date
         })
         this.originalSilentDeviceDbDData = data
+      })
+    },
+    copyToClipboard(text) {
+      let input = document.createElement('input')
+      input.value = text
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('Copy')
+      input.remove()
+      this.$toast('已复制到剪切板！', {
+        customCss: {
+          'background-color': '#67C23A',
+          color: '#fff'
+        }
       })
     }
   }
