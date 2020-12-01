@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import stringMapping from './filter-strings'
 
 const filters = {
   dateTimeFilter(date, str = 'yyyy-MM-dd hh:mm:ss') {
@@ -61,6 +62,13 @@ const filters = {
       return '断开'
     }
     return 'N/A'
+  },
+  connectionFilter(val) {
+    if (val in stringMapping.connectionString) {
+      return stringMapping.connectionString[val]
+    } else {
+      return 'N/A'
+    }
   }
 }
 
