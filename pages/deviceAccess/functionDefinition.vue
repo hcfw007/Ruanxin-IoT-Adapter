@@ -268,6 +268,13 @@
                 <span>最大长度不超过255字节</span>
               </el-form-item>
             </section>
+            <el-form-item label="传输类型" required>
+              <el-select v-model="customFunctionTransferType" placeholder="请选择数据类型">
+                <el-option v-if="customFunction.type !== 'EXCEPTION'" label="可下发可上报" value="up, down" />
+                <el-option v-if="customFunction.type !== 'EXCEPTION' && customFunction.type !== 'BUFFER'" label="只可下发" value="down" />
+                <el-option label="只可上报" value="up" />
+              </el-select>
+            </el-form-item>
           </section>
 
           <section v-if="customFunction.fn_type === 'EVENT'">
@@ -296,13 +303,6 @@
             </el-form-item>
           </section>
 
-          <el-form-item label="传输类型" required>
-            <el-select v-model="customFunctionTransferType" placeholder="请选择数据类型">
-              <el-option v-if="customFunction.type !== 'EXCEPTION'" label="可下发可上报" value="up, down" />
-              <el-option v-if="customFunction.type !== 'EXCEPTION' && customFunction.type !== 'BUFFER'" label="只可下发" value="down" />
-              <el-option label="只可上报" value="up" />
-            </el-select>
-          </el-form-item>
           <el-form-item label="备注">
             <el-input v-model="customFunction.remark" type="textarea" maxlength="100" placeholder="最多100个字符" show-word-limit />
           </el-form-item>
@@ -711,6 +711,11 @@ export default {
       if (this.customFunctionTransferType.includes('down')) {
         customFunction.down = true
       } else {
+        customFunction.down = false
+      }
+      // 事件类型只可上报
+      if (customFunction.fn_type === 'EVENT') {
+        customFunction.up = true
         customFunction.down = false
       }
       let result
