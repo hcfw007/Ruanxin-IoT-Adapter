@@ -782,7 +782,7 @@ export default {
       // 添加组合信息（根据id获取index）
       let combination = []
       for (let item of this.combinedFunction.combination) {
-        for (let fn of this.functionList.functions) {
+        for (let fn of this.functionListFilteredByCombinedTransferType) {
           if (fn.id === item) {
             combination.push({
               id: fn.id,
