@@ -419,7 +419,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
 export default {
@@ -795,7 +795,12 @@ export default {
       }
       combinedFunction.combination = combination
 
-      let result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败')
+      let result
+      if (this.combinedFunctionDrawerMode === '编辑') {
+        result = await editCombinedFunction(this, combinedFunction, '编辑组合功能点成功！', '编辑组合功能点失败', { id: this.combinedFunction.id })
+      } else {
+        result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败')
+      }
       // 关闭载入动画、drawer，拉取新列表
       // 失败就不关闭drawer
       if (result) { this.addingCombinedFunction = false }

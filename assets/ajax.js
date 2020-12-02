@@ -91,6 +91,46 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
   return flag
 }
 
+const patchRequestFactory = url => async (vueObj, data = {}, successToastMessage = '成功', failedToastMessage = '失败', urlReplacementItem = {}) => {
+  let flag = 'origin'
+  let _url = url
+  for (let item in urlReplacementItem) {
+    _url = _url.replace('${' + item + '}', urlReplacementItem[item])
+  }
+  await instance.patch(_url, data).then((response) => {
+    let responseData = response.data
+    if (typeof responseData === 'string') {
+      responseData = JSON.parse(responseData)
+    }
+    if (responseData.code === 200) {
+      vueObj.$toast(successToastMessage, {
+        customCss: {
+          'background-color': '#67C23A',
+          color: '#fff'
+        }
+      })
+      flag = true
+    } else {
+      vueObj.$toast(failedToastMessage + '，消息为' + responseData.msg, {
+        customCss: {
+          'background-color': '#E6A23C',
+          color: '#fff'
+        }
+      })
+      flag = false
+    }
+  }).catch((err) => {
+    vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
+      customCss: {
+        'background-color': '#E6A23C',
+        color: '#fff'
+      }
+    })
+    flag = false
+  })
+  return flag
+}
+
 const getRequestFactory = url => async (vueObj, dataItemName, data = {}, urlReplacementItem = {}) => {
   let flag = 'origin'
   let _url = url
@@ -192,6 +232,8 @@ export const deleteProductFunction = deleteRequestFactory('/functions/${combinat
 export const editProductFunction = putRequestFactory('/functions/custom/${combinationId}')
 // 创建组合功能点
 export const postCombinedFunction = postRequestFactory('/functions/combine')
+// 编辑组合功能点
+export const editCombinedFunction = patchRequestFactory('/functions/combine/${id}')
 
 // 导出功能点并下载
 export const exportFunction = pid =>
