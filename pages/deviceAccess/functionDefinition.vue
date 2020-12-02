@@ -187,7 +187,7 @@
       <div class="drawer-content">
         <el-row>
           <el-col :span="24">
-            <el-transfer v-model="addedFunctions" filterable :data="functionList.functions" :props="{key: 'id', label: 'name'}" :titles="['功能点列表', '要添加的功能']" />
+            <el-transfer v-model="addedFunctions" filterable :data="functionListFilteredByProductCategory" :props="{key: 'id', label: 'name'}" :titles="['功能点列表', '要添加的功能']" />
           </el-col>
         </el-row>
         <el-row>
@@ -502,6 +502,10 @@ export default {
         down = true
       }
       return this.functionList.functions.filter(ele => (ele.up === up && ele.down === down))
+    },
+    functionListFilteredByProductCategory() {
+      let categoryId = this.currentProduct.category_id
+      return this.functionList.functions.filter(ele => ele.category_id === categoryId)
     }
   },
   created() {
