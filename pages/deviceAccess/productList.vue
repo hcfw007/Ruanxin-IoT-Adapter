@@ -239,9 +239,9 @@ export default {
       localStorage.setItem('currentProduct', JSON.stringify(product))
       this.$router.push('/deviceAccess/productPreview')
     },
-    deleteProduct(product) {
-      let pid = product.pid
-      deleteProduct(this, null, '删除产品成功！', '删除产品失败', { id: pid })
+    async deleteProduct(product) {
+      await deleteProduct(this, null, '删除产品成功！', '删除产品失败', { id: product.id })
+      this.getProductList()
     }
   }
 }
