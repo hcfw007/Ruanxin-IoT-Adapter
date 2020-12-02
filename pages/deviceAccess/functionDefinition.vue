@@ -128,7 +128,7 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <el-row class="device-function-block block-white block-round">
+    <!-- <el-row class="device-function-block block-white block-round">
       <el-col :span="24">
         <el-row>
           <el-col :span="18">
@@ -176,7 +176,7 @@
           </el-col>
         </el-row>
       </el-col>
-    </el-row>
+    </el-row> -->
     <el-drawer
       title="添加标准功能点"
       :visible.sync="addingFunction"
