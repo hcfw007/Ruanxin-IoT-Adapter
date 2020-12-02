@@ -48,7 +48,7 @@
           {{ currentProduct.connection | connectionFilter }}
         </div>
       </el-col>
-      <el-col v-if="currentProduct.device_node === '子设备'" :span="3">
+      <el-col v-if="currentProduct.device_node === 'CHILD'" :span="3">
         <div class="product-subdevice-biding-code-label product-label">
           子设备绑定码
         </div>
