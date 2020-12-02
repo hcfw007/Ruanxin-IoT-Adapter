@@ -501,7 +501,7 @@ export default {
       if (this.combinedFunctionTransferType.includes('down')) {
         down = true
       }
-      return this.functionList.functions.filter(ele => (ele.up === up && ele.down === down))
+      return this.productFunctionList.functions.filter(ele => (ele.up === up && ele.down === down))
     },
     functionListFilteredByProductCategory() {
       let categoryId = this.currentProduct.category_id
