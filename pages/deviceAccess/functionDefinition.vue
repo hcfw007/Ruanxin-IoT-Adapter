@@ -99,7 +99,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="combinedFunctionList.items">
+                <el-table :data="combinedFunctionList.functions">
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -475,7 +475,7 @@ export default {
       systemFunctionList: [],
       combinedFunctionList: {
         count: 0,
-        items: []
+        functions: []
       },
       functionList: {
         count: 0,
@@ -803,7 +803,7 @@ export default {
       if (this.combinedFunctionDrawerMode === '编辑') {
         result = await editCombinedFunction(this, combinedFunction, '编辑组合功能点成功！', '编辑组合功能点失败', { id: this.combinedFunction.id })
       } else {
-        result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败')
+        result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败', { id: this.currentProduct.pid })
       }
       // 关闭载入动画、drawer，拉取新列表
       // 失败就不关闭drawer

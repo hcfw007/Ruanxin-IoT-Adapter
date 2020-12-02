@@ -215,9 +215,9 @@ export const editProduct = postRequestFactory('/products/update')
 export const deleteProduct = deleteRequestFactory('/products/delete/${id}')
 
 // 获取产品的功能点
-export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions')
+export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=BASE')
 // 获取产品的组合功能点
-export const getCombinedFunctionList = getRequestFactory('/products/${productPid}/combine_functions/list')
+export const getCombinedFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=COMBINE')
 
 // 获取所有标准功能点
 // 功能点添加到产品之后，对于这个combination会产生一个新的id
@@ -229,9 +229,9 @@ export const postProductCustomFunction = postRequestFactory('/products/${product
 // 删除功能点（根据combination id）
 export const deleteProductFunction = deleteRequestFactory('/functions/${combinationId}')
 // 修改自定义功能点
-export const editProductFunction = putRequestFactory('/functions/custom/${combinationId}')
+export const editProductFunction = putRequestFactory('/functions/base/${combinationId}')
 // 创建组合功能点
-export const postCombinedFunction = postRequestFactory('/functions/combine')
+export const postCombinedFunction = postRequestFactory('/products/${id}/functions/combine')
 // 编辑组合功能点
 export const editCombinedFunction = patchRequestFactory('/functions/combine/${id}')
 
