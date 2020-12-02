@@ -1,5 +1,5 @@
 {
-  "name": "CIoTA-Website",
+  "name": "Ruanxin-IoT-Client",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.0",
     "chart.js": "^2.9.4",
-    "element-ui": "^2.13.2",
+    "element-ui": "^2.14.1",
     "nuxt": "^2.14.0",
     "nw-vue-toast": "^0.4.2",
     "swiper": "^6.2.0",
