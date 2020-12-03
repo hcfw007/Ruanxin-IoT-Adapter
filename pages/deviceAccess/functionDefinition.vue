@@ -731,7 +731,7 @@ export default {
       // 判断编辑还是新增，并发送请求
       if (this.customFunctionDrawerMode === '编辑') {
         customFunction.id = this.customFunction.id
-        result = await editProductFunction(this, customFunction, '编辑功能点成功！', '编辑功能点失败', { combinationId: this.customFunction.id })
+        result = await editProductFunction(this, customFunction, '编辑功能点成功！', '编辑功能点失败', { productPid: this.currentProduct.pid, combinationId: this.customFunction.id })
       } else {
         result = await postProductCustomFunction(this, customFunction, '添加功能点成功！', '添加功能点失败', { productPid: this.currentProduct.pid })
       }

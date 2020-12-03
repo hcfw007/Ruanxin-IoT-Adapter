@@ -229,7 +229,7 @@ export const postProductCustomFunction = postRequestFactory('/products/${product
 // 删除功能点（根据combination id）
 export const deleteProductFunction = deleteRequestFactory('/functions/${combinationId}')
 // 修改自定义功能点
-export const editProductFunction = putRequestFactory('/functions/base/${combinationId}')
+export const editProductFunction = putRequestFactory('/products/${productPid}/functions/base/${combinationId}')
 // 创建组合功能点
 export const postCombinedFunction = postRequestFactory('/products/${id}/functions/combine')
 // 编辑组合功能点
