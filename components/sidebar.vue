@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <img src="~/static/images/logo.png" alt="" class="logo">
-    <el-menu>
+    <el-menu ref="menu">
       <el-submenu v-for="(menuItem, menuIndex) in menuStructure.children" :key="'menu' + String(menuIndex)" :index="String(menuIndex)">
         <template slot="title">
           <img v-if="menuItem.icon" :src="menuItem.icon" alt="" class="menu-icon">{{ menuItem.name }}
@@ -23,6 +23,41 @@ export default {
   data() {
     return {
       menuStructure
+    }
+  },
+  watch: {
+    $route(to, from) {
+      this.setupMenu(to.path)
+    }
+  },
+  mounted() {
+    this.setupMenu(this.$route.path)
+  },
+  methods: {
+    setupMenu(url) {
+      let paths = url.split('/')
+      if (paths.length < 2) { return }
+      // 一级目录
+      let level1 = paths[1]
+      for (let index = 0; index < menuStructure.children.length; index++) {
+        let menuItem = menuStructure.children[index]
+        if (menuItem.id === level1) {
+          this.$refs.menu.openMenu(String(index))
+
+          // 二级目录
+          if (paths.length > 2) {
+            let level2 = paths[2]
+            for (let subIndex = 0; subIndex < menuItem.children.length; subIndex++) {
+              let suemenuItem = menuItem.children[subIndex]
+              if (suemenuItem.id === level2) {
+                this.$refs.menu.activeIndex = String(index) + '-' + String(subIndex)
+                break
+              }
+            }
+          }
+          break
+        }
+      }
     }
   }
 }
