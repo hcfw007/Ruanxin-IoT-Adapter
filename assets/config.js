@@ -142,7 +142,7 @@ export const functionConfig = {
     number: {
       min: 0, // 最小值
       max: 100, // 最大值
-      step: 0.1, // 步长
+      step: 1, // 步长
       unit: '' // 单位
     },
     enum: {
