@@ -534,6 +534,7 @@ export default {
               color: '#fff'
             }
           })
+          this.getProductFunctionList()
         } else {
           this.$toast('导入失败， 消息为：' + data.msg, {
             customCss: {
@@ -607,7 +608,6 @@ export default {
       } else {
         transferType = 'down'
       }
-      console.log(row)
       // 写入功能点内容
       this.customFunctionTransferType = transferType
       this.customFunction = fun
