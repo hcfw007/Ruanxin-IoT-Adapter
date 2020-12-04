@@ -151,6 +151,18 @@ export const functionConfig = {
     exception: {
       items: [] // 枚举值
     }
+  },
+  paramProto: {
+    // 数值型
+    num_type: {
+      min: 0, // 最小值
+      max: 100, // 最大值
+      step: 0.1, // 步长
+      unit: '' // 单位
+    },
+    enum_type: {
+      items: [] // 枚举值
+    }
   }
 }
 

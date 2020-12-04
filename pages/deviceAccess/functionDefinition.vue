@@ -331,7 +331,7 @@
           <el-form-item label="数据类型" required>
             <el-select v-model="currentParam.type" placeholder="请选择数据类型" required>
               <el-option label="布尔型" value="BOOLEAN" />
-              <el-option label="数值型" value="NUMBER" />
+              <el-option label="数值型" value="INTEGER" />
               <el-option label="枚举型" value="ENUM" />
               <el-option label="字符串型" value="STRING" />
             </el-select>
@@ -340,23 +340,23 @@
           <section v-if="currentParam.type === 'NUMBER'">
             <el-form-item label="取值范围" required>
               <el-col :span="11">
-                <el-input v-model="currentParam.number.min" placeholder="最小值" />
+                <el-input v-model="currentParam.num_type.min" placeholder="最小值" />
               </el-col>
               <el-col :span="2" class="text-center">-</el-col>
               <el-col :span="11">
-                <el-input v-model="currentParam.number.max" placeholder="最大值" />
+                <el-input v-model="currentParam.num_type.max" placeholder="最大值" />
               </el-col>
             </el-form-item>
             <el-form-item label="间距" required>
-              <el-input v-model="currentParam.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+              <el-input v-model="currentParam.num_type.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
             </el-form-item>
             <el-form-item label="单位">
-              <el-input v-model="currentParam.number.unit" placeholder="请输入单位" />
+              <el-input v-model="currentParam.num_type.unit" placeholder="请输入单位" />
             </el-form-item>
           </section>
           <section v-if="currentParam.type === 'ENUM'">
             <el-form-item label="枚举值" required>
-              <enum-editor v-model="currentParam.enum.items" />
+              <enum-editor v-model="currentParam.enum_type.items" />
             </el-form-item>
           </section>
           <section v-if="currentParam.type === 'STRING'">
@@ -630,8 +630,7 @@ export default {
         type: 'BOOLEAN',
         subject: ''
       }
-      param = Object.assign(param, functionConfig.functionSpecFieldsByTypeProto)
-      param.exception = undefined // 参数没有故障型
+      param = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
       this.currentParam = param
       // 显示drawer
       this.paramDrawerMode = '添加'
@@ -650,6 +649,7 @@ export default {
         return
       }
       let param = this.currentParam
+      if (!this.customFunction.params) { this.customFunction.params = [] }
       this.customFunction.params.push(param)
       this.addingParam = false
     },
