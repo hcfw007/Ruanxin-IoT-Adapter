@@ -78,12 +78,12 @@ export default {
         '/webadmin': ''
       }
     }
-  },
-  router: {
-    base: '/client/'
-  },
-  server: {
-    host: '10.10.22.2',
-    port: 3000
   }
+  // router: {
+  //   base: '/client/'
+  // },
+  // server: {
+  //   host: '10.10.22.2',
+  //   port: 3000
+  // }
 }

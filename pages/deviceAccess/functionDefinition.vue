@@ -223,7 +223,8 @@
             <el-form-item label="数据类型" required>
               <el-select v-model="customFunction.type" placeholder="请选择数据类型" @change="customFunctionTypeChangeHandler($event)">
                 <el-option label="布尔型" value="BOOLEAN" />
-                <el-option label="数值型" value="NUMBER" />
+                <el-option label="整数型" value="INTEGER" />
+                <el-option label="浮点型" value="FLOAT" />
                 <el-option label="枚举型" value="ENUM" />
                 <el-option label="故障型" value="EXCEPTION" />
                 <el-option label="字符串型" value="STRING" />
@@ -231,7 +232,7 @@
               </el-select>
             </el-form-item>
             <section v-if="customFunction.type === 'BOOLEAN'" />
-            <section v-if="customFunction.type === 'NUMBER'">
+            <section v-if="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
               <el-form-item label="取值范围" required>
                 <el-col :span="11">
                   <el-input v-model="functionSpecFieldsByType.number.min" placeholder="最小值" />
@@ -705,9 +706,10 @@ export default {
 
       // 获取特定数据类型的特殊信息
       let type = customFunction.type.toLowerCase()
+      if (type === 'integer' || type === 'float') { type = 'number' } // number 细分
+      let _type = type
+      if (_type === 'enum') { _type = 'enum_value' } // “enum和java关键字冲突” said wang quan
       if (type in functionConfig.functionSpecFieldsByTypeProto) {
-        let _type = type
-        if (_type === 'enum') { _type = 'enum_value' } // “enum和java关键字冲突” said wang quan
         customFunction[_type] = this.functionSpecFieldsByType[type]
       }
 
