@@ -801,7 +801,7 @@ export default {
 
       let result
       if (this.combinedFunctionDrawerMode === '编辑') {
-        result = await editCombinedFunction(this, combinedFunction, '编辑组合功能点成功！', '编辑组合功能点失败', { id: this.combinedFunction.id })
+        result = await editCombinedFunction(this, combinedFunction, '编辑组合功能点成功！', '编辑组合功能点失败', { editCombinedFunction: this.combinedFunction.id, pid: this.currentProduct.pid })
       } else {
         result = await postCombinedFunction(this, combinedFunction, '添加组合功能点成功！', '添加组合功能点失败', { id: this.currentProduct.pid })
       }
