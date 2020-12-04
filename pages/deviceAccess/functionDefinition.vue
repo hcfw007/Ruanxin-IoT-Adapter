@@ -641,6 +641,11 @@ export default {
     editParam(param) {
       // 编辑参数
       this.currentParam = param
+      for (let item in functionConfig.paramProto) {
+        if (!param[item]) {
+          param[item] = basicDeepCopy(functionConfig.paramProto[item])
+        }
+      }
       this.paramDrawerMode = '编辑'
       this.addingParam = true
     },
