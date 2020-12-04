@@ -233,7 +233,7 @@ export const editProductFunction = putRequestFactory('/products/${productPid}/fu
 // 创建组合功能点
 export const postCombinedFunction = postRequestFactory('/products/${id}/functions/combine')
 // 编辑组合功能点
-export const editCombinedFunction = patchRequestFactory('/products/{pid}/functions/combine/{combinationId}')
+export const editCombinedFunction = patchRequestFactory('/products/${pid}/functions/combine/${combinationId}')
 
 // 导出功能点并下载
 export const exportFunction = pid =>
