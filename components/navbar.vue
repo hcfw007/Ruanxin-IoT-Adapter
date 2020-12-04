@@ -3,7 +3,7 @@
     <el-row class="nav-row">
       <el-col :span="12" style="margin-top: 30px">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index" :to="item.link">
+          <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index">
             {{ item.name }}
           </el-breadcrumb-item>
         </el-breadcrumb>
