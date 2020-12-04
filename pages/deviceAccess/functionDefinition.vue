@@ -331,13 +331,14 @@
           <el-form-item label="数据类型" required>
             <el-select v-model="currentParam.type" placeholder="请选择数据类型" required>
               <el-option label="布尔型" value="BOOLEAN" />
-              <el-option label="数值型" value="INTEGER" />
+              <el-option label="整数型" value="INTEGER" />
+              <el-option label="浮点型" value="FLOAT" />
               <el-option label="枚举型" value="ENUM" />
               <el-option label="字符串型" value="STRING" />
             </el-select>
           </el-form-item>
           <section v-if="currentParam.type === 'BOOLEAN'" />
-          <section v-if="currentParam.type === 'NUMBER'">
+          <section v-if="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
             <el-form-item label="取值范围" required>
               <el-col :span="11">
                 <el-input v-model="currentParam.num_type.min" placeholder="最小值" />
