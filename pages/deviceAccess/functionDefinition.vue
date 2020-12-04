@@ -523,14 +523,25 @@ export default {
       this.uploadingImportedFile = true
       let pid = this.currentProduct.pid
       let file = event.target.files[0]
-      await importFunction(file).then((response) => {
-        console.log(response)
-        this.$toast('导入成功', {
-          customCss: {
-            'background-color': '#67C23A',
-            color: '#fff'
-          }
-        })
+      let data = new FormData()
+      data.append('file', file)
+      await importFunction(data).then((response) => {
+        let data = response.data
+        if (data.code === 200) {
+          this.$toast('导入成功', {
+            customCss: {
+              'background-color': '#67C23A',
+              color: '#fff'
+            }
+          })
+        } else {
+          this.$toast('导入失败， 消息为：' + data.msg, {
+            customCss: {
+              'background-color': '#E6A23C',
+              color: '#fff'
+            }
+          })
+        }
       }).catch((err) => {
         console.log(err)
         this.$toast('导入失败', {
