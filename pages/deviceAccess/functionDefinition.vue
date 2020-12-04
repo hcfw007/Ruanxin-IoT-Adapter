@@ -422,6 +422,8 @@ import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction } from '~/assets/ajax'
 import { functionConfig } from '~/assets/config'
 
+const basicDeepCopy = obj => JSON.parse(JSON.stringify(obj))
+
 export default {
   filters: {
     functionTypeFilter(value) {
@@ -455,20 +457,7 @@ export default {
       customFunction: {
         fn_type: 'COMMON'
       },
-      functionSpecFieldsByType: {
-        number: {
-          min: 0,
-          max: 100,
-          step: 0.1,
-          unit: ''
-        },
-        enum: {
-          items: []
-        },
-        exception: {
-          items: []
-        }
-      },
+      functionSpecFieldsByType: basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto),
       addedFunctions: [],
       currentDeviceFunctionTab: 'basic-function',
       deviceFunctionList: [],
@@ -605,9 +594,17 @@ export default {
       } else {
         transferType = 'down'
       }
+      console.log(row)
       // 写入功能点内容
       this.customFunctionTransferType = transferType
       this.customFunction = fun
+      // 写入特定类型的数据
+      let type = row.type.toLowerCase()
+      if (type in functionConfig.functionSpecFieldsByTypeProto) {
+        let _type = type
+        if (_type === 'enum') { _type = 'enum_value' }
+        this.functionSpecFieldsByType[type] = basicDeepCopy(row[_type])
+      }
       // 修改并展示drawer
       this.customFunctionDrawerMode = '编辑'
       this.addingCustomFunction = true
@@ -673,7 +670,7 @@ export default {
       // 点击添加自定义功能点
       // 初始化自定义功能点数据结构
       this.customFunction = Object.assign({}, functionConfig.customFunctionProto)
-      this.functionSpecFieldsByType = Object.assign({}, functionConfig.functionSpecFieldsByTypeProto)
+      this.functionSpecFieldsByType = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
       // 显示添加自定义功能点的drawer
       this.customFunctionDrawerMode = '添加'
       this.addingCustomFunction = true
@@ -708,7 +705,9 @@ export default {
       // 获取特定数据类型的特殊信息
       let type = customFunction.type.toLowerCase()
       if (type in functionConfig.functionSpecFieldsByTypeProto) {
-        customFunction[type] = this.functionSpecFieldsByType[type]
+        let _type = type
+        if (_type === 'enum') { _type = 'enum_value' } // “enum和java关键字冲突” said wang quan
+        customFunction[_type] = this.functionSpecFieldsByType[type]
       }
 
       // 映射传输类型
