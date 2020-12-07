@@ -405,7 +405,7 @@
         </el-form>
         <el-row>
           <el-col :span="24">
-            <el-transfer v-model="combinedFunction.combination" filterable :data="functionListFilteredByCombinedTransferType" :props="{key: 'id', label: 'name'}" :titles="['独立功能点', '组合功能点']" />
+            <el-transfer v-model="combinedFunction.combination" filterable :data="functionListFilteredByCombinedTransferType" :props="{key: 'index', label: 'name'}" :titles="['独立功能点', '组合功能点']" />
           </el-col>
         </el-row>
         <el-row>
@@ -586,7 +586,7 @@ export default {
       }
       let combinations = []
       for (let item of row.combination) {
-        combinations.push(item.id)
+        combinations.push(item.index)
       }
 
       // 写入功能点内容
@@ -797,11 +797,11 @@ export default {
         }
       }
 
-      // 添加组合信息（根据id获取index）
+      // 添加组合信息（根据index获取功能点）
       let combination = []
       for (let item of this.combinedFunction.combination) {
         for (let fn of this.functionListFilteredByCombinedTransferType) {
-          if (fn.id === item) {
+          if (fn.index === item) {
             combination.push({
               id: fn.id,
               index: fn.index,
