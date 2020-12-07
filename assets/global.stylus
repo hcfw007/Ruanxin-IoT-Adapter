@@ -85,7 +85,6 @@ h3
   .filter-label
     margin-right: 15px
 
-
 .text-right
   text-align: right
 
@@ -113,6 +112,7 @@ h3
 
     &>*
       height: 100%
+
     .el-button
       color: #fff
 
@@ -122,11 +122,13 @@ h3
 .indicator
   &.positive
     color: var(--default-link-color)
+
     .dot
       background-color: var(--default-link-color)
 
   &.negative
     color: #333
+
     .dot
       background-color: #333
 
@@ -142,5 +144,5 @@ h3
 .drawer-content
   padding: 20px
 
-  .el-input, .el-select
+  .el-input:not(.el-transfer-panel__filter), .el-select
     width: 100%
