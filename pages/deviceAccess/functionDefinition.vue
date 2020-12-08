@@ -181,7 +181,6 @@
       title="添加标准功能点"
       :visible.sync="addingFunction"
       direction="rtl"
-      :modal="false"
       size="600"
       :wrapper-closable="false"
     >
@@ -203,7 +202,6 @@
       :title="customFunctionDrawerMode + '自定义功能点'"
       :visible.sync="addingCustomFunction"
       direction="rtl"
-      :modal="false"
       :wrapper-closable="false"
     >
       <div class="drawer-content">
@@ -321,7 +319,6 @@
       :title="paramDrawerMode + '输出参数'"
       :visible.sync="addingParam"
       direction="rtl"
-      :modal="false"
       :wrapper-closable="false"
     >
       <div class="drawer-content">
@@ -381,7 +378,6 @@
       :title="combinedFunctionDrawerMode + '组合功能点'"
       :visible.sync="addingCombinedFunction"
       direction="rtl"
-      :modal="false"
       size="600"
       :wrapper-closable="false"
     >

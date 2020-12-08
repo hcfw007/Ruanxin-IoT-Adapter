@@ -96,7 +96,6 @@
       :title="productDrawerMode + '产品'"
       :visible.sync="creatingProduct"
       direction="rtl"
-      :modal="false"
       :wrapper-closable="false"
     >
       <div class="drawer-content">
