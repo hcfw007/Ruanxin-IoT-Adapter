@@ -183,6 +183,7 @@
       direction="rtl"
       :modal="false"
       size="600"
+      :wrapper-closable="false"
     >
       <div class="drawer-content">
         <el-row>
@@ -203,6 +204,7 @@
       :visible.sync="addingCustomFunction"
       direction="rtl"
       :modal="false"
+      :wrapper-closable="false"
     >
       <div class="drawer-content">
         <el-form :model="customFunction" label-width="120px">
@@ -320,6 +322,7 @@
       :visible.sync="addingParam"
       direction="rtl"
       :modal="false"
+      :wrapper-closable="false"
     >
       <div class="drawer-content">
         <el-form :model="currentParam" label-width="120px">
@@ -380,6 +383,7 @@
       direction="rtl"
       :modal="false"
       size="600"
+      :wrapper-closable="false"
     >
       <div class="drawer-content">
         <el-form :model="combinedFunction" label-width="120px">

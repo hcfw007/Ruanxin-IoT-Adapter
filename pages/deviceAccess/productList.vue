@@ -97,6 +97,7 @@
       :visible.sync="creatingProduct"
       direction="rtl"
       :modal="false"
+      :wrapper-closable="false"
     >
       <div class="drawer-content">
         <el-form ref="productForm" :model="newProduct" label-width="120px" :rules="productFormRule">
