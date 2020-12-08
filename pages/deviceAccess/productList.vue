@@ -128,14 +128,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="联网方式" prop="connection">
-            <el-select v-model="newProduct.connection" placeholder="请选择连接方式">
-              <el-option label="2G" value="_2G" />
-              <el-option label="4G" value="_4G" />
-              <el-option label="NBIoT" value="NBIoT" />
-              <el-option label="Wifi" value="WIFI" />
-              <el-option label="以太网" value="ETHERNET" />
-              <el-option label="其他" value="OTHER" />
-            </el-select>
+            <el-checkbox-group v-model="newProduct.connection">
+              <el-checkbox label="_2G">2G</el-checkbox>
+              <el-checkbox label="_4G">4G</el-checkbox>
+              <el-checkbox label="NBIoT">NBIoT</el-checkbox>
+              <el-checkbox label="WIFI">Wifi</el-checkbox>
+              <el-checkbox label="ETHERNET">以太网</el-checkbox>
+              <el-checkbox label="OTHER">其他</el-checkbox>
+            </el-checkbox-group>
           </el-form-item>
           <el-form-item label="产品型号">
             <el-input v-model="newProduct.model" placeholder="请输入产品型号" />

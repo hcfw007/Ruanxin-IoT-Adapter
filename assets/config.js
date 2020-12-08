@@ -173,7 +173,7 @@ export const productConfig = {
     category_id: '',
     industry_id: '',
     device_node: '',
-    connection: '',
+    connection: [],
     model: '',
     protocol_type: ''
   }
