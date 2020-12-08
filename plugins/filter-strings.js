@@ -7,8 +7,17 @@ const connectionString = {
   OTHER: '其他'
 }
 
+const protocolString = {
+  MQTT: 'MQTT协议',
+  CoAP: 'CoAP协议',
+  HTTPS: 'Https协议',
+  TCP: 'TCP协议',
+  CUSTOM: '自定义协议'
+}
+
 const stringMapping = {
-  connectionString
+  connectionString,
+  protocolString
 }
 
 export default stringMapping

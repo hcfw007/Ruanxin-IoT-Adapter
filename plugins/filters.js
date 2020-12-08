@@ -69,6 +69,13 @@ const filters = {
     } else {
       return 'N/A'
     }
+  },
+  protocolFilter(val) {
+    if (val in stringMapping.protocolString) {
+      return stringMapping.protocolString[val]
+    } else {
+      return 'N/A'
+    }
   }
 }
 

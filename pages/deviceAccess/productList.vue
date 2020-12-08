@@ -71,7 +71,7 @@
               协议
             </div>
             <div class="product-protocol-value product-value">
-              {{ product.protocol_type }}
+              {{ product.protocol_type | protocolFilter }}
             </div>
           </el-col>
           <el-col :span="4">
@@ -116,7 +116,7 @@
               <el-option label="MQTT协议" value="MQTT" />
               <el-option label="CoAP协议" value="CoAP" />
               <el-option label="Https协议" value="HTTPS" />
-              <el-option label="tcp协议" value="TCP" />
+              <el-option label="TCP协议" value="TCP" />
               <el-option label="自定义协议" value="CUSTOM" />
             </el-select>
           </el-form-item>
