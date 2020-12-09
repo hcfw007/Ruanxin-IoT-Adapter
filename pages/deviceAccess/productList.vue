@@ -140,6 +140,9 @@
           <el-form-item label="产品型号" prop="model">
             <el-input v-model="newProduct.model" placeholder="请输入产品型号" />
           </el-form-item>
+          <el-form-item label="产品描述" prop="remarks">
+            <el-input v-model="newProduct.remark" type="textarea" maxlength="500" placeholder="最多500个字符" show-word-limit />
+          </el-form-item>
           <el-divider />
           <el-form-item class="text-right">
             <el-button type="primary" :loading="postingNewProduct" @click="saveProduct()">保存</el-button>

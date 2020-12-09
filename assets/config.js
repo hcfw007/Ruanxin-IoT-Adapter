@@ -175,7 +175,8 @@ export const productConfig = {
     device_node: '',
     connection: [],
     model: '',
-    protocol_type: ''
+    protocol_type: '',
+    remark: ''
   }
 }
 
