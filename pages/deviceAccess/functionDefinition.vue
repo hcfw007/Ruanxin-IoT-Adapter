@@ -255,8 +255,8 @@
               </el-form-item>
             </section>
             <section v-if="customFunction.type === 'EXCEPTION'">
-              <el-form-item label="枚举值" required>
-                <enum-editor v-model="functionSpecFieldsByType.exception.items" />
+              <el-form-item label="故障值" required>
+                <enum-editor v-model="functionSpecFieldsByType.exception.items" type-label="故障值" />
               </el-form-item>
             </section>
             <section v-if="customFunction.type === 'STRING'">

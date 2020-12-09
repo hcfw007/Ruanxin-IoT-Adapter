@@ -2,10 +2,10 @@
   <div class="emun-editor">
     <el-row>
       <el-col :span="16">
-        <el-input v-model="input" placeholder="请输入枚举值" class="emun-input" />
+        <el-input v-model="input" :placeholder="`请输入${ typeLabel }`" class="emun-input" />
       </el-col>
       <el-col :span="8" style="text-align: right">
-        <span class="add-emun" @click="addEmun">+ 添加枚举值</span>
+        <span class="add-emun" @click="addEmun">+ 添加{{ typeLabel }}</span>
       </el-col>
     </el-row>
     <el-row>
@@ -24,6 +24,10 @@ export default {
     value: {
       type: Array,
       default: () => []
+    },
+    typeLabel: {
+      type: String,
+      default: '枚举值'
     }
   },
   data() {
