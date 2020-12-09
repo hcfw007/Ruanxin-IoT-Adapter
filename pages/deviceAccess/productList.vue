@@ -104,15 +104,15 @@
             <el-input v-model="newProduct.name" placeholder="请输入产品名称" />
           </el-form-item>
           <el-form-item label="行业-产品类别" prop="category_id">
-            <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%" @change="newProduct.category_id=''">
+            <el-select v-model="newProduct.industry_id" placeholder="请选择行业" style="width: 49%" :disabled="productDrawerMode === '编辑'" @change="newProduct.category_id=''">
               <el-option v-for="(industry, index) in industryList" :key="'industry' + index" :label="industry.name" :value="industry.id" />
             </el-select>
-            <el-select v-model="newProduct.category_id" placeholder="请选择类别" style="width: 49%; margin-left: 1%">
+            <el-select v-model="newProduct.category_id" placeholder="请选择类别" style="width: 49%; margin-left: 1%" :disabled="productDrawerMode === '编辑'">
               <el-option v-for="(category, index) in categoryFilteredByIndustry" :key="'category' + index" :label="category.name" :value="category.id" />
             </el-select>
           </el-form-item>
           <el-form-item label="协议类型" prop="protocol_type">
-            <el-select v-model="newProduct.protocol_type" placeholder="请选择设备协议类型">
+            <el-select v-model="newProduct.protocol_type" placeholder="请选择设备协议类型" :disabled="productDrawerMode === '编辑'">
               <el-option label="MQTT协议" value="MQTT" />
               <el-option label="CoAP协议" value="CoAP" />
               <el-option label="Https协议" value="HTTPS" />
@@ -121,14 +121,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="设备节点" prop="device_node">
-            <el-select v-model="newProduct.device_node" placeholder="请选择设备节点类型">
+            <el-select v-model="newProduct.device_node" placeholder="请选择设备节点类型" :disabled="productDrawerMode === '编辑'">
               <el-option label="直连设备" value="DIRECT" />
               <el-option label="网关设备" value="GATEWAY" />
               <el-option label="子设备" value="CHILD" />
             </el-select>
           </el-form-item>
           <el-form-item label="联网方式" prop="connection">
-            <el-checkbox-group v-model="newProduct.connection">
+            <el-checkbox-group v-model="newProduct.connection" :disabled="productDrawerMode === '编辑'">
               <el-checkbox label="_2G">2G</el-checkbox>
               <el-checkbox label="_4G">4G</el-checkbox>
               <el-checkbox label="NBIoT">NBIoT</el-checkbox>
