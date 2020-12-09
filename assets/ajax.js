@@ -218,6 +218,8 @@ export const deleteProduct = deleteRequestFactory('/products/delete/${id}')
 export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=BASE')
 // 获取产品的组合功能点
 export const getCombinedFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=COMBINE')
+// 获取产品的所有功能点
+export const getFullFunctionList = getRequestFactory('/products/${productPid}/functions')
 
 // 获取所有标准功能点
 // 功能点添加到产品之后，对于这个combination会产生一个新的id
@@ -269,3 +271,7 @@ export const downloadSDK = pid =>
     download.click()
     window.URL.revokeObjectURL(download.href)
   })
+
+// 下发功能
+export const dispatchCommand = data =>
+  instance.post('devices/write/commands', data)

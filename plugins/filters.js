@@ -76,6 +76,15 @@ const filters = {
     } else {
       return 'N/A'
     }
+  },
+  dataTypeFilter(val) {
+    if (!val) { return '请先选择功能点' }
+    let _val = val.toUpperCase()
+    if (_val in stringMapping.dataTypeString) {
+      return stringMapping.dataTypeString[_val]
+    } else {
+      return 'N/A'
+    }
   }
 }
 
