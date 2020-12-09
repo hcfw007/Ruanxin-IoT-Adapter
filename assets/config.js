@@ -247,3 +247,44 @@ export const productFormRule = {
     }
   ]
 }
+
+// 功能点表单验证
+
+export const functionRules = {
+  combinedFunctionRule: {
+    name: [
+      {
+        required: true,
+        message: '请输入功能点名称',
+        trigger: 'blur'
+      },
+      {
+        max: 20,
+        message: '长度不能超过20个字符',
+        trigger: 'blur'
+      },
+      {
+        pattern: /^[\w\u4E00-\u9FA5]*$/,
+        message: '只允许使用中文、英文、数字、下划线',
+        trigger: 'change'
+      }
+    ],
+    subject: [
+      {
+        required: true,
+        message: '请输入字段名称',
+        trigger: 'blur'
+      },
+      {
+        max: 20,
+        message: '长度不能超过20个字符',
+        trigger: 'blur'
+      },
+      {
+        pattern: /^[\w\u4E00-\u9FA5]*$/,
+        message: '只允许使用中文、英文、数字、下划线',
+        trigger: 'change'
+      }
+    ]
+  }
+}

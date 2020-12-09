@@ -382,11 +382,11 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form :model="combinedFunction" label-width="120px">
-          <el-form-item label="功能点名称" required>
+        <el-form ref="combinedFunctionForm" :model="combinedFunction" label-width="120px" :rules="functionRules.combinedFunctionRule">
+          <el-form-item label="功能点名称" prop="name">
             <el-input v-model="combinedFunction.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
-          <el-form-item label="字段名称" required>
+          <el-form-item label="字段名称" prop="subject">
             <el-input v-model="combinedFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="功能类型" required>
@@ -422,7 +422,7 @@
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction } from '~/assets/ajax'
-import { functionConfig } from '~/assets/config'
+import { functionConfig, functionRules } from '~/assets/config'
 
 const basicDeepCopy = obj => JSON.parse(JSON.stringify(obj))
 
@@ -479,7 +479,8 @@ export default {
       currentProduct: {},
       customFunctionDrawerMode: '添加',
       paramDrawerMode: '添加',
-      combinedFunctionDrawerMode: '添加'
+      combinedFunctionDrawerMode: '添加',
+      functionRules
       // functionListFilteredByCombinedTransferType: []
     }
   },
@@ -771,6 +772,12 @@ export default {
       }
     },
     async saveCombinedFunction() {
+      // 表单校验
+      let pass = true
+      await this.$refs.combinedFunctionForm.validate((valid) => {
+        pass = valid
+      })
+      if (!pass) { return }
       // 按钮载入动画
       this.postingCombinedFunction = true
       // 获取功能点信息
