@@ -244,7 +244,7 @@ export const exportFunction = pid =>
     let url = window.URL.createObjectURL(data)
     let download = document.createElement('a')
     download.href = url
-    download.download = 'functions.json'
+    // download.download = 'functions.json'
     download.click()
     window.URL.revokeObjectURL(download.href)
   })
@@ -255,4 +255,17 @@ export const importFunction = data =>
     headers: {
       'Content-Type': 'multipart/form-data'
     }
+  })
+
+// 下载SDK
+export const downloadSDK = pid =>
+  instance.get('/devices/' + pid + '/sdk', {
+    responseType: 'blob'
+  }).then((response) => {
+    let data = response.data
+    let url = window.URL.createObjectURL(data)
+    let download = document.createElement('a')
+    download.href = url
+    download.click()
+    window.URL.revokeObjectURL(download.href)
   })

@@ -23,7 +23,7 @@
       <el-col :span="14" class="function-info-operators text-right">
         <el-button :loading="uploadingImportedFile" @click="chooseImportFile">导入功能点</el-button>
         <el-button @click="exportFunction">导出功能点</el-button>
-        <el-button type="primary">下载SDK</el-button>
+        <el-button type="primary" @click="downloadSDK">下载SDK</el-button>
         <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
       </el-col>
     </el-row>
@@ -421,7 +421,7 @@
 
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
-import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction } from '~/assets/ajax'
+import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction, downloadSDK } from '~/assets/ajax'
 import { functionConfig, functionRules } from '~/assets/config'
 
 const basicDeepCopy = obj => JSON.parse(JSON.stringify(obj))
@@ -509,7 +509,18 @@ export default {
     exportFunction() {
       let pid = this.currentProduct.pid
       exportFunction(pid).catch((err) => {
-        this.$toast('导出失败，消息为' + err.msg, {
+        this.$toast('导出失败，消息为' + err.message, {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+      })
+    },
+    downloadSDK() {
+      let pid = this.currentProduct.pid
+      downloadSDK(pid).catch((err) => {
+        this.$toast('下载失败，消息为' + err.message, {
           customCss: {
             'background-color': '#E6A23C',
             color: '#fff'
