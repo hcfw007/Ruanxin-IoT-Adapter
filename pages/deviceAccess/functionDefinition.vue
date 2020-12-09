@@ -625,6 +625,7 @@ export default {
       this.customFunction = fun
       // 写入特定类型的数据
       let type = row.type.toLowerCase()
+      if (type === 'integer' || type === 'float') { type = 'number' }
       if (type in functionConfig.functionSpecFieldsByTypeProto) {
         let _type = type
         if (_type === 'enum') { _type = 'enum_value' }
