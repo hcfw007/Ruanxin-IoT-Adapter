@@ -643,7 +643,7 @@ export default {
         type: 'BOOLEAN',
         subject: ''
       }
-      param = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
+      param = basicDeepCopy(functionConfig.paramProto)
       this.currentParam = param
       // 显示drawer
       this.paramDrawerMode = '添加'
