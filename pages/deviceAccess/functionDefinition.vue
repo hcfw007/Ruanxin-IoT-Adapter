@@ -213,7 +213,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="功能点名称" required>
-            <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" />
+            <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" :disabled="customFunctionDrawerMode === '编辑'" />
           </el-form-item>
           <el-form-item label="字段名称" required>
             <el-input v-model="customFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
