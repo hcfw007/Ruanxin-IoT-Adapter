@@ -186,6 +186,16 @@ export const productFormRule = {
       required: true,
       message: '请输入产品名称',
       trigger: 'blur'
+    },
+    {
+      max: 20,
+      message: '长度不能超过20个字符',
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[\w\u4E00-\u9FA5]*$/,
+      message: '只允许使用中文、英文、数字、下划线',
+      trigger: 'change'
     }
   ],
   category_id: [
@@ -221,6 +231,18 @@ export const productFormRule = {
       required: true,
       message: '请选择协议类型',
       trigger: 'blur'
+    }
+  ],
+  model: [
+    {
+      max: 20,
+      message: '长度不能超过20个字符',
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[\w\u4E00-\u9FA5]*$/,
+      message: '只允许使用中文、英文、数字、下划线',
+      trigger: 'change'
     }
   ]
 }

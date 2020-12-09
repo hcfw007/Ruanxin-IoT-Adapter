@@ -137,7 +137,7 @@
               <el-checkbox label="OTHER">其他</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-          <el-form-item label="产品型号">
+          <el-form-item label="产品型号" prop="model">
             <el-input v-model="newProduct.model" placeholder="请输入产品型号" />
           </el-form-item>
           <el-divider />
