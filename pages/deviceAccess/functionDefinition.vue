@@ -6,7 +6,7 @@
           基础功能点
         </div>
         <div class="function-info-value">
-          110999
+          {{ productFunctionList.count }}
         </div>
       </el-col>
       <el-col :span="2">
@@ -17,7 +17,7 @@
           组合功能点
         </div>
         <div class="function-info-value">
-          20999
+          {{ combinedFunctionList.count }}
         </div>
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
