@@ -42,13 +42,24 @@ export default {
     return {
       input: '',
       errorMessage: '',
+      currentArray: [],
       error: false
       // items: []
     }
   },
+  watch: {
+    value() {
+      // 当外部调用的数组发生变化时，要重新初始化组件。
+      if (this.value !== this.currentArray) {
+        this.input = ''
+        this.error = false
+        this.currentArray = this.value
+      }
+    }
+  },
   methods: {
     addEmun() {
-      this.validateInput(this.val)
+      this.validateInput(this.input)
       if (this.error) { return }
       this.value.push(this.input)
       this.input = ''
@@ -60,12 +71,14 @@ export default {
       if (this.input.length === 0) {
         this.error = true
         this.errorMessage = '添加内容为空，请输入'
-        return
+        return true
       }
       if (this.value.includes(val)) {
         this.error = true
         this.errorMessage = '添加重复内容，请检查'
+        return true
       }
+      return false
     }
   }
 }
