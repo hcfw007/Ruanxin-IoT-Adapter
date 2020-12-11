@@ -264,8 +264,8 @@ export const functionRules = {
         trigger: 'blur'
       },
       {
-        pattern: /^[\w\u4E00-\u9FA5]*$/,
-        message: '只允许使用中文、英文、数字、下划线',
+        pattern: /^[a-zA-Z0-9\u4E00-\u9FA5]*$/,
+        message: '只允许使用中文、英文、数字',
         trigger: 'change'
       }
     ],
@@ -281,8 +281,8 @@ export const functionRules = {
         trigger: 'blur'
       },
       {
-        pattern: /^[a-zA-Z]+[\w\u4E00-\u9FA5]*$/,
-        message: '只允许使用中文、英文、数字、下划线，且必须以字母作为开头。',
+        pattern: /^[a-zA-Z]+[\w]*$/,
+        message: '只允许使用英文、数字、下划线，且必须以字母作为开头。',
         trigger: 'change'
       }
     ]
