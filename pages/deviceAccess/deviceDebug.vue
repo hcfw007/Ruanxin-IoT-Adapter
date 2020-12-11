@@ -4,9 +4,12 @@
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
-            <el-select v-model="debugInfo.deviceId" filterable allow-create placeholder="请选择或输入设备" @change="updateFunctionList($event)">
+            <el-select v-model="debugInfo.devicePid" filterable allow-create placeholder="请选择或输入设备PiD" @change="handleDeviceChange($event)">
               <el-option v-for="product in productList" :key="'product' + product.id" :label="product.name" :value="product.pid" />
             </el-select>
+          </el-form-item>
+          <el-form-item v-if="showIDInput" label="设备ID">
+            <el-input v-model="debugInfo.deviceId" placeholder="手动输入的设备需要手动填写设备ID" />
           </el-form-item>
           <el-form-item label="消息类型">
             <el-radio-group v-model="debugInfo.messageType" @change="handleMessageTypeChange">
@@ -15,15 +18,15 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="功能点">
-            <el-select v-model="debugInfo.function" placeholder="请选择功能点">
+            <el-select v-model="debugInfo.functinIndex" placeholder="请选择功能点" :loading="gettingFunction" @change="handleFunctionChange">
               <el-option v-for="fun in filteredFunctionList" :key="'fun' + fun.id" :label="fun.name" :value="fun.index" />
             </el-select>
           </el-form-item>
           <el-form-item label="数据类型">
-            {{ getFunctionFromIndex(debugInfo.function).type | dataTypeFilter }}
+            {{ debugInfo.function.type | dataTypeFilter }}
           </el-form-item>
           <el-form-item label="功能点值">
-            <el-input v-model="debugInfo.value" type="textarea" maxlength="255" placeholder="最多255个字符" show-word-limit />
+            <el-input v-model="debugInfo.value" type="textarea" maxlength="255" placeholder="最多255个字符，应符合JSONArray格式" show-word-limit />
           </el-form-item>
           <el-form-item label="发送设置">
             <el-select v-model="debugInfo.requestType" placeholder="请选择发送模式">
@@ -72,16 +75,18 @@
 </template>
 
 <script>
-import { getMessageLogList } from '~/assets/getters'
 import { getProductList, getFullFunctionList, dispatchCommand } from '~/assets/ajax'
 
 export default {
   data() {
     return {
       debugInfo: {
+        device: {},
+        devicePid: '',
         deviceId: '',
         messageType: 'down',
         function: '',
+        functinIndex: '',
         dataType: 'String',
         value: '',
         requestType: 'once',
@@ -96,7 +101,9 @@ export default {
       },
       looping: false,
       shakeproof: false,
-      interval: null
+      interval: null,
+      gettingFunction: false,
+      showIDInput: false
     }
   },
   computed: {
@@ -105,28 +112,43 @@ export default {
     }
   },
   created() {
-    this.getMessageLogList()
     this.getProductList()
   },
   methods: {
     getProductList() {
       getProductList(this, 'productList')
     },
-    getMessageLogList() {
-      getMessageLogList().then((data) => {
-        this.messageLogList = data
-      })
-    },
-    updateFunctionList(pid) {
+    async updateFunctionList(pid) {
+      this.gettingFunction = true
       this.productFunctionList = {
         count: 0,
         functions: []
       }
       this.debugInfo.function = ''
-      getFullFunctionList(this, 'productFunctionList', null, { productPid: pid })
+      await getFullFunctionList(this, 'productFunctionList', null, { productPid: pid })
+      this.gettingFunction = false
     },
     handleMessageTypeChange(val) {
       this.debugInfo.function = ''
+    },
+    handleFunctionChange(val) {
+      this.debugInfo.function = this.getFunctionFromIndex(val)
+    },
+    handleDeviceChange(val) {
+      let device = this.getDeviceFromPid(val)
+      if (device) {
+        this.debugInfo.device = device
+        this.debugInfo.deviceId = device.id
+      } else {
+        this.showIDInput = true
+      }
+      this.updateFunctionList(device.pid)
+    },
+    getDeviceFromPid(pid) {
+      for (let item of this.productList) {
+        if (item.pid === pid) { return item }
+      }
+      return false
     },
     getFunctionFromIndex(index) {
       for (let item of this.productFunctionList.functions) {
@@ -140,9 +162,12 @@ export default {
         this.shakeproof = false
       }, 2000)
       let data = {
-        deviceId: this.debugInfo.deviceId,
-        function: this.debugInfo.function,
-        command: this.debugInfo.value
+        pid: this.debugInfo.devicePid,
+        sn: this.debugInfo.deviceId,
+        params: this.debugInfo.value
+      }
+      if (this.debugInfo.function.meta_type === 'COMBINE') {
+        data.group_id = this.debugInfo.function.index
       }
       if (this.debugInfo.requestType === 'loop') {
         this.interval = setInterval(() => {
@@ -155,7 +180,7 @@ export default {
     },
     request(data) {
       dispatchCommand(data).then((response) => {
-        console.log(response)
+        this.messageLogList.push(response.data)
       })
     },
     stop() {
