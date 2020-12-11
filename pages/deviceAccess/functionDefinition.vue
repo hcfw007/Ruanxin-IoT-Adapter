@@ -205,17 +205,17 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form :model="customFunction" label-width="120px">
+        <el-form ref="customFunctionForm" :model="customFunction" :rules="functionRules.customFunctionRule" label-width="120px">
           <el-form-item label="功能类型" required>
             <el-select v-model="customFunction.fn_type" placeholder="请选择功能类型">
               <el-option label="属性类型" value="COMMON" />
               <el-option label="事件类型" value="EVENT" />
             </el-select>
           </el-form-item>
-          <el-form-item label="功能点名称" required>
+          <el-form-item label="功能点名称" prop="name">
             <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" :disabled="customFunctionDrawerMode === '编辑'" />
           </el-form-item>
-          <el-form-item label="字段名称" required>
+          <el-form-item label="字段名称" prop="subject">
             <el-input v-model="customFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
           </el-form-item>
 
@@ -723,6 +723,12 @@ export default {
       this.getProductFunctionList()
     },
     async saveCustomFunction() {
+      // 表单校验
+      let pass = true
+      await this.$refs.customFunctionForm.validate((valid) => {
+        pass = valid
+      })
+      if (!pass) { return }
       // 按钮载入动画
       this.postingCustomFunction = true
       // 获取功能点信息
