@@ -2,7 +2,15 @@
   <div class="emun-editor">
     <el-row>
       <el-col :span="16">
-        <el-input v-model="input" :placeholder="`请输入${ typeLabel }`" class="emun-input" />
+        <el-input
+          v-model="input"
+          :placeholder="`请输入${ typeLabel }`"
+          class="emun-input"
+          :class="{'error': error}"
+          @change="validateInput"
+          @focus="error = false"
+        />
+        <div v-if="error" class="el-form-item__error">{{ errorMessage }}</div>
       </el-col>
       <el-col :span="8" style="text-align: right">
         <span class="add-emun" @click="addEmun">+ 添加{{ typeLabel }}</span>
@@ -32,37 +40,32 @@ export default {
   },
   data() {
     return {
-      input: ''
+      input: '',
+      errorMessage: '',
+      error: false
       // items: []
     }
   },
   methods: {
     addEmun() {
-      if (this.input.length < 1) {
-        this.$toast('无法添加空内容，请输入', {
-          customCss: {
-            'background-color': '#E6A23C',
-            color: '#fff'
-          }
-        })
-        return
-      }
-      for (let item of this.value) {
-        if (item === this.input) {
-          this.$toast('无法添加重复内容，请检查', {
-            customCss: {
-              'background-color': '#E6A23C',
-              color: '#fff'
-            }
-          })
-          return
-        }
-      }
+      this.validateInput(this.val)
+      if (this.error) { return }
       this.value.push(this.input)
       this.input = ''
     },
     removeEmun(index) {
       this.value.splice(index, 1)
+    },
+    validateInput(val) {
+      if (this.input.length === 0) {
+        this.error = true
+        this.errorMessage = '添加内容为空，请输入'
+        return
+      }
+      if (this.value.includes(val)) {
+        this.error = true
+        this.errorMessage = '添加重复内容，请检查'
+      }
     }
   }
 }
@@ -87,4 +90,7 @@ export default {
       line-height: 20px
       border-radius: 10px
       cursor: pointer
+
+  .error>input
+    border-color: red
 </style>
