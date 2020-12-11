@@ -38,6 +38,26 @@ export default {
   },
   methods: {
     addEmun() {
+      if (this.input.length < 1) {
+        this.$toast('无法添加空内容，请输入', {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+        return
+      }
+      for (let item of this.value) {
+        if (item === this.input) {
+          this.$toast('无法添加重复内容，请检查', {
+            customCss: {
+              'background-color': '#E6A23C',
+              color: '#fff'
+            }
+          })
+          return
+        }
+      }
       this.value.push(this.input)
       this.input = ''
     },
