@@ -292,7 +292,7 @@
                   {{ param.name }}
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <span class="clickable-text" @click="editParam(param)">编辑</span>
+                  <span class="clickable-text" @click="editParam(param, index)">编辑</span>
                   <span class="clickable-text" @click="customFunction.params.slice(index, 1)">删除</span>
                 </el-col>
               </el-row>
@@ -322,11 +322,11 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form :model="currentParam" label-width="120px">
-          <el-form-item label="参数名称" required>
+        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRule">
+          <el-form-item label="参数名称" prop="name">
             <el-input v-model="currentParam.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
-          <el-form-item label="参数字段" required>
+          <el-form-item label="参数字段" prop="subject">
             <el-input v-model="currentParam.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="数据类型" required>
@@ -422,7 +422,7 @@
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction, downloadSDK } from '~/assets/ajax'
-import { functionConfig, functionRules } from '~/assets/config'
+import { functionConfig, functionRules, paramRule } from '~/assets/config'
 
 const basicDeepCopy = obj => JSON.parse(JSON.stringify(obj))
 
@@ -456,6 +456,7 @@ export default {
       uploadingImportedFile: false,
       currentParam: {
       },
+      currentParamIndex: 0,
       customFunction: {
         fn_type: 'COMMON'
       },
@@ -480,7 +481,8 @@ export default {
       customFunctionDrawerMode: '添加',
       paramDrawerMode: '添加',
       combinedFunctionDrawerMode: '添加',
-      functionRules
+      functionRules,
+      paramRule
       // functionListFilteredByCombinedTransferType: []
     }
   },
@@ -662,24 +664,32 @@ export default {
       this.paramDrawerMode = '添加'
       this.addingParam = true
     },
-    editParam(param) {
+    editParam(param, index) {
       // 编辑参数
-      this.currentParam = param
+      this.currentParam = basicDeepCopy(param)
       for (let item in functionConfig.paramProto) {
         if (!param[item]) {
           param[item] = basicDeepCopy(functionConfig.paramProto[item])
         }
       }
+      // 记录param index
+      this.currentParamIndex = index
       this.paramDrawerMode = '编辑'
       this.addingParam = true
     },
-    saveParam() {
-      // 如果是编辑，直接关闭窗口返回即可，因为直接编辑的是param对象
+    async saveParam() {
+      // 表单校验
+      let pass = true
+      await this.$refs.paramForm.validate((valid) => {
+        pass = valid
+      })
+      if (!pass) { return }
+      let param = this.currentParam
       if (this.paramDrawerMode === '编辑') {
+        this.customFunction.params[this.currentParamIndex] = param
         this.addingParam = false
         return
       }
-      let param = this.currentParam
       if (!this.customFunction.params) { this.customFunction.params = [] }
       this.customFunction.params.push(param)
       this.addingParam = false

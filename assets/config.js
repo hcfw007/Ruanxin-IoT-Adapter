@@ -291,3 +291,5 @@ export const functionRules = {
   combinedFunctionRule: publicNameSubjectRule,
   customFunctionRule: publicNameSubjectRule
 }
+
+export const paramRule = publicNameSubjectRule
