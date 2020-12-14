@@ -26,7 +26,7 @@
             {{ debugInfo.function.type | dataTypeFilter }}
           </el-form-item>
           <el-form-item label="功能点值">
-            <el-input v-model="debugInfo.value" type="textarea" maxlength="255" placeholder="最多255个字符，应符合JSONArray格式" show-word-limit />
+            <el-input v-model="debugInfo.value" type="textarea" maxlength="255" placeholder="最多255个字符，应符合JSON格式" show-word-limit />
           </el-form-item>
           <el-form-item label="发送设置">
             <el-select v-model="debugInfo.requestType" placeholder="请选择发送模式">
@@ -164,7 +164,7 @@ export default {
       let data = {
         pid: this.debugInfo.devicePid,
         sn: this.debugInfo.deviceId,
-        params: this.debugInfo.value
+        params: JSON.parse(this.debugInfo.value)
       }
       if (this.debugInfo.function.meta_type === 'COMBINE') {
         data.group_id = this.debugInfo.function.index
