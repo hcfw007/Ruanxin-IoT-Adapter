@@ -50,15 +50,15 @@
             <span class="message-log-title">消息日志</span>
           </el-col>
           <el-col :span="12" class="text-right">
-            <span class="clickable-text">清屏</span>
+            <span class="clickable-text" @click="messageLogList = []">清屏</span>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24" class="message-log-container">
+          <el-col v-if="messageLogList.length > 0" :span="24" class="message-log-container">
             <div v-for="(log, index) in messageLogList" :key="'log' + index" class="message-block">
-              <div class="message-timestamp">
+              <!-- <div class="message-timestamp">
                 获取属性 {{ log.time }}
-              </div>
+              </div> -->
               <div class="message-result">
                 result: {{ log.result }}
               </div>
@@ -67,6 +67,9 @@
               </div>
               <div v-if="index < (messageLogList.length - 1)" class="message-seperator" />
             </div>
+          </el-col>
+          <el-col v-else :span="24">
+            <h4>暂无数据</h4>
           </el-col>
         </el-row>
       </el-col>
@@ -161,10 +164,22 @@ export default {
       setTimeout(() => {
         this.shakeproof = false
       }, 2000)
+      let params = null
+      try {
+        params = JSON.parse(this.debugInfo.value)
+      } catch (e) {
+        console.debug(e.message)
+        this.$toast('读取功能点值失败，请输入合法的JSON字符串', {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+      }
       let data = {
         pid: this.debugInfo.devicePid,
         sn: this.debugInfo.deviceId,
-        params: JSON.parse(this.debugInfo.value)
+        params
       }
       if (this.debugInfo.function.meta_type === 'COMBINE') {
         data.group_id = this.debugInfo.function.index
@@ -180,7 +195,11 @@ export default {
     },
     request(data) {
       dispatchCommand(data).then((response) => {
-        this.messageLogList.push(response.data)
+        let log = {
+          message: response.data.msg,
+          result: response.data.success ? '成功' : '失败'
+        }
+        this.messageLogList.push(log)
       })
     },
     stop() {
