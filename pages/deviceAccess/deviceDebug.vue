@@ -175,6 +175,7 @@ export default {
             color: '#fff'
           }
         })
+        return
       }
       let data = {
         pid: this.debugInfo.devicePid,
