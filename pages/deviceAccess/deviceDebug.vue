@@ -25,8 +25,15 @@
           <el-form-item label="数据类型">
             {{ debugInfo.function.type | dataTypeFilter }}
           </el-form-item>
-          <el-form-item label="功能点值">
-            <el-input v-model="debugInfo.value" type="textarea" maxlength="255" placeholder="最多255个字符，应符合JSON格式" show-word-limit />
+          <el-form-item v-if="debugInfo.messageType === 'down'" label="功能点值">
+            <el-input
+              v-model="debugInfo.value"
+              type="textarea"
+              maxlength="255"
+              placeholder="最多255个字符，应符合JSON格式"
+              show-word-limit
+              :autosize="{ minRows: 5}"
+            />
           </el-form-item>
           <el-form-item label="发送设置">
             <el-select v-model="debugInfo.requestType" placeholder="请选择发送模式">
@@ -136,6 +143,23 @@ export default {
     },
     handleFunctionChange(val) {
       this.debugInfo.function = this.getFunctionFromIndex(val)
+      let valueObj = []
+      if (this.debugInfo.function.meta_type !== 'COMBINE') {
+        valueObj.push({
+          index: this.debugInfo.function.index,
+          value: {
+          }
+        })
+      } else {
+        for (let item of this.debugInfo.function.combination) {
+          valueObj.push({
+            index: item.index,
+            value: {
+            }
+          })
+        }
+      }
+      this.debugInfo.value = JSON.stringify(valueObj, null, 2)
     },
     handleDeviceChange(val) {
       let device = this.getDeviceFromPid(val)
@@ -164,38 +188,46 @@ export default {
       setTimeout(() => {
         this.shakeproof = false
       }, 2000)
-      let params = null
-      try {
-        params = JSON.parse(this.debugInfo.value)
-      } catch (e) {
-        console.debug(e.message)
-        this.$toast('读取功能点值失败，请输入合法的JSON字符串', {
-          customCss: {
-            'background-color': '#E6A23C',
-            color: '#fff'
-          }
-        })
-        return
-      }
+
       let data = {
         pid: this.debugInfo.devicePid,
-        sn: this.debugInfo.deviceId,
-        params
+        sn: this.debugInfo.deviceId
       }
+
+      if (this.debugInfo.messageType === 'down') {
+        try {
+          let params = JSON.parse(this.debugInfo.value)
+          data.prams = params
+        } catch (e) {
+          console.debug(e.message)
+          this.$toast('读取功能点值失败，请输入合法的JSON字符串', {
+            customCss: {
+              'background-color': '#E6A23C',
+              color: '#fff'
+            }
+          })
+          return
+        }
+      } else if (this.debugInfo.function.meta_type !== 'COMBINE') {
+        data.params = {
+          index: this.debugInfo.function.index
+        }
+      }
+
       if (this.debugInfo.function.meta_type === 'COMBINE') {
         data.group_id = this.debugInfo.function.index
       }
       if (this.debugInfo.requestType === 'loop') {
         this.interval = setInterval(() => {
-          this.request(data)
+          this.request(data, this.debugInfo.messageType)
         }, this.debugInfo.requestInterval * 1000)
         this.looping = true
       } else {
-        this.request(data)
+        this.request(data, this.debugInfo.messageType)
       }
     },
-    request(data) {
-      dispatchCommand(data).then((response) => {
+    request(data, type) {
+      dispatchCommand(data, type).then((response) => {
         let log = {
           message: response.data.msg,
           result: response.data.success ? '成功' : '失败'

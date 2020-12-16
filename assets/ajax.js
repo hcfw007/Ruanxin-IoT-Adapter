@@ -273,5 +273,5 @@ export const downloadSDK = pid =>
   })
 
 // 下发功能
-export const dispatchCommand = data =>
-  instance.post('devices/write/commands', data)
+export const dispatchCommand = (data, type) =>
+  instance.post(type === 'down' ? 'devices/write/commands' : 'devices/read/commands', data)
