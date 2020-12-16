@@ -503,7 +503,9 @@ export default {
     }
   },
   created() {
-    this.checkProduct()
+    if (!this.checkProduct()) {
+      return
+    }
     this.getFunctionList()
     this.getProductFunctionList()
   },

@@ -208,7 +208,9 @@ export default {
     }
   },
   created() {
-    this.checkProduct()
+    if (!this.checkProduct()) {
+      return
+    }
     this.getProductList()
     this.getDeviceData()
     this.getProjectData()
