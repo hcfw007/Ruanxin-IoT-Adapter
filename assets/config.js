@@ -26,10 +26,10 @@ export const menuStructure = {
           id: 'functionDefinition',
           addr: '/deviceAccess/functionDefinition',
           name: '功能定义'
-        }, {
-          id: 'adapterKey',
-          addr: '/deviceAccess/adapterKey',
-          name: '适配器部署密钥'
+        // }, {
+        //   id: 'adapterKey',
+        //   addr: '/deviceAccess/adapterKey',
+        //   name: '适配器部署密钥'
         }, {
           id: 'deviceDebug',
           addr: '/deviceAccess/deviceDebug',
