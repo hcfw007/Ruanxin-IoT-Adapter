@@ -55,7 +55,7 @@
               {{ product.name }}
             </div>
             <div class="product-tags">
-              <el-tag v-for="(tag, index) in product.tags" :key="'product' + product.id + 'tag' + index" effect="dark">{{ tag }}</el-tag>
+              <el-tag effect="dark">{{ product.industry_name }} - {{ product.category_name }}</el-tag>
             </div>
           </el-col>
           <el-col :span="4">
