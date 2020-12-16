@@ -51,7 +51,7 @@
       <el-col :span="24">
         <el-row v-for="product in productList" :key="'product' + product.id" class="product-block">
           <el-col :span="8" class="product-general-info">
-            <div class="product-name">
+            <div class="product-name" @click="setAndView(product)">
               {{ product.name }}
             </div>
             <div class="product-tags">
@@ -296,6 +296,7 @@ export default {
   .product-name
     font-size: 20px
     font-weight: bold
+    cursor: pointer
 
   .product-tags
     margin-top: 15px
