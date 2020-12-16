@@ -257,7 +257,7 @@ export default {
     justify-content: space-between
 
     .develop-step-block
-      width: 300px
+      width: 19%
       height: 100px
       padding: 20px
 
@@ -274,8 +274,8 @@ export default {
         vertical-align: middle
 
       .develop-step-hint
-        font-size: 24px
-        margin-left: 20%
+        font-size: 22px
+        margin-left: 10px
 
   .product-number
     .product-number-label
