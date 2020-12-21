@@ -1,9 +1,21 @@
 line-chart-color = #AAD0FF
 
+:root
+  --default-link-color: #1890ff
+  --light-background: #f1f2f6
+  --sub-primary: #1890ff
+  --sub-content: #242f68
+  --sub-edit: #00a705
+  --sub-delete: #e57835
+  --sub-close: #d8d8d8
+  --sub-log: #e3b618
+  --sub-disabled: #8c8c8c
+  --sub-divider: #555a7f
+  --dark-background-image: linear-gradient(#162158, #0c1239)
+
 body
   margin: 0
-  background-color: rgb(240, 242, 245)
-  --default-link-color: rgb(63, 144, 247)
+  background-color: light-background
 
 *
   box-sizing: border-box
