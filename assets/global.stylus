@@ -15,7 +15,7 @@ line-chart-color = #AAD0FF
 
 body
   margin: 0
-  background-color: light-background
+  background-color: var(--light-background)
 
 *
   box-sizing: border-box
