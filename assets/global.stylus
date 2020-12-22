@@ -52,6 +52,9 @@ a, a:visited
   &.gray
     color: #999
 
+.finished-text
+  color: var(--sub-edit)
+
 h3
   margin: 0
 

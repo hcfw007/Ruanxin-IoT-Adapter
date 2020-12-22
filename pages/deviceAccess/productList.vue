@@ -58,7 +58,15 @@
               <el-tag effect="dark">{{ product.industry_name }} - {{ product.category_name }}</el-tag>
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
+            <div class="product-IID-label product-label">
+              发布状态
+            </div>
+            <div class="product-IID-value product-value">
+              {{ product.is_release ? '已发布' : '未发布' }}
+            </div>
+          </el-col>
+          <el-col :span="3">
             <div class="product-IID-label product-label">
               产品ID
             </div>
@@ -66,7 +74,7 @@
               {{ product.pid }}
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <div class="product-protocol-label product-label">
               协议
             </div>
@@ -74,7 +82,7 @@
               {{ product.protocol_type | protocolFilter }}
             </div>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="3">
             <div class="product-created-label product-label">
               创建时间
             </div>
@@ -85,9 +93,11 @@
           <el-col :span="4" class="product-operators">
             <span class="clickable-text" @click="setAndView(product)">查看</span>
             <span class="clickable-text" @click="editProduct(product)">编辑</span>
-            <el-popconfirm title="确定要删除吗？" @confirm="deleteProduct(product)">
-              <span slot="reference" class="clickable-text">删除</span>
+            <el-popconfirm title="确定要删除吗？" :disabled="product.is_release" @confirm="deleteProduct(product)">
+              <span slot="reference" class="clickable-text" :class="{disabled: product.is_release}">删除</span>
             </el-popconfirm>
+            <span v-if="!product.is_release" class="clickable-text" @click="releaseProduct(product)">发布</span>
+            <span v-else class="finished-text">已发布</span>
           </el-col>
         </el-row>
       </el-col>
@@ -156,7 +166,7 @@
 
 <script>
 import { colors, rapidDevelopStep, productConfig, productFormRule } from '~/assets/config'
-import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct, deleteProduct } from '~/assets/ajax'
+import { getIndustryList, getCategoryList, postNewProduct, getProductList, editProduct, deleteProduct, releaseProduct } from '~/assets/ajax'
 
 export default {
   data() {
@@ -183,6 +193,11 @@ export default {
     this.getStaticList()
   },
   methods: {
+    async releaseProduct(product) {
+      let id = product.id
+      await releaseProduct(this, null, '发布成功！', '发布失败', { id })
+      this.getProductList()
+    },
     getStaticList() {
       getIndustryList(this, 'industryList')
       getCategoryList(this, 'categoryList')

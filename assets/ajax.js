@@ -213,6 +213,8 @@ export const getProductList = getRequestFactory('/products/select')
 export const editProduct = postRequestFactory('/products/update')
 // 删除产品
 export const deleteProduct = deleteRequestFactory('/products/delete/${id}')
+// 发布产品
+export const releaseProduct = patchRequestFactory('/products/release/${id}')
 
 // 获取产品的功能点
 export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=BASE')
