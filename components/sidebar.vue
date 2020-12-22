@@ -65,7 +65,7 @@ export default {
 
 <style lang="stylus">
 .sidebar
-  background-color: rgb(4, 21, 39)
+  background-image: var(--dark-background-image)
   height: 100%
   padding-top: 20px
 
@@ -81,11 +81,19 @@ export default {
     .el-menu-item, .el-submenu__title, .el-submenu__title i
       color: #fff
 
+    .el-submenu__title
+      font-size: 18px
+      padding-left: 40px !important
+
+    .el-menu-item
+      font-size: 16px
+      padding-left: 60px !important
+
     .el-submenu__title:hover, .el-menu-item:hover, .el-menu-item.is-active, .el-submenu__title.is-active
-      background-color: rgb(63, 144, 247)
+      background-color: var(--sub-primary)
 
     .menu-icon
       margin-right: 15px
-      height: 16px
+      height: 18px
 
 </style>

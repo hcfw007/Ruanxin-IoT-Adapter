@@ -65,9 +65,13 @@ export default {
 navbarHeight = 70px // height of navbar content
 
 .navbar
-  background-color: #fff
+  background-image: var(--dark-background-image)
   height: navbarHeight // - 2 for border width
   padding: 0 40px
+  color: #fff
+
+  .el-breadcrumb__inner
+    color: #fff !important
 
   .nav-row
     height: 100%
