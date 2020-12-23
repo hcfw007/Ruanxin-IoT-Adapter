@@ -30,6 +30,11 @@ export default {
       path: []
     }
   },
+  watch: {
+    $route(to, from) {
+      this.getPath()
+    }
+  },
   created() {
     this.getPath()
   },
