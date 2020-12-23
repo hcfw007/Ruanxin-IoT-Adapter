@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseURL = '/webadmin'
 const headers = {
-  Authorization: 'test'
+  Authenticator: 'test'
 }
 
 const instance = axios.create({
