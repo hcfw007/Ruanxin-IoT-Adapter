@@ -64,11 +64,19 @@ const filters = {
     return 'N/A'
   },
   connectionFilter(val) {
-    if (val in stringMapping.connectionString) {
-      return stringMapping.connectionString[val]
-    } else {
-      return 'N/A'
+    let str = ''
+    for (let index in val) {
+      let item = val[index]
+      if (index > 0) {
+        str += '，'
+      }
+      if (item in stringMapping.connectionString) {
+        str += stringMapping.connectionString[item]
+      } else {
+        str += '未知'
+      }
     }
+    return str
   },
   protocolFilter(val) {
     if (val in stringMapping.protocolString) {
