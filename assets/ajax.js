@@ -276,6 +276,14 @@ export const downloadSDK = pid =>
     let url = window.URL.createObjectURL(data)
     let download = document.createElement('a')
     download.href = url
+    try {
+      let disposition = response.headers['content-disposition']
+      let filename = disposition.split(';')[1].split('=')[1].replace(/"/g, '')
+      download.download = filename
+    } catch (e) {
+      console.debug(e.message)
+    }
+    download.click()
     download.click()
     window.URL.revokeObjectURL(download.href)
   })
