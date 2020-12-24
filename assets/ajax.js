@@ -248,8 +248,14 @@ export const exportFunction = pid =>
     let url = window.URL.createObjectURL(data)
     let download = document.createElement('a')
     download.href = url
-    let disposition = response.headers['content-disposition']
-    let filename = disposition.split(';')[1].split('=')[1].replace(/"/g, '')
+    let filename = 'function.json'
+    try {
+      let disposition = response.headers['content-disposition']
+      filename = disposition.split(';')[1].split('=')[1].replace(/"/g, '')
+    } catch (e) {
+      console.debug(e.message)
+      filename = 'function.json'
+    }
     download.download = filename
     download.click()
     window.URL.revokeObjectURL(download.href)
