@@ -284,7 +284,6 @@ export const downloadSDK = pid =>
       console.debug(e.message)
     }
     download.click()
-    download.click()
     window.URL.revokeObjectURL(download.href)
   })
 
