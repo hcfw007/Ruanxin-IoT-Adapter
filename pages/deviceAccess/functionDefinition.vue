@@ -207,7 +207,7 @@
       <div class="drawer-content">
         <el-form ref="customFunctionForm" :model="customFunction" :rules="functionRules.customFunctionRule" label-width="120px">
           <el-form-item label="功能类型" required>
-            <el-select v-model="customFunction.fn_type" placeholder="请选择功能类型">
+            <el-select v-model="customFunction.fn_type" placeholder="请选择功能类型" :disabled="customFunctionDrawerMode === '编辑'">
               <el-option label="属性类型" value="COMMON" />
               <el-option label="事件类型" value="EVENT" />
             </el-select>
