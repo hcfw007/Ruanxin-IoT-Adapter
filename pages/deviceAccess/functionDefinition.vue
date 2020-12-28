@@ -387,16 +387,16 @@
             <el-input v-model="combinedFunction.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="字段名称" prop="subject">
-            <el-input v-model="combinedFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
+            <el-input v-model="combinedFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" :disabled="combinedFunctionDrawerMode === '编辑'" />
           </el-form-item>
           <el-form-item label="功能类型" required>
-            <el-select v-model="combinedFunction.fn_type" placeholder="请选择功能类型">
+            <el-select v-model="combinedFunction.fn_type" placeholder="请选择功能类型" :disabled="combinedFunctionDrawerMode === '编辑'">
               <el-option label="属性类型" value="COMMON" />
               <el-option label="事件类型" value="EVENT" />
             </el-select>
           </el-form-item>
           <el-form-item label="传输类型" required>
-            <el-select v-model="combinedFunctionTransferType" placeholder="请选择数据类型" @change="combinedFunction.combination = []">
+            <el-select v-model="combinedFunctionTransferType" placeholder="请选择数据类型" :disabled="combinedFunctionDrawerMode === '编辑'" @change="combinedFunction.combination = []">
               <el-option label="可下发可上报" value="up, down" />
               <el-option label="只可下发" value="down" />
               <el-option label="只可上报" value="up" />
