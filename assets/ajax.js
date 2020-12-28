@@ -239,31 +239,38 @@ export const postCombinedFunction = postRequestFactory('/products/${id}/function
 // 编辑组合功能点
 export const editCombinedFunction = patchRequestFactory('/products/${pid}/functions/combine/${combinationId}')
 
+// 对下载文件名进行base64解码
+const downloadProcessor = (response) => {
+  let data = response.data
+  let url = window.URL.createObjectURL(data)
+  let download = document.createElement('a')
+  download.href = url
+  try {
+    let disposition = response.headers['content-disposition']
+    let filename = disposition.split(';')[1].split('?UTF8?B?')[1]
+    download.download = Base64.decode(filename)
+  } catch (e) {
+    console.debug(e.message)
+  }
+  download.click()
+  window.URL.revokeObjectURL(download.href)
+}
+
 // 导出功能点并下载
 export const exportFunction = pid =>
   instance.get('/functions/export/' + pid, {
     responseType: 'blob'
-  }).then((response) => {
-    let data = response.data
-    let url = window.URL.createObjectURL(data)
-    let download = document.createElement('a')
-    download.href = url
-    try {
-      let disposition = response.headers['content-disposition']
-      let filename = disposition.split(';')[1].split('=')[1].replace(/"/g, '')
-      download.download = filename
-    } catch (e) {
-      console.debug(e.message)
-    }
-    download.click()
-    window.URL.revokeObjectURL(download.href)
-  })
+  }).then(downloadProcessor)
 
 // 导入功能点
-export const importFunction = data =>
+export const importFunction = (data, progressCallback) =>
   instance.post('/functions/import/', data, {
     headers: {
       'Content-Type': 'multipart/form-data'
+    },
+    onUploadProgress: (progressEvent) => {
+      let complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
+      if (progressCallback) { progressCallback(complete) }
     }
   })
 
@@ -271,21 +278,7 @@ export const importFunction = data =>
 export const downloadSDK = pid =>
   instance.get('/devices/' + pid + '/sdk', {
     responseType: 'blob'
-  }).then((response) => {
-    let data = response.data
-    let url = window.URL.createObjectURL(data)
-    let download = document.createElement('a')
-    download.href = url
-    try {
-      let disposition = response.headers['content-disposition']
-      let filename = disposition.split(';')[1].split('=')[1].replace(/"/g, '')
-      download.download = filename
-    } catch (e) {
-      console.debug(e.message)
-    }
-    download.click()
-    window.URL.revokeObjectURL(download.href)
-  })
+  }).then(downloadProcessor)
 
 // 下发功能
 export const dispatchCommand = (data, type) =>
