@@ -199,7 +199,7 @@ export default {
           let params = JSON.parse(this.debugInfo.value)
           data.params = params
         } catch (e) {
-          console.debug(e.mess
+          console.debug(e.message)
           this.$toast('读取功能点值失败，请输入合法的JSON字符串', {
             customCss: {
               'background-color': '#E6A23C',
