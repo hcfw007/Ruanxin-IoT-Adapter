@@ -17,7 +17,7 @@ export default {
   layout: 'error-layout',
   computed: {
     statusCode () {
-      return this.$route.query.error || 404
+      return 404
     },
     message () {
       return '出错了'
