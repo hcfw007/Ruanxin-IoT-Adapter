@@ -229,8 +229,8 @@ export default {
     request(data, type) {
       dispatchCommand(data, type).then((response) => {
         let log = {
-          message: response.data.msg,
-          result: response.data.success ? '成功' : '失败'
+          message: response.data.data.message,
+          result: response.data.data.success ? '成功' : '失败'
         }
         this.messageLogList.push(log)
       })
