@@ -1,6 +1,6 @@
 <template>
   <div class="device-detail main-content">
-    <el-row class="block-white block-round">
+    <el-row class="block-white ">
       <el-col :span="24">
         <el-row>
           <el-col :span="24">
@@ -33,7 +33,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row class="block-white block-round">
+    <el-row class="block-white ">
       <el-col :span="24">
         <el-tabs v-model="currentDeviceInfoTab">
           <el-tab-pane label="设备信息" name="device-basic-info">

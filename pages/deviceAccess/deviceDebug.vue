@@ -1,6 +1,6 @@
 <template>
   <div class="device-debug main-content">
-    <el-row class="block-white block-round">
+    <el-row class="block-white ">
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
@@ -45,8 +45,8 @@
             <el-input v-model="debugInfo.requestInterval" type="number" placeholder="3-3600, 单位秒" min="3" max="3600" />
           </el-form-item>
           <el-form-item class="text-right">
-            <el-button v-if="looping" type="primary" :loading="shakeproof" @click="stop">停止</el-button>
-            <el-button v-else type="primary" :loading="shakeproof" @click="execute">发送</el-button>
+            <el-button v-if="looping" type="primary" :loading="shakeproof" class="stop-button" @click="stop">停止</el-button>
+            <el-button v-else type="primary" :loading="shakeproof" class="execute-button" @click="execute">发送</el-button>
             <el-button @click="reset">重置</el-button>
           </el-form-item>
         </el-form>
@@ -281,4 +281,8 @@ export default {
       width: 100%
       height: 0
       border-top: solid 1px #AAA
+
+  .execute-button, .stop-button
+    background-color: #3071a9
+    border-color: #3071a9
 </style>

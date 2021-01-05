@@ -1,6 +1,6 @@
 <template>
   <div class="function-definition main-content">
-    <el-row class="function-info-block block-white block-round">
+    <el-row class="function-info-block block-white ">
       <el-col :span="4">
         <div class="function-info-label">
           基础功能点
@@ -21,13 +21,13 @@
         </div>
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
-        <el-button :loading="uploadingImportedFile" @click="chooseImportFile">导入功能点</el-button>
-        <el-button @click="exportFunction">导出功能点</el-button>
-        <el-button type="primary" @click="downloadSDK">下载SDK</el-button>
+        <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button>
+        <el-button class="function-button" @click="exportFunction">导出功能点</el-button>
+        <el-button type="primary" class="sdk-button" @click="downloadSDK">下载SDK</el-button>
         <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
       </el-col>
     </el-row>
-    <el-row class="device-function-block block-white block-round">
+    <el-row class="device-function-block block-white ">
       <el-col :span="24">
         <el-tabs v-model="currentDeviceFunctionTab">
           <el-tab-pane label="基础功能点" name="basic-function">
@@ -53,7 +53,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="productFunctionList.functions">
+                <el-table :data="productFunctionList.functions" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -70,9 +70,9 @@
                   </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                      <span class="clickable-text" @click="editFunction(scope.row)">编辑</span>
+                      <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editFunction(scope.row)">
                       <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id)">
-                        <span slot="reference" class="clickable-text">删除</span>
+                        <img slot="reference" src="@/static/images/icons/delete.png" alt="" class="table-mini-image clickable" title="删除">
                       </el-popconfirm>
                     </template>
                   </el-table-column>
@@ -99,7 +99,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="combinedFunctionList.functions">
+                <el-table :data="combinedFunctionList.functions" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -115,9 +115,9 @@
                   </el-table-column>
                   <el-table-column label="操作">
                     <template slot-scope="scope">
-                      <span class="clickable-text" @click="editCombinedFunction(scope.row)">编辑</span>
+                      <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editCombinedFunction(scope.row)">
                       <el-popconfirm title="确定要删除吗？" @confirm="deleteFunction(scope.row.id, scope.row)">
-                        <span slot="reference" class="clickable-text">删除</span>
+                        <img slot="reference" src="@/static/images/icons/delete.png" alt="" class="table-mini-image clickable" title="删除">
                       </el-popconfirm>
                     </template>
                   </el-table-column>
@@ -128,7 +128,7 @@
         </el-tabs>
       </el-col>
     </el-row>
-    <!-- <el-row class="device-function-block block-white block-round">
+    <!-- <el-row class="device-function-block block-white ">
       <el-col :span="24">
         <el-row>
           <el-col :span="18">
@@ -898,7 +898,7 @@ export default {
       text-align: center
       height: 30px
       width: 30px
-      line-height: 28px
+      line-height: 22px
       font-size: 24px
       font-weight: bold
       vertical-align: middle
@@ -913,4 +913,15 @@ export default {
     padding: 0 10px
     &:not(:first-child)
       margin-top: 5px !important
+
+  .sdk-button
+    text-align: center
+    background: #3071a9
+    color: #fff
+    cursor: pointer
+
+  .function-button
+    text-align: center
+    cursor: pointer
+
 </style>

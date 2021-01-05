@@ -15,13 +15,13 @@
     </el-row>
     <el-row class="no-padding">
       <el-col :span="24" class="develop-step-row">
-        <div v-for="(item, index) in rapidDevelopStep" :key="'step' + index" class="develop-step-block block-white block-round">
+        <div v-for="(item, index) in rapidDevelopStep" :key="'step' + index" class="develop-step-block block-white ">
           <div class="develop-step-index" :style="{'background-color': colors['background-colors'][index], 'color': colors['font-colors'][index]}">{{ index + 1 }}</div>
           <div class="develop-step-hint">{{ item.name }}</div>
         </div>
       </el-col>
     </el-row>
-    <el-row class="product-general-info-row block-white block-round">
+    <el-row class="product-general-info-row block-white ">
       <el-col :span="4">
         <div class="product-number">
           <div class="product-number-label">
@@ -44,62 +44,69 @@
         </div>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" class="add-product" @click="addProduct">添加产品</el-button>
+        <el-button type="primary" class="add-product" @click="addProduct">新增</el-button>
       </el-col>
     </el-row>
-    <el-row class="product-list-row block-white block-round">
+    <el-row class="product-list-row block-white">
       <el-col :span="24">
-        <el-row v-for="product in productList" :key="'product' + product.id" class="product-block">
-          <el-col :span="8" class="product-general-info">
-            <div class="product-name" @click="setAndView(product)">
-              {{ product.name }}
-            </div>
-            <div class="product-tags">
-              <el-tag effect="dark">{{ product.industry_name }} - {{ product.category_name }}</el-tag>
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="product-IID-label product-label">
-              发布状态
-            </div>
-            <div class="product-IID-value product-value">
-              {{ product.is_release ? '已发布' : '未发布' }}
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="product-IID-label product-label">
-              产品ID
-            </div>
-            <div class="product-IID-value product-value">
-              {{ product.pid }}
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="product-protocol-label product-label">
-              协议
-            </div>
-            <div class="product-protocol-value product-value">
-              {{ product.protocol_type | protocolFilter }}
-            </div>
-          </el-col>
-          <el-col :span="3">
-            <div class="product-created-label product-label">
-              创建时间
-            </div>
-            <div class="product-created-value product-value">
-              {{ product.created_at | dateTimeFilter }}
-            </div>
-          </el-col>
-          <el-col :span="4" class="product-operators">
-            <span class="clickable-text" @click="setAndView(product)">查看</span>
-            <span class="clickable-text" @click="editProduct(product)">编辑</span>
-            <el-popconfirm title="确定要删除吗？" :disabled="product.is_release" @confirm="deleteProduct(product)">
-              <span slot="reference" class="clickable-text" :class="{disabled: product.is_release}">删除</span>
-            </el-popconfirm>
-            <span v-if="!product.is_release" class="clickable-text" @click="releaseProduct(product)">发布</span>
-            <span v-else class="finished-text">已发布</span>
-          </el-col>
-        </el-row>
+        <el-table
+          :data="productList"
+          border
+        >
+          <el-table-column
+            prop="industry_name"
+            label="行业"
+          />
+          <el-table-column
+            prop="firm_name"
+            label="厂商"
+          />
+          <el-table-column
+            prop="category_name"
+            label="设备类型"
+          />
+          <el-table-column
+            prop="name"
+            label="产品名称"
+          />
+          <el-table-column
+            prop="pid"
+            label="产品ID"
+          />
+          <el-table-column
+            prop="protocol_type"
+            label="协议类型"
+          />
+          <el-table-column
+            prop="user_name"
+            label="创建人"
+          />
+          <el-table-column
+            label="创建时间"
+          >
+            <template slot-scope="scope">{{ scope.row.created_at.split('.')[0] }}</template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="230"
+          >
+            <template slot-scope="scope">
+              <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
+              <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editProduct(scope.row)">
+              <el-popconfirm title="确定要删除吗？" :disabled="scope.row.is_release" @confirm="deleteProduct(scope.row)">
+                <img
+                  slot="reference"
+                  src="@/static/images/icons/delete.png"
+                  alt=""
+                  class="table-mini-image clickable"
+                  :class="{ disabled: scope.row.is_release }"
+                  title="删除"
+                >
+              </el-popconfirm>
+              <img src="@/static/images/icons/publish.png" alt="" class="table-mini-image clickable" title="发布" @click="releaseProduct(scope.row)">
+            </template>
+          </el-table-column>
+        </el-table>
       </el-col>
     </el-row>
     <el-drawer
@@ -194,6 +201,15 @@ export default {
   },
   methods: {
     async releaseProduct(product) {
+      if (product.is_release) {
+        this.$toast('此产品已发布，无需重复发布', {
+          customCss: {
+            'background-color': '#67C23A',
+            color: '#fff'
+          }
+        })
+        return
+      }
       let id = product.id
       await releaseProduct(this, null, '发布成功！', '发布失败', { id })
       this.getProductList()
@@ -307,6 +323,15 @@ export default {
 
   .add-product
     margin-top: 15px
+    bfont-size: 14px
+    height: 34px
+    line-height: 34px
+    padding: 0 15px
+    text-align: center
+    color: #fff
+    border-radius: 5px
+    background-color: #FFAC1E
+    border-color: #FFAC1E
 
   .product-name
     font-size: 20px

@@ -1,6 +1,6 @@
 <template>
   <div class="adapter-key main-content">
-    <el-row class="block-round block-white">
+    <el-row class=" block-white">
       <el-col :span="24">
         <el-row>
           <el-col :span="24">

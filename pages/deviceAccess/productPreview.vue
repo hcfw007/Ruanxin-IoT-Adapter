@@ -1,6 +1,6 @@
 <template>
   <div class="product-preview main-content">
-    <el-row class="product-block block-white block-round">
+    <el-row class="product-block block-white ">
       <el-col :span="9" class="product-general-info">
         <div class="product-name">
           {{ currentProduct.name }}
@@ -64,7 +64,7 @@
         </el-popover>
       </el-col>
     </el-row>
-    <el-row class="device-data-block block-white block-round">
+    <el-row class="device-data-block block-white ">
       <el-col :span="6">
         <div class="device-data-label" style="border-left: solid 5px var(--default-link-color)">
           设备总数
@@ -98,7 +98,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class="project-block block-white block-round">
+    <el-row class="project-block block-white ">
       <el-col :span="24">
         <el-row>
           <el-col :span="24">
@@ -120,7 +120,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row class="active-device-block block-white block-round">
+    <el-row class="active-device-block block-white ">
       <el-col :span="24">
         <el-row class="block-title-row">
           <el-col :span="5">
@@ -147,7 +147,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row class="active-device-block block-white block-round">
+    <el-row class="active-device-block block-white ">
       <el-col :span="24">
         <el-row class="block-title-row">
           <el-col :span="5">

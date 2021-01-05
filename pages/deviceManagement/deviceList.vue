@@ -1,6 +1,6 @@
 <template>
   <div class="device-list main-content">
-    <el-row class="block-white block-round">
+    <el-row class="block-white ">
       <el-col :span="24">
         <el-row>
           <el-col :span="12">
@@ -27,7 +27,7 @@
         </el-row>
       </el-col>
     </el-row>
-    <el-row class="block-white block-round">
+    <el-row class="block-white ">
       <el-col :span="24">
         <el-row>
           <el-col :span="24">
