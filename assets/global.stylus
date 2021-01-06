@@ -213,7 +213,7 @@ span:focus
       border-bottom: 1px solid #fff
 
 // 输入
-input
+input, textarea
   border: 1px solid #999 !important
 
 :-moz-placeholder, ::-moz-placeholder, input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-input-placeholder, textarea::-webkit-input-placeholder
