@@ -7,7 +7,7 @@
       <el-header height="70px" style="padding: 0">
         <navbar />
       </el-header>
-      <el-main>
+      <el-main class="content">
         <Nuxt />
       </el-main>
     </el-container>
@@ -37,4 +37,7 @@
   .main-content
     .el-row:not(:first-child)
       margin-top: 20px
+
+  .content
+    position: relative
 </style>

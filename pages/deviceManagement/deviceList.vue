@@ -1,5 +1,6 @@
 <template>
-  <div class="device-list main-content">
+  <div class="iframe-container"><iframe :src="`http://47.103.143.104:8080/devicemanage/#/EquipmentInformation?token=${ token }&roleids=179${ roleids }`" frameborder="0" style="height: 100%; width: 100%;" /></div>
+  <!-- <div class="device-list main-content">
     <el-row class="block-white ">
       <el-col :span="24">
         <el-row>
@@ -131,26 +132,28 @@
         </el-row>
       </el-col>
     </el-row>
-  </div>
+  </div> -->
 </template>
 
 <script>
+import { cookieControl, getQueryString } from '@/assets/util'
 import { getDeviceList } from '~/assets/getters'
 
 export default {
   data() {
     return {
-      searchInput: '',
-      searchType: '',
-      createTime: '',
-      activateTime: '',
-      onlineStatus: '',
-      activateStatus: '',
-      deviceList: []
+      token: '',
+      roleids: ''
     }
   },
   created() {
-    this.getDeviceList()
+    let token = getQueryString('token')
+    if (!token) { token = cookieControl.getCookie('token') } else { cookieControl.setCookie('token', token) }
+    this.token = token
+
+    let roleids = getQueryString('roleids')
+    if (!roleids) { roleids = cookieControl.getCookie('roleids') } else { cookieControl.setCookie('roleids', roleids) }
+    this.roleids = roleids
   },
   methods: {
     getDeviceList() {
@@ -170,5 +173,12 @@ export default {
 
     i
       margin-right: 10px
+
+.iframe-container
+  position: absolute
+  top: 10px
+  left: 10px
+  right: 10px
+  bottom: 10px
 
 </style>
