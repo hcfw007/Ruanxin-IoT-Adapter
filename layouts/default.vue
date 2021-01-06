@@ -14,6 +14,14 @@
   </el-container>
 </template>
 
+<script>
+export default {
+  created() {
+    console.log(this.$route)
+  }
+}
+</script>
+
 <style lang="stylus">
 .frame-container
   width: 100vw

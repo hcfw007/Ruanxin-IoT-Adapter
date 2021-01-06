@@ -176,6 +176,10 @@ span:focus
   &:not(:first-child)
     margin-left: 5px
 
+.el-popover__reference-wrapper
+  .table-mini-image
+    margin-left: 5px
+
 // 表格样式
 .el-table
   // 标题行
