@@ -229,6 +229,7 @@
                 <el-option label="故障型" value="EXCEPTION" />
                 <el-option label="字符串型" value="STRING" />
                 <el-option label="透传型" value="BUFFER" />
+                <el-option label="日期型" value="DATE" />
               </el-select>
             </el-form-item>
             <section v-if="customFunction.type === 'BOOLEAN'" />
