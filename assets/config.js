@@ -46,41 +46,41 @@ export const menuStructure = {
           id: 'deviceList',
           addr: '/deviceManagement/deviceList',
           name: '设备列表'
-        }, {
-          id: 'remoteUpgrade',
-          addr: '/deviceManagement/remoteUpgrade',
-          name: '远程升级'
-        }, {
-          id: 'groupManagement',
-          addr: '/deviceManagement/groupManagement',
-          name: '群组管理'
-        }, {
-          id: 'adapterInstance',
-          addr: '/deviceManagement/adapterInstance',
-          name: '适配器实例'
+        // }, {
+        //   id: 'remoteUpgrade',
+        //   addr: '/deviceManagement/remoteUpgrade',
+        //   name: '远程升级'
+        // }, {
+        //   id: 'groupManagement',
+        //   addr: '/deviceManagement/groupManagement',
+        //   name: '群组管理'
+        // }, {
+        //   id: 'adapterInstance',
+        //   addr: '/deviceManagement/adapterInstance',
+        //   name: '适配器实例'
         }
       ]
-    }, {
-      id: 'dataManagement',
-      addr: '/dataManagement',
-      name: '数据管理',
-      icon: dataManagementIcon
-    }, {
-      id: 'unifiedService',
-      addr: '/unifiedService',
-      name: '统一服务',
-      icon: unifiedServiceIcon,
-      children: [
-        {
-          id: 'ruleEngine',
-          addr: '/unifiedService/ruleEngine',
-          name: '规则引擎'
-        }, {
-          id: 'pushService',
-          addr: '/unifiedService/pushService',
-          name: '推送服务'
-        }
-      ]
+    // }, {
+    //   id: 'dataManagement',
+    //   addr: '/dataManagement',
+    //   name: '数据管理',
+    //   icon: dataManagementIcon
+    // }, {
+    //   id: 'unifiedService',
+    //   addr: '/unifiedService',
+    //   name: '统一服务',
+    //   icon: unifiedServiceIcon,
+    //   children: [
+    //     {
+    //       id: 'ruleEngine',
+    //       addr: '/unifiedService/ruleEngine',
+    //       name: '规则引擎'
+    //     }, {
+    //       id: 'pushService',
+    //       addr: '/unifiedService/pushService',
+    //       name: '推送服务'
+    //     }
+    //   ]
     }
   ]
 }

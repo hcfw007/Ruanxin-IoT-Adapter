@@ -9,6 +9,9 @@ export default {
   data() {
     return {
     }
+  },
+  created() {
+    this.$router.push('/deviceAccess/productList')
   }
 }
 </script>
