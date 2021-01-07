@@ -222,3 +222,10 @@ input, textarea
 
 :-moz-placeholder, ::-moz-placeholder, input:-ms-input-placeholder, textarea:-ms-input-placeholder, input::-webkit-input-placeholder, textarea::-webkit-input-placeholder
   color: #bfbfbf
+
+// 必填星号
+span.required-star
+  position: relative
+  top: -5px
+  left: -2px
+  color: #f00

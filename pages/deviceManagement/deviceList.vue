@@ -1,5 +1,5 @@
 <template>
-  <div class="iframe-container"><iframe :src="`http://47.103.143.104:8080/devicemanage/#/EquipmentInformation?token=${ token }&roleids=179${ roleids }`" frameborder="0" style="height: 100%; width: 100%;" /></div>
+  <div class="iframe-container"><iframe :src="`http://47.103.143.104:8080/devicemanage/#/EquipmentInformation?token=${ token }`" frameborder="0" style="height: 100%; width: 100%;" /></div>
   <!-- <div class="device-list main-content">
     <el-row class="block-white ">
       <el-col :span="24">

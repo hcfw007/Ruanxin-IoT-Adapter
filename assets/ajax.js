@@ -5,6 +5,7 @@ import { cookieControl, getQueryString } from '@/assets/util'
 let token = getQueryString('token')
 if (!token) { token = cookieControl.getCookie('token') } else { cookieControl.setCookie('token', token) }
 
+// const baseURL = 'https://8.133.182.126/webadmin'
 const baseURL = '/webadmin'
 const headers = {
   Authenticator: token
@@ -335,8 +336,8 @@ export const importFunction = (data, progressCallback) =>
   })
 
 // 下载SDK
-export const downloadSDK = pid =>
-  instance.get('/devices/' + pid + '/sdk', {
+export const downloadSDK = (pid, chipType) =>
+  instance.get('/devices/' + pid + '/sdk?chiptype=' + chipType, {
     responseType: 'blob'
   }).then(downloadProcessor)
 

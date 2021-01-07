@@ -23,7 +23,7 @@
       <el-col :span="14" class="function-info-operators text-right">
         <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button>
         <el-button class="function-button" @click="exportFunction">导出功能点</el-button>
-        <el-button type="primary" class="sdk-button" @click="downloadSDK">下载SDK</el-button>
+        <el-button type="primary" class="sdk-button" @click="displaySDKDialog = true">下载SDK</el-button>
         <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
       </el-col>
     </el-row>
@@ -417,6 +417,24 @@
         </el-row>
       </div>
     </el-drawer>
+
+    <el-dialog
+      title="下载SDK"
+      :visible.sync="displaySDKDialog"
+      width="30%"
+    >
+      <span><span class="required-star">*</span>请选择内核架构</span>
+      <el-radio-group v-model="SDKArchitecture">
+        <el-radio label="X86">x86芯片平台</el-radio>
+        <el-radio label="ARMV8">ARM Version 8</el-radio>
+        <el-radio label="ARMV7">ARM Version 7</el-radio>
+        <el-radio label="OTHER">其他芯片平台</el-radio>
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer text-center">
+        <el-button type="primary" @click="downloadSDK(); displaySDKDialog = false">下载SDK</el-button>
+        <el-button @click="displaySDKDialog = false">取消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -444,6 +462,8 @@ export default {
   },
   data() {
     return {
+      displaySDKDialog: false,
+      SDKArchitecture: 'X86',
       customFunctionTransferType: 'up, down',
       combinedFunctionTransferType: 'up, down',
       addingFunction: false,
@@ -524,7 +544,8 @@ export default {
     },
     downloadSDK() {
       let pid = this.currentProduct.pid
-      downloadSDK(pid).catch((err) => {
+      let chipType = this.SDKArchitecture
+      downloadSDK(pid, chipType).catch((err) => {
         this.$toast('下载失败，消息为' + err.message, {
           customCss: {
             'background-color': '#E6A23C',
