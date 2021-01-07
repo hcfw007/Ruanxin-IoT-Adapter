@@ -4,8 +4,8 @@ import { cookieControl, getQueryString } from '@/assets/util'
 
 let token = localStorage.getItem('authenticator')
 
-// const baseURL = '/webadmin'
-const baseURL = 'https://8.133.182.126/webadmin'
+const baseURL = '/webadmin'
+// const baseURL = 'https://8.133.182.126/webadmin'
 const headers = {
   Authenticator: token
 }
