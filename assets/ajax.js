@@ -2,11 +2,10 @@ import axios from 'axios'
 import { Base64 } from 'js-base64'
 import { cookieControl, getQueryString } from '@/assets/util'
 
-let token = getQueryString('token')
-if (!token) { token = cookieControl.getCookie('token') } else { cookieControl.setCookie('token', token) }
+let token = localStorage.getItem('authenticator')
 
-// const baseURL = 'https://8.133.182.126/webadmin'
-const baseURL = '/webadmin'
+// const baseURL = '/webadmin'
+const baseURL = 'https://8.133.182.126/webadmin'
 const headers = {
   Authenticator: token
 }
@@ -51,16 +50,6 @@ const putRequestFactory = url => async (vueObj, data = {}, successToastMessage =
       flag = false
     }
   }).catch((err) => {
-    if (err.message.includes('401')) {
-      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
-        customCss: {
-          'background-color': '#E6A23C',
-          color: '#fff'
-        }
-      })
-      setTimeout(goBackToLogin, 3000)
-      return
-    }
     vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
       customCss: {
         'background-color': '#E6A23C',
@@ -101,16 +90,6 @@ const postRequestFactory = url => async (vueObj, data = {}, successToastMessage 
       flag = false
     }
   }).catch((err) => {
-    if (err.message.includes('401')) {
-      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
-        customCss: {
-          'background-color': '#E6A23C',
-          color: '#fff'
-        }
-      })
-      setTimeout(goBackToLogin, 3000)
-      return
-    }
     vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
       customCss: {
         'background-color': '#E6A23C',
@@ -151,16 +130,6 @@ const patchRequestFactory = url => async (vueObj, data = {}, successToastMessage
       flag = false
     }
   }).catch((err) => {
-    if (err.message.includes('401')) {
-      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
-        customCss: {
-          'background-color': '#E6A23C',
-          color: '#fff'
-        }
-      })
-      setTimeout(goBackToLogin, 3000)
-      return
-    }
     vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
       customCss: {
         'background-color': '#E6A23C',
@@ -241,16 +210,6 @@ const deleteRequestFactory = url => async (vueObj, data = {}, successToastMessag
       flag = false
     }
   }).catch((err) => {
-    if (err.message.includes('401')) {
-      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
-        customCss: {
-          'background-color': '#E6A23C',
-          color: '#fff'
-        }
-      })
-      setTimeout(goBackToLogin, 3000)
-      return
-    }
     vueObj.$toast(failedToastMessage + '，消息为' + err.message, {
       customCss: {
         'background-color': '#E6A23C',
@@ -336,8 +295,8 @@ export const importFunction = (data, progressCallback) =>
   })
 
 // 下载SDK
-export const downloadSDK = (pid, chipType) =>
-  instance.get('/devices/' + pid + '/sdk?chiptype=' + chipType, {
+export const downloadSDK = pid =>
+  instance.get('/devices/' + pid + '/sdk', {
     responseType: 'blob'
   }).then(downloadProcessor)
 
