@@ -236,6 +236,11 @@ export const productFormRule = {
   ],
   model: [
     {
+      required: true,
+      message: '请输入产品型号',
+      trigger: 'blur'
+    },
+    {
       max: 20,
       message: '长度不能超过20个字符',
       trigger: 'blur'
