@@ -295,8 +295,8 @@ export const importFunction = (data, progressCallback) =>
   })
 
 // 下载SDK
-export const downloadSDK = pid =>
-  instance.get('/devices/' + pid + '/sdk', {
+export const downloadSDK = (pid, chipType) =>
+  instance.get('/devices/' + pid + '/sdk?chipType=' + chipType, {
     responseType: 'blob'
   }).then(downloadProcessor)
 
