@@ -708,12 +708,12 @@ export default {
     },
     editParam(param, index) {
       // 编辑参数
-      this.currentParam = basicDeepCopy(param)
       for (let item in functionConfig.paramProto) {
         if (!param[item]) {
           param[item] = basicDeepCopy(functionConfig.paramProto[item])
         }
       }
+      this.currentParam = basicDeepCopy(param)
       // 记录param index
       this.currentParamIndex = index
       this.paramDrawerMode = '编辑'
