@@ -150,6 +150,10 @@ export const functionConfig = {
     },
     exception: {
       items: [] // 枚举值
+    },
+    boolean: {
+      true_value: '',
+      false_value: ''
     }
   },
   paramProto: {
@@ -162,6 +166,10 @@ export const functionConfig = {
     },
     enum_type: {
       items: [] // 枚举值
+    },
+    boolean_type: {
+      true_value: '',
+      false_value: ''
     }
   }
 }
@@ -275,6 +283,23 @@ const publicNameSubjectRule = {
     {
       required: true,
       message: '请输入字段名称',
+      trigger: 'blur'
+    },
+    {
+      max: 20,
+      message: '长度不能超过20个字符',
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[a-zA-Z]+[\w]*$/,
+      message: '只允许使用英文、数字、下划线，且必须以字母作为开头。',
+      trigger: 'change'
+    }
+  ],
+  'boolean.true_value': [
+    {
+      required: true,
+      message: '请输入真值',
       trigger: 'blur'
     },
     {

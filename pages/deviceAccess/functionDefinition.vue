@@ -232,7 +232,14 @@
                 <el-option label="日期型" value="DATE" />
               </el-select>
             </el-form-item>
-            <section v-if="customFunction.type === 'BOOLEAN'" />
+            <section v-if="customFunction.type === 'BOOLEAN'">
+              <el-form-item label="True - " required>
+                <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
+              </el-form-item>
+              <el-form-item label="False - " required>
+                <el-input v-model="functionSpecFieldsByType.boolean.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
+              </el-form-item>
+            </section>
             <section v-if="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
               <el-form-item label="取值范围" required>
                 <el-col :span="11">
@@ -339,7 +346,14 @@
               <el-option label="字符串型" value="STRING" />
             </el-select>
           </el-form-item>
-          <section v-if="currentParam.type === 'BOOLEAN'" />
+          <section v-if="currentParam.type === 'BOOLEAN'">
+            <el-form-item label="True - " required>
+              <el-input v-model="currentParam.boolean_type.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
+            </el-form-item>
+            <el-form-item label="False - " required>
+              <el-input v-model="currentParam.boolean_type.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
+            </el-form-item>
+          </section>
           <section v-if="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
             <el-form-item label="取值范围" required>
               <el-col :span="11">
@@ -443,7 +457,10 @@ import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction, downloadSDK } from '~/assets/ajax'
 import { functionConfig, functionRules, paramRule } from '~/assets/config'
 
-const basicDeepCopy = obj => JSON.parse(JSON.stringify(obj))
+const basicDeepCopy = (obj) => {
+  if (!obj) { return {} }
+  return JSON.parse(JSON.stringify(obj))
+}
 
 export default {
   filters: {
@@ -655,6 +672,7 @@ export default {
       if (type in functionConfig.functionSpecFieldsByTypeProto) {
         let _type = type
         if (_type === 'enum') { _type = 'enum_value' }
+        if (_type === 'boolean') { _type = 'boolean_value' }
         this.functionSpecFieldsByType[type] = basicDeepCopy(row[_type])
       }
       // 修改并展示drawer
@@ -778,6 +796,7 @@ export default {
       if (type === 'integer' || type === 'float') { type = 'number' } // number 细分
       let _type = type
       if (_type === 'enum') { _type = 'enum_value' } // “enum和java关键字冲突” said wang quan
+      if (_type === 'boolean') { _type = 'boolean_value' } // 不知道为啥有的加value有的不加
       if (type in functionConfig.functionSpecFieldsByTypeProto) {
         customFunction[_type] = this.functionSpecFieldsByType[type]
       }
