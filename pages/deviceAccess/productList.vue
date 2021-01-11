@@ -70,12 +70,18 @@
               />
               <el-table-column
                 label="创建时间"
+                width="180"
               >
                 <template slot-scope="scope">{{ scope.row.created_at.split('.')[0] }}</template>
               </el-table-column>
               <el-table-column
+                label="发布状态"
+              >
+                <template slot-scope="scope">{{ scope.row.is_release ? '已发布' : '未发布' }}</template>
+              </el-table-column>
+              <el-table-column
                 label="操作"
-                width="230"
+                width="160"
               >
                 <template slot-scope="scope">
                   <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
@@ -90,7 +96,14 @@
                       title="删除"
                     >
                   </el-popconfirm>
-                  <img src="@/static/images/icons/publish.png" alt="" class="table-mini-image clickable" title="发布" @click="releaseProduct(scope.row)">
+                  <img
+                    v-if="!scope.row.is_release"
+                    src="@/static/images/icons/publish.png"
+                    alt=""
+                    class="table-mini-image clickable"
+                    title="发布"
+                    @click="releaseProduct(scope.row)"
+                  >
                 </template>
               </el-table-column>
             </el-table>
