@@ -14,7 +14,7 @@
           <i class="el-icon-message-solid" />
         </el-badge>
         <el-divider direction="vertical" /> -->
-        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span class="username">{{ username }}</span></nuxt-link></span>
+        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span class="username">{{ user.realName }}</span></nuxt-link></span>
         <span class="quit" style="margin-left: 10px"><a :href="loginURL"><i class="el-icon-switch-button" style="margin-right: 10px" />退出</a></span>
         <!-- <el-avatar icon="el-icon-user-solid" /> -->
       </el-col>
@@ -24,13 +24,13 @@
 
 <script>
 import { menuStructure } from '~/assets/config'
-import { loginURL } from '~/assets/ajax'
+import { loginURL, goBackToLogin } from '~/assets/ajax'
 
 export default {
   data() {
     return {
       path: [],
-      username: '用户',
+      user: {},
       loginURL
     }
   },
@@ -41,8 +41,27 @@ export default {
   },
   created() {
     this.getPath()
+    this.getUser()
   },
   methods: {
+    getUser() {
+      try {
+        let user = localStorage.getItem('userInfo')
+        this.user = JSON.parse(user)
+        if (!user) {
+          throw new Error('本地无法获取用户信息')
+        }
+      } catch (e) {
+        console.error(e.msg)
+        this.$toast('登录失效或已过期，3秒后返回登录页面！', {
+          customCss: {
+            'background-color': '#E6A23C',
+            color: '#fff'
+          }
+        })
+        setTimeout(goBackToLogin, 3000)
+      }
+    },
     getPath() {
       let tree = menuStructure
       let paths = this.$route.path.split('/')
