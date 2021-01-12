@@ -328,3 +328,10 @@ export const getVerifyImage = (phone) => {
 export const getSMSCode = putRequestFactory(RXSystemBaseUrl + 'user/changePhoneSendAuthCode')
 // 修改手机号
 export const changePhone = putRequestFactory(RXSystemBaseUrl + 'user/changePhone')
+
+// 统计信息类
+const statisticBaseUrl = 'http://47.103.143.104:8000/api-devicemanagement/'
+// 产品概览信息统计接口
+export const getDeviceData = getRequestFactory(statisticBaseUrl + 'cetc/product/count')
+export const getActiveDeviceDbDData = getRequestFactory(statisticBaseUrl + 'cetc/product/countByProductKey?type=live&productId=${pid}')
+export const getSilentDeviceDbDData = getRequestFactory(statisticBaseUrl + 'cetc/product/countByProductKey?type=silence&productId=${pid}')
