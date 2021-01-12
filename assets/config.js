@@ -26,10 +26,6 @@ export const menuStructure = {
           id: 'functionDefinition',
           addr: '/deviceAccess/functionDefinition',
           name: '功能定义'
-        // }, {
-        //   id: 'adapterKey',
-        //   addr: '/deviceAccess/adapterKey',
-        //   name: '适配器部署密钥'
         }, {
           id: 'deviceDebug',
           addr: '/deviceAccess/deviceDebug',
@@ -46,41 +42,21 @@ export const menuStructure = {
           id: 'deviceList',
           addr: '/deviceManagement/deviceList',
           name: '设备列表'
-        // }, {
-        //   id: 'remoteUpgrade',
-        //   addr: '/deviceManagement/remoteUpgrade',
-        //   name: '远程升级'
-        // }, {
-        //   id: 'groupManagement',
-        //   addr: '/deviceManagement/groupManagement',
-        //   name: '群组管理'
-        // }, {
-        //   id: 'adapterInstance',
-        //   addr: '/deviceManagement/adapterInstance',
-        //   name: '适配器实例'
         }
       ]
-    // }, {
-    //   id: 'dataManagement',
-    //   addr: '/dataManagement',
-    //   name: '数据管理',
-    //   icon: dataManagementIcon
-    // }, {
-    //   id: 'unifiedService',
-    //   addr: '/unifiedService',
-    //   name: '统一服务',
-    //   icon: unifiedServiceIcon,
-    //   children: [
-    //     {
-    //       id: 'ruleEngine',
-    //       addr: '/unifiedService/ruleEngine',
-    //       name: '规则引擎'
-    //     }, {
-    //       id: 'pushService',
-    //       addr: '/unifiedService/pushService',
-    //       name: '推送服务'
-    //     }
-    //   ]
+    }, {
+      id: 'userManagement',
+      addr: '/userManage',
+      name: '用户管理',
+      hide: true,
+      children: [
+        {
+          id: 'userInfo',
+          addr: '/userInfo',
+          name: '个人信息',
+          hide: true
+        }
+      ]
     }
   ]
 }
