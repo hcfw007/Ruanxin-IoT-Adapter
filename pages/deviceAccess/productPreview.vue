@@ -70,7 +70,7 @@
           设备总数
         </div>
         <div class="device-data-value">
-          {{ productList.length }}
+          {{ deviceData.total }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -78,7 +78,7 @@
           在线设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.onlineDevice }}
+          {{ deviceData.live }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -86,7 +86,7 @@
           今日活跃设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.activeDevice }}
+          {{ deviceData.actived }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -94,7 +94,7 @@
           沉默设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.silentDevice }}
+          {{ deviceData.silence }}
         </div>
       </el-col>
     </el-row>
@@ -133,6 +133,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :clearable="false"
             />
           </el-col>
           <el-col :span="5" class="text-right">
@@ -160,6 +161,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :clearable="false"
             />
           </el-col>
           <el-col :span="5" class="text-right">
@@ -178,10 +180,10 @@
 </template>
 
 <script>
-import { getDeviceData, getProjectData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/getters'
+import { getProjectData } from '~/assets/getters'
 import { colors } from '~/assets/config'
 import { dateComparer } from '~/assets/util'
-import { getProductList } from '~/assets/ajax'
+import { getProductList, getDeviceData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/ajax'
 
 export default {
   data() {
@@ -213,7 +215,6 @@ export default {
     }
     this.getProductList()
     this.getDeviceData()
-    this.getProjectData()
     this.getDeviceDbDData()
     this.activeDeviceDateRange = [
       new Date(new Date() - 29 * 24 * 60 * 60 * 1000),
@@ -255,48 +256,60 @@ export default {
     getProductList() {
       getProductList(this, 'productList')
     },
-    getDeviceData() {
-      getDeviceData().then((data) => {
-        this.deviceData = data
-      })
-    },
-    getProjectData() {
-      getProjectData().then((data) => {
-        let totalValue = 0
-        let projectDoughnutData = {
-          datasets: [{
-            data: [],
-            backgroundColor: colors['chart-colors'],
-            weight: 10,
-            borderWidth: 2
-          }],
-          labels: []
-        }
+    async getDeviceData() {
+      await getDeviceData(this, 'deviceData')
+      let project = this.deviceData.project
+      let data = []
+      for (let item in project) {
+        data.push({
+          name: item,
+          value: project[item]
+        })
+      }
+      data.sort((a, b) => b.value - a.value)
+      let totalValue = 0
+      let projectDoughnutData = {
+        datasets: [{
+          data: [],
+          backgroundColor: colors['chart-colors'],
+          weight: 10,
+          borderWidth: 2
+        }],
+        labels: []
+      }
+      if (data.length > 5) {
+        let _data = []
+        let other = 0
         for (let index in data) {
-          let item = data[index]
-          projectDoughnutData.datasets[0].data.push(item.value)
-          projectDoughnutData.labels.push(item.name)
-          totalValue += item.value
-          item.color = colors['chart-colors'][index]
+          if (index < 4) {
+            _data.push(data[index])
+          } else {
+            other += data[index].value
+          }
         }
-        this.projectDoughnutData = projectDoughnutData
-        this.totalValue = totalValue
-        this.projectData = data
-      })
+        _data.push({ name: '其他', value: other })
+        data = _data
+      }
+      for (let index in data) {
+        let item = data[index]
+        projectDoughnutData.datasets[0].data.push(item.value)
+        projectDoughnutData.labels.push(item.name)
+        totalValue += item.value
+        item.color = colors['chart-colors'][index]
+      }
+      this.projectDoughnutData = projectDoughnutData
+      this.totalValue = totalValue
+      this.projectData = data
     },
     getDeviceDbDData() {
-      getActiveDeviceDbDData().then((data) => {
-        data.sort((a, b) => {
-          return a.date - b.date
-        })
-        this.originalActiveDeviceDbDData = data
-      })
-      getSilentDeviceDbDData().then((data) => {
-        data.sort((a, b) => {
-          return a.date - b.date
-        })
-        this.originalSilentDeviceDbDData = data
-      })
+      // TODO wait till api fixed
+      // getActiveDeviceDbDData(this, 'originalActiveDeviceDbDData', null, { pid: this.currentProduct.pid })
+      // getSilentDeviceDbDData().then((data) => {
+      //   data.sort((a, b) => {
+      //     return a.date - b.date
+      //   })
+      //   this.originalSilentDeviceDbDData = data
+      // })
     },
     copyToClipboard(text) {
       let input = document.createElement('input')
