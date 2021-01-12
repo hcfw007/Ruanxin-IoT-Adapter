@@ -12,6 +12,7 @@ line-chart-color = #AAD0FF
   --sub-disabled: #8c8c8c
   --sub-divider: #555a7f
   --dark-background-image: linear-gradient(#162158, #0c1239)
+  --dark-background: #001529
 
 body
   margin: 0

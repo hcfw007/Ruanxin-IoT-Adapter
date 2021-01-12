@@ -2,7 +2,7 @@
   <div class="sidebar">
     <img src="~/static/images/logo.png" alt="" class="logo">
     <el-menu ref="menu">
-      <el-submenu v-for="(menuItem, menuIndex) in menuStructure.children" :key="'menu' + String(menuIndex)" :index="String(menuIndex)">
+      <el-submenu v-for="(menuItem, menuIndex) in displayMenu" :key="'menu' + String(menuIndex)" :index="String(menuIndex)">
         <template slot="title">
           <img v-if="menuItem.icon" :src="menuItem.icon" alt="" class="menu-icon">{{ menuItem.name }}
         </template>
@@ -23,6 +23,11 @@ export default {
   data() {
     return {
       menuStructure
+    }
+  },
+  computed: {
+    displayMenu() {
+      return menuStructure.children.filter(ele => !ele.hide)
     }
   },
   watch: {
@@ -65,7 +70,7 @@ export default {
 
 <style lang="stylus">
 .sidebar
-  background-image: var(--dark-background-image)
+  background-color: var(--dark-background)
   height: 100%
   padding-top: 20px
 
