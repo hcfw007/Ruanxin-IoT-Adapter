@@ -21,92 +21,94 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class="product-general-info-row block-white ">
-      <el-col :span="4">
-        <div class="product-number">
-          <div class="product-number-label">
-            产品数量（个）
-          </div>
-          <div class="product-number-value">
-            {{ productList.length }}
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="1">
-        <div class="seperator" />
-      </el-col>
-      <el-col :span="16">
-        <div class="apply-link">
-          <nuxt-link to="#">去申请 &gt;</nuxt-link>
-        </div>
-        <div class="apply-hint">
-          注：创建产品后，需向雄安IoT平台申请设备唯一标识，该标识将作为设备在平台的全局唯一标识码。
-        </div>
-      </el-col>
-      <el-col :span="3">
-        <el-button type="primary" class="add-product" @click="addProduct">新增</el-button>
-      </el-col>
-    </el-row>
     <el-row class="product-list-row block-white">
       <el-col :span="24">
-        <el-table
-          :data="productList"
-          border
-        >
-          <el-table-column
-            prop="industry_name"
-            label="行业"
-          />
-          <el-table-column
-            prop="firm_name"
-            label="厂商"
-          />
-          <el-table-column
-            prop="category_name"
-            label="设备类型"
-          />
-          <el-table-column
-            prop="name"
-            label="产品名称"
-          />
-          <el-table-column
-            prop="pid"
-            label="产品ID"
-          />
-          <el-table-column
-            prop="protocol_type"
-            label="协议类型"
-          />
-          <el-table-column
-            prop="user_name"
-            label="创建人"
-          />
-          <el-table-column
-            label="创建时间"
-          >
-            <template slot-scope="scope">{{ scope.row.created_at.split('.')[0] }}</template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            width="230"
-          >
-            <template slot-scope="scope">
-              <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
-              <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editProduct(scope.row)">
-              <el-popconfirm title="确定要删除吗？" :disabled="scope.row.is_release" @confirm="deleteProduct(scope.row)">
-                <img
-                  slot="reference"
-                  src="@/static/images/icons/delete.png"
-                  alt=""
-                  class="table-mini-image clickable"
-                  :class="{ disabled: scope.row.is_release }"
-                  title="删除"
-                >
-              </el-popconfirm>
-              <img src="@/static/images/icons/publish.png" alt="" class="table-mini-image clickable" title="发布" @click="releaseProduct(scope.row)">
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-row>
+          <el-col :span="12">
+            <span class="product-number-label">产品数量（个）：</span>
+            <span class="product-number-value">
+              {{ productList.length }}
+            </span>
+          </el-col>
+          <el-col :span="12" class="text-right">
+            <el-button type="primary" class="add-product" @click="addProduct">新增</el-button>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-table
+              :data="productList"
+              border
+            >
+              <el-table-column
+                prop="industry_name"
+                label="行业"
+              />
+              <el-table-column
+                prop="firm_name"
+                label="厂商"
+              />
+              <el-table-column
+                prop="category_name"
+                label="设备类型"
+              />
+              <el-table-column
+                prop="name"
+                label="产品名称"
+              />
+              <el-table-column
+                prop="pid"
+                label="产品ID"
+              />
+              <el-table-column
+                prop="protocol_type"
+                label="协议类型"
+              />
+              <el-table-column
+                prop="user_name"
+                label="创建人"
+              />
+              <el-table-column
+                label="创建时间"
+                width="180"
+              >
+                <template slot-scope="scope">{{ scope.row.created_at.split('.')[0] }}</template>
+              </el-table-column>
+              <el-table-column
+                label="发布状态"
+              >
+                <template slot-scope="scope">{{ scope.row.is_release ? '已发布' : '未发布' }}</template>
+              </el-table-column>
+              <el-table-column
+                label="操作"
+                width="160"
+              >
+                <template slot-scope="scope">
+                  <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
+                  <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editProduct(scope.row)">
+                  <el-popconfirm title="确定要删除吗？" :disabled="scope.row.is_release" @confirm="deleteProduct(scope.row)">
+                    <img
+                      slot="reference"
+                      src="@/static/images/icons/delete.png"
+                      alt=""
+                      class="table-mini-image clickable"
+                      :class="{ disabled: scope.row.is_release }"
+                      title="删除"
+                    >
+                  </el-popconfirm>
+                  <img
+                    v-if="!scope.row.is_release"
+                    src="@/static/images/icons/publish.png"
+                    alt=""
+                    class="table-mini-image clickable"
+                    title="发布"
+                    @click="releaseProduct(scope.row)"
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
     <el-drawer
@@ -308,22 +310,20 @@ export default {
         font-size: 22px
         margin-left: 10px
 
-  .product-number
-    .product-number-label
-      font-size: 18px
-      color: #666
+  .product-number-label
+    font-size: 22px
+    color: #666
 
-    .product-number-value
-      margin-top: 15px
-      font-size: 34px
+  .product-number-value
+    margin-top: 30px
+    font-size: 34px
 
   .apply-hint
     margin-top: 20px
     color: #666
 
   .add-product
-    margin-top: 15px
-    bfont-size: 14px
+    font-size: 14px
     height: 34px
     line-height: 34px
     padding: 0 15px

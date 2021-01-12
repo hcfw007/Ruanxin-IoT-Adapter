@@ -10,8 +10,10 @@ const headers = {
   Authenticator: token
 }
 
-const loginURL = 'http://47.103.143.104:8080/devicemanage/#/user/login'
-const goBackToLogin = () => {
+const RXSystemBaseUrl = 'http://47.103.143.104:8000/api-usersystem/'
+
+export const loginURL = 'http://47.103.143.104:8080/devicemanage/#/user/login'
+export const goBackToLogin = () => {
   location.href = loginURL
 }
 
@@ -295,11 +297,34 @@ export const importFunction = (data, progressCallback) =>
   })
 
 // 下载SDK
-export const downloadSDK = pid =>
-  instance.get('/devices/' + pid + '/sdk', {
+export const downloadSDK = (pid, chipType) =>
+  instance.get('/devices/' + pid + '/sdk?chipType=' + chipType, {
     responseType: 'blob'
   }).then(downloadProcessor)
 
 // 下发功能
 export const dispatchCommand = (data, type) =>
   instance.post(type === 'down' ? 'devices/write/commands' : 'devices/read/commands', data)
+
+// 用户相关，使用软信接口
+// 修改用户姓名
+export const editRealName = putRequestFactory(RXSystemBaseUrl + 'user/myInfo')
+export const editPassword = putRequestFactory(RXSystemBaseUrl + 'user/changePassword')
+// 获取用户信息
+export const getUserInfo = getRequestFactory(RXSystemBaseUrl + 'user/myInfo')
+// 图片验证码
+export const getVerifyImage = (phone) => {
+  return instance.get(RXSystemBaseUrl + 'user/getVerifyCode', {
+    params: {
+      key: phone
+    },
+    responseType: 'blob'
+  }).then((response) => {
+    return response.data
+  })
+}
+
+// 短信验证码
+export const getSMSCode = putRequestFactory(RXSystemBaseUrl + 'user/changePhoneSendAuthCode')
+// 修改手机号
+export const changePhone = putRequestFactory(RXSystemBaseUrl + 'user/changePhone')
