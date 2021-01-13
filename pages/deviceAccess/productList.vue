@@ -85,7 +85,14 @@
               >
                 <template slot-scope="scope">
                   <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
-                  <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editProduct(scope.row)">
+                  <img
+                    src="@/static/images/icons/edit.png"
+                    alt=""
+                    class="table-mini-image clickable"
+                    title="编辑"
+                    :class="{disabled: scope.row.is_release}"
+                    @click="editProduct(scope.row)"
+                  >
                   <el-popconfirm title="确定要删除吗？" :disabled="scope.row.is_release" @confirm="deleteProduct(scope.row)">
                     <img
                       slot="reference"
@@ -230,6 +237,7 @@ export default {
       this.creatingProduct = true
     },
     editProduct(product) {
+      if (product.is_release) { return }
       // 根据原型的项目取出所需数据
       let _product = {}
       for (let item in productConfig.productProto) {
