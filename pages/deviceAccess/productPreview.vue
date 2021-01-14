@@ -86,7 +86,7 @@
           今日活跃设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.actived }}
+          {{ deviceData.acticed }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -143,7 +143,8 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="activeDeviceDbDData.label !== undefined" :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
+            <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
       </el-col>
@@ -171,7 +172,8 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="silentDeviceDbData.label !== undefined" :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
+            <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
       </el-col>
@@ -183,7 +185,7 @@
 import { getProjectData } from '~/assets/getters'
 import { colors } from '~/assets/config'
 import { dateComparer } from '~/assets/util'
-import { getProductList, getDeviceData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/ajax'
+import { getProductList, getDeviceData, getDeviceDbDData } from '~/assets/ajax'
 
 export default {
   data() {
@@ -203,10 +205,10 @@ export default {
   },
   computed: {
     activeDeviceDbDData() {
-      return this.generateLineChartData(this.originalActiveDeviceDbDData, this.activeDeviceDateRange)
+      return this.generateLineChartData(this.originalActiveDeviceDbDData.data, this.activeDeviceDateRange)
     },
     silentDeviceDbData() {
-      return this.generateLineChartData(this.originalSilentDeviceDbDData, this.silentDeviceDateRange)
+      return this.generateLineChartData(this.originalSilentDeviceDbDData.data, this.silentDeviceDateRange)
     }
   },
   created() {
@@ -226,8 +228,15 @@ export default {
     ]
   },
   methods: {
-    generateLineChartData(originalData, range) {
-      if (!originalData || !originalData.length) { return {} }
+    generateLineChartData(data, range) {
+      if (!data) { return {} }
+      let originalData = []
+      for (let item in data.data) {
+        originalData.push({
+          date: new Date(item),
+          value: data.data[item]
+        })
+      }
       let areaColor = '#AAD0FF'
       if (process.client) {
         let gradient = document.getElementById('hidden-secret').getContext('2d').createLinearGradient(0, 0, 0, 200)
@@ -303,13 +312,8 @@ export default {
     },
     getDeviceDbDData() {
       // TODO wait till api fixed
-      // getActiveDeviceDbDData(this, 'originalActiveDeviceDbDData', null, { pid: this.currentProduct.pid })
-      // getSilentDeviceDbDData().then((data) => {
-      //   data.sort((a, b) => {
-      //     return a.date - b.date
-      //   })
-      //   this.originalSilentDeviceDbDData = data
-      // })
+      getDeviceDbDData(this, 'originalActiveDeviceDbDData', { productId: this.currentProduct.pid, type: 'live' })
+      getDeviceDbDData(this, 'originalSilentDeviceDbDData', { productId: this.currentProduct.pid, type: 'silent' })
     },
     copyToClipboard(text) {
       let input = document.createElement('input')
