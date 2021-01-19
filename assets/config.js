@@ -133,6 +133,7 @@ export const functionConfig = {
     }
   },
   paramProto: {
+    type: 'BOOLEAN',
     // 数值型
     num_type: {
       min: 0, // 最小值
@@ -291,6 +292,32 @@ const publicNameSubjectRule = {
   ]
 }
 
+const booleanRule = {
+  true_value: [
+    {
+      required: true,
+      message: '请输入布尔型真值',
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[a-zA-Z0-9\u4E00-\u9FA5]{1,20}$/,
+      message: '仅支持中文、字母及数字，不超过20个字符',
+      trigger: 'change'
+    }
+  ],
+  false_value: [
+    {
+      required: true,
+      message: '请输入布尔型假值',
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[a-zA-Z0-9\u4E00-\u9FA5]{1,20}$/,
+      message: '仅支持中文、字母及数字，不超过20个字符',
+      trigger: 'change'
+    }
+  ]
+}
 // 功能点表单验证
 
 export const functionRules = {
@@ -298,4 +325,7 @@ export const functionRules = {
   customFunctionRule: publicNameSubjectRule
 }
 
-export const paramRule = publicNameSubjectRule
+export const paramRules = {
+  publicNameSubjectRule,
+  booleanRule
+}

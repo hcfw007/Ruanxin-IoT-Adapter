@@ -233,12 +233,14 @@
               </el-select>
             </el-form-item>
             <section v-if="customFunction.type === 'BOOLEAN'">
-              <el-form-item label="True - " required>
-                <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-              </el-form-item>
-              <el-form-item label="False - " required>
-                <el-input v-model="functionSpecFieldsByType.boolean.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-              </el-form-item>
+              <el-form ref="functionBooleanForm" :model="functionSpecFieldsByType.boolean" label-width="120px" :rules="functionRules.booleanRule">
+                <el-form-item label="True - " prop="true_value">
+                  <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+                </el-form-item>
+                <el-form-item label="False - " prop="false_value">
+                  <el-input v-model="functionSpecFieldsByType.boolean.false_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+                </el-form-item>
+              </el-form>
             </section>
             <section v-if="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
               <el-form-item label="取值范围" required>
@@ -330,7 +332,7 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRule">
+        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRules.publicNameSubjectRule">
           <el-form-item label="参数名称" prop="name">
             <el-input v-model="currentParam.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
@@ -347,12 +349,14 @@
             </el-select>
           </el-form-item>
           <section v-if="currentParam.type === 'BOOLEAN'">
-            <el-form-item label="True - " required>
-              <el-input v-model="currentParam.boolean_type.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-            </el-form-item>
-            <el-form-item label="False - " required>
-              <el-input v-model="currentParam.boolean_type.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-            </el-form-item>
+            <el-form ref="paramBooleanForm" :model="currentParam.boolean_type" label-width="120px" :rules="paramRules.booleanRule">
+              <el-form-item label="True - " prop="true_value">
+                <el-input v-model="currentParam.boolean_type.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+              </el-form-item>
+              <el-form-item label="False - " prop="false_value">
+                <el-input v-model="currentParam.boolean_type.false_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+              </el-form-item>
+            </el-form>
           </section>
           <section v-if="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
             <el-form-item label="取值范围" required>
@@ -455,7 +459,7 @@
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction, downloadSDK } from '~/assets/ajax'
-import { functionConfig, functionRules, paramRule } from '~/assets/config'
+import { functionConfig, functionRules, paramRules } from '~/assets/config'
 
 const basicDeepCopy = (obj) => {
   if (!obj) { return {} }
@@ -520,7 +524,7 @@ export default {
       paramDrawerMode: '添加',
       combinedFunctionDrawerMode: '添加',
       functionRules,
-      paramRule
+      paramRules
       // functionListFilteredByCombinedTransferType: []
     }
   },
@@ -723,8 +727,13 @@ export default {
       // 表单校验
       let pass = true
       await this.$refs.paramForm.validate((valid) => {
-        pass = valid
+        pass = valid && pass
       })
+      if (this.currentParam.type === 'BOOLEAN') {
+        await this.$refs.paramBooleanForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
       if (!pass) { return }
       let param = this.currentParam
       if (this.paramDrawerMode === '编辑') {
@@ -778,8 +787,13 @@ export default {
       // 表单校验
       let pass = true
       await this.$refs.customFunctionForm.validate((valid) => {
-        pass = valid
+        pass = valid && pass
       })
+      if (this.customFunction.fn_type === 'COMMON' && this.customFunction.type === 'BOOLEAN') {
+        await this.$refs.functionBooleanForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
       if (!pass) { return }
       // 按钮载入动画
       this.postingCustomFunction = true
