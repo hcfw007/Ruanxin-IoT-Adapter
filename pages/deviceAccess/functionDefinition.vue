@@ -40,7 +40,7 @@
                   标准功能无法满足你的需求时，你可以添加自定义功能
                 </span>
               </el-col>
-              <el-col :span="6" class="text-right">
+              <el-col :span="6" class="text-right" style="padding-right: 20px">
                 <div class="add-function-button" @click="addFunction()">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">标准功能点</div>
@@ -90,7 +90,7 @@
                   可以将多个独立功能点组合，进行上报或者下发。
                 </span>
               </el-col>
-              <el-col :span="6" class="text-right">
+              <el-col :span="6" class="text-right" style="padding-right: 20px">
                 <div class="add-function-button" @click="addCombinedFunction()">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">组合功能点</div>
