@@ -4,8 +4,8 @@
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
-            <el-select v-model="debugInfo.devicePid" filterable allow-create placeholder="请选择或输入设备PiD" @change="handleDeviceChange($event)">
-              <el-option v-for="product in productList" :key="'product' + product.id" :label="product.name" :value="product.pid" />
+            <el-select v-model="debugInfo.devicePid" filterable allow-create placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
+              <el-option v-for="device in deviceList.resultList" :key="'device' + device.sensorId" :label="device.sensorName" :value="device.sensorId" />
             </el-select>
           </el-form-item>
           <el-form-item v-if="showIDInput" label="设备ID">
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getProductList, getFullFunctionList, dispatchCommand } from '~/assets/ajax'
+import { getDeviceList, getFullFunctionList, dispatchCommand } from '~/assets/ajax'
 
 export default {
   data() {
@@ -102,7 +102,9 @@ export default {
         requestType: 'once',
         requestInterval: 3
       },
-      productList: [],
+      deviceList: {
+        resultList: []
+      },
       functionData: {},
       messageLogList: [],
       productFunctionList: {
@@ -122,11 +124,14 @@ export default {
     }
   },
   created() {
-    this.getProductList()
+    if (!this.checkProduct()) {
+      return
+    }
+    this.getDeviceList()
   },
   methods: {
-    getProductList() {
-      getProductList(this, 'productList')
+    getDeviceList() {
+      getDeviceList(this, 'deviceList', { productId: this.currentProduct.pid })
     },
     async updateFunctionList(pid) {
       this.gettingFunction = true
