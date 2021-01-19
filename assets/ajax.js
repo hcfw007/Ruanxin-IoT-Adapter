@@ -336,7 +336,7 @@ export const changePhone = putRequestFactory(RXSystemBaseUrl + 'user/changePhone
 // 统计信息类
 const statisticBaseUrl = 'http://47.103.143.104:8000/api-devicemanagement/'
 // 产品概览信息统计接口
-export const getDeviceData = getRequestFactory(statisticBaseUrl + 'cetc/product/count')
+export const getDeviceData = getRequestFactory(statisticBaseUrl + 'cetc/product/count?productId=${pid}')
 export const getDeviceDbDData = (vueObj, dataItemName, data) => {
   let flag = 'origin'
   instance.post('http://47.103.143.104:8000/api-devicemanagement/cetc/product/countByProductKey', data).then((response) => {
