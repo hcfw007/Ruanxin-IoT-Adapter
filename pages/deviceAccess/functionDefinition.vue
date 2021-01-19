@@ -761,7 +761,7 @@ export default {
     addCustomFunction() {
       // 点击添加自定义功能点
       // 初始化自定义功能点数据结构
-      this.customFunction = Object.assign({}, functionConfig.customFunctionProto)
+      this.customFunction = basicDeepCopy(functionConfig.customFunctionProto)
       this.functionSpecFieldsByType = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
       // 显示添加自定义功能点的drawer
       this.customFunctionDrawerMode = '添加'
