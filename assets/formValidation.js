@@ -1,4 +1,4 @@
-export const userMobileRule = {
+const userMobileRule = {
   phone: [
     {
       required: true,
@@ -25,4 +25,33 @@ export const userMobileRule = {
       trigger: 'blur'
     }
   ]
+}
+
+const userPasswordRule = {
+  oldPassword: [
+    {
+      required: true,
+      message: '请输入旧密码',
+      trigger: 'blur'
+    }
+  ],
+  newPassword1: [
+    {
+      required: true,
+      message: '请输入旧密码',
+      trigger: 'blur'
+    }
+  ],
+  newPassword2: [
+    {
+      required: true,
+      message: '请输入旧密码',
+      trigger: 'blur'
+    }
+  ]
+}
+
+export const userRules = {
+  userMobileRule,
+  userPasswordRule
 }

@@ -34,8 +34,8 @@
           <div class="info-value">{{ user.roleNames }}</div>
         </div>
         <div class="info-row">
-          <div class="info-label">用户账号：</div>
-          <div class="info-value">{{ user.loginName }}</div>
+          <div class="info-label">厂商名称：</div>
+          <div class="info-value">{{ user.firmName }}</div>
         </div>
         <div class="info-row">
           <div class="info-label">创建时间：</div>
@@ -55,14 +55,14 @@
       </div>
     </el-dialog>
     <el-dialog title="修改密码" :visible.sync="dialogControl.displayPasswordDialog" width="600px">
-      <el-form :model="dialogModel.password" label-width="100px">
-        <el-form-item label="旧密码">
+      <el-form ref="passwordChangeForm" :model="dialogModel.password" label-width="100px" :rules="rules.userRules.userPasswordRule">
+        <el-form-item label="旧密码" prop="oldPassword">
           <el-input v-model="dialogModel.password.oldPassword" autocomplete="off" type="password" />
         </el-form-item>
-        <el-form-item label="新密码">
+        <el-form-item label="新密码" prop="newPassword1">
           <el-input v-model="dialogModel.password.newPassword1" autocomplete="off" type="password" />
         </el-form-item>
-        <el-form-item label="确认密码">
+        <el-form-item label="确认密码" prop="newPassword2">
           <el-input v-model="dialogModel.password.newPassword2" autocomplete="off" type="password" />
         </el-form-item>
       </el-form>
@@ -72,7 +72,7 @@
       </div>
     </el-dialog>
     <el-dialog title="修改手机号码" :visible.sync="dialogControl.displayMobileDialog" width="600px" @open="refreshVerifyImage()">
-      <el-form ref="mobileChangeForm" :model="dialogModel.mobile" label-width="100px" :rules="rules.userMobileRule">
+      <el-form ref="mobileChangeForm" :model="dialogModel.mobile" label-width="100px" :rules="rules.userRules.userMobileRule">
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="dialogModel.mobile.phone" autocomplete="off" />
         </el-form-item>
@@ -96,7 +96,7 @@
 <script>
 import { goBackToLogin, editRealName, editPassword, getUserInfo, getVerifyImage, getSMSCode, changePhone } from '@/assets/ajax'
 
-import { userMobileRule } from '@/assets/formValidation'
+import { userRules } from '@/assets/formValidation'
 
 export default {
   data() {
@@ -129,7 +129,7 @@ export default {
         SMSButtonLabel: '获取验证码'
       },
       rules: {
-        userMobileRule
+        userRules
       }
     }
   },
@@ -184,6 +184,11 @@ export default {
       this.refreshUserInfo()
     },
     async changePassword() {
+      let pass = true
+      await this.$refs.passwordChangeForm.validate((valid) => {
+        pass = pass && valid
+      })
+      if (!pass) { return }
       let oldPassword = this.dialogModel.password.oldPassword
       let newPassword = this.dialogModel.password.newPassword1
       if (newPassword !== this.dialogModel.password.newPassword2) {
