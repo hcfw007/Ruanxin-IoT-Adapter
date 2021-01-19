@@ -5,9 +5,9 @@
         <h3 class="page-title">
           标准协议快速开发指南
         </h3>
-        <span class="page-title-link">
+        <!-- <span class="page-title-link">
           前往开发指南 &gt;
-        </span>
+        </span> -->
         <span class="pange-title-hint">
           注：自定义协议产品需在第五步后额外进行部署适配器的操作
         </span>
