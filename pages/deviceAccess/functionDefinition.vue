@@ -21,7 +21,7 @@
         </div>
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
-        <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button>
+        <!-- <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button> -->
         <el-button class="function-button" @click="exportFunction">导出功能点</el-button>
         <el-button type="primary" class="sdk-button" @click="displaySDKDialog = true">下载SDK</el-button>
         <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
