@@ -272,23 +272,6 @@ const publicNameSubjectRule = {
       message: '只允许使用英文、数字、下划线，且必须以字母作为开头。',
       trigger: 'change'
     }
-  ],
-  'boolean.true_value': [
-    {
-      required: true,
-      message: '请输入真值',
-      trigger: 'blur'
-    },
-    {
-      max: 20,
-      message: '长度不能超过20个字符',
-      trigger: 'blur'
-    },
-    {
-      pattern: /^[a-zA-Z]+[\w]*$/,
-      message: '只允许使用英文、数字、下划线，且必须以字母作为开头。',
-      trigger: 'change'
-    }
   ]
 }
 
