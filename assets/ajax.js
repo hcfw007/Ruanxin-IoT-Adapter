@@ -375,7 +375,7 @@ export const getDeviceList = (vueObj, dataItemName, data) => {
 
 export const getDeviceDbDData = (vueObj, dataItemName, data) => {
   let flag = 'origin'
-  instance.post(statisticBaseUrl + '/cetc/product/countByProductKey', data).then((response) => {
+  instance.post(statisticBaseUrl + 'cetc/product/countByProductKey', data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
