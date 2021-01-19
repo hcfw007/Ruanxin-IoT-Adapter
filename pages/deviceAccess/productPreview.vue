@@ -313,7 +313,7 @@ export default {
     getDeviceDbDData() {
       // TODO wait till api fixed
       getDeviceDbDData(this, 'originalActiveDeviceDbDData', { productId: this.currentProduct.pid, type: 'live' })
-      getDeviceDbDData(this, 'originalSilentDeviceDbDData', { productId: this.currentProduct.pid, type: 'silent' })
+      getDeviceDbDData(this, 'originalSilentDeviceDbDData', { productId: this.currentProduct.pid, type: 'silence' })
     },
     copyToClipboard(text) {
       let input = document.createElement('input')
