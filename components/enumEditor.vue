@@ -95,6 +95,11 @@ export default {
         this.errorMessage = 'Key只能为整数，请检查'
         return true
       }
+      if (!/^[a-zA-Z0-9\u4E00-\u9FA5]{1,20}$/.test(this.valueInput)) {
+        this.error = true
+        this.errorMessage = 'Value支持中文、字母及数字，不超过20个字符并且非空'
+        return true
+      }
       for (let item of this.value) {
         if (item.key === this.keyInput) {
           this.error = true
