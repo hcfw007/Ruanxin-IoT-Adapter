@@ -155,12 +155,15 @@
           </el-form-item>
           <el-form-item label="联网方式" prop="connection">
             <el-checkbox-group v-model="newProduct.connection" :disabled="productDrawerMode === '编辑'">
+              <el-checkbox label="LoRa">LoRa</el-checkbox>
+              <el-checkbox label="WiFi">无线</el-checkbox>
+              <el-checkbox label="有线">有线</el-checkbox>
+              <el-checkbox labe="蓝牙">蓝牙</el-checkbox>
+              <el-checkbox label="蜂窝">蜂窝</el-checkbox>
               <el-checkbox label="_2G">2G</el-checkbox>
               <el-checkbox label="_4G">4G</el-checkbox>
-              <el-checkbox label="NBIoT">NBIoT</el-checkbox>
-              <el-checkbox label="WIFI">Wifi</el-checkbox>
-              <el-checkbox label="ETHERNET">以太网</el-checkbox>
-              <el-checkbox label="OTHER">其他</el-checkbox>
+              <el-checkbox label="NB">NB</el-checkbox>
+              <el-checkbox label="其他">其他</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="产品型号" prop="model">
