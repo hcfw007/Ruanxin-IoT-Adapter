@@ -158,7 +158,7 @@
               <el-checkbox label="LoRa">LoRa</el-checkbox>
               <el-checkbox label="WiFi">无线</el-checkbox>
               <el-checkbox label="有线">有线</el-checkbox>
-              <el-checkbox labe="蓝牙">蓝牙</el-checkbox>
+              <el-checkbox label="蓝牙">蓝牙</el-checkbox>
               <el-checkbox label="蜂窝">蜂窝</el-checkbox>
               <el-checkbox label="_2G">2G</el-checkbox>
               <el-checkbox label="_4G">4G</el-checkbox>
