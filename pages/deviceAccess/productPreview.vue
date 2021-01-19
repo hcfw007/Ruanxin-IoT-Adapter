@@ -266,7 +266,7 @@ export default {
       getProductList(this, 'productList')
     },
     async getDeviceData() {
-      await getDeviceData(this, 'deviceData')
+      await getDeviceData(this, 'deviceData', null, { pid: this.currentProduct.pid })
       let project = this.deviceData.project
       let data = []
       for (let item in project) {

@@ -1,10 +1,12 @@
 const connectionString = {
   _2G: '2G',
   _4G: '4G',
-  NBIoT: 'NBIoT',
-  WIFI: 'wifi',
-  ETHERNET: '以太网',
-  OTHER: '其他'
+  NB: 'NB',
+  无线: 'WiFi',
+  有线: '有线',
+  蓝牙: '蓝牙',
+  蜂窝: '蜂窝',
+  其他: '其他'
 }
 
 const protocolString = {

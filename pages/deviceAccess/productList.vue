@@ -156,7 +156,7 @@
           <el-form-item label="联网方式" prop="connection">
             <el-checkbox-group v-model="newProduct.connection" :disabled="productDrawerMode === '编辑'">
               <el-checkbox label="LoRa">LoRa</el-checkbox>
-              <el-checkbox label="WiFi">无线</el-checkbox>
+              <el-checkbox label="无线">Wifi</el-checkbox>
               <el-checkbox label="有线">有线</el-checkbox>
               <el-checkbox label="蓝牙">蓝牙</el-checkbox>
               <el-checkbox label="蜂窝">蜂窝</el-checkbox>
