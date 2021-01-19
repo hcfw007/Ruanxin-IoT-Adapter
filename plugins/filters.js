@@ -73,7 +73,7 @@ const filters = {
       if (item in stringMapping.connectionString) {
         str += stringMapping.connectionString[item]
       } else {
-        str += '未知'
+        str += val
       }
     }
     return str
