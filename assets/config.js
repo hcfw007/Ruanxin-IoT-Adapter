@@ -305,7 +305,8 @@ const booleanRule = {
 
 export const functionRules = {
   combinedFunctionRule: publicNameSubjectRule,
-  customFunctionRule: publicNameSubjectRule
+  customFunctionRule: publicNameSubjectRule,
+  booleanRule
 }
 
 export const paramRules = {
