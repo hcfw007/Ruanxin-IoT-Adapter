@@ -303,7 +303,7 @@
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <span class="clickable-text" @click="editParam(param, index)">编辑</span>
-                  <span class="clickable-text" @click="customFunction.params.slice(index, 1)">删除</span>
+                  <span class="clickable-text" @click="customFunction.params.splice(index, 1)">删除</span>
                 </el-col>
               </el-row>
               <el-row class="add-param-row">
