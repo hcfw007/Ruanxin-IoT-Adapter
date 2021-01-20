@@ -237,7 +237,6 @@ export default {
           value: data[item]
         })
       }
-      console.log(originalData)
       if (originalData.length === 0) { return {} }
       let areaColor = '#AAD0FF'
       if (process.client) {
