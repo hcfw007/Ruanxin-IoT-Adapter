@@ -61,9 +61,12 @@
                 label="产品ID"
               />
               <el-table-column
-                prop="protocol_type"
                 label="协议类型"
-              />
+              >
+                <template slot-scope="scope">
+                  {{ scope.row.protocol_type | protocolFilter }}
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="user_name"
                 label="创建人"
