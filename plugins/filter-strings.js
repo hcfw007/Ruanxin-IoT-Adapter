@@ -24,7 +24,8 @@ const dataTypeString = {
   INTEGER: '整数型',
   ENUM: '枚举型',
   EXCEPTION: '故障型',
-  STRING: '字符串型'
+  STRING: '字符串型',
+  DATE: '日期型'
 }
 
 const stringMapping = {

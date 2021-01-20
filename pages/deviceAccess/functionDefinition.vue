@@ -62,7 +62,11 @@
                   </el-table-column>
                   <el-table-column prop="name" label="功能点名称" />
                   <el-table-column prop="subject" label="字段名称" />
-                  <el-table-column prop="type" label="数据类型" />
+                  <el-table-column label="数据类型">
+                    <template slot-scope="scope">
+                      {{ scope.row.type | dataTypeFilter }}
+                    </template>
+                  </el-table-column>
                   <el-table-column label="传输类型">
                     <template slot-scope="scope">
                       {{ transferTypeTransfer(scope.row.up, scope.row.down) }}

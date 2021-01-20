@@ -4,7 +4,7 @@
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
-            <el-select v-model="debugInfo.devicePid" filterable allow-create placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
+            <el-select v-model="debugInfo.sensorId" filterable allow-create placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
               <el-option v-for="device in deviceList.resultList" :key="'device' + device.sensorId" :label="device.sensorName" :value="device.sensorId" />
             </el-select>
           </el-form-item>
@@ -93,7 +93,7 @@ export default {
       debugInfo: {
         device: {},
         devicePid: '',
-        deviceId: '',
+        sensorId: '',
         messageType: 'down',
         function: '',
         functinIndex: '',
@@ -196,7 +196,7 @@ export default {
       }, 2000)
       let sn = this.debugInfo.sensorId
       let device = null
-      for (let item of this.deviceList.result) {
+      for (let item of this.deviceList.resultList) {
         if (item.sensorId === sn) {
           device = item
         }
