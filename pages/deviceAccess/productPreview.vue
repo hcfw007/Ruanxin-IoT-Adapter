@@ -261,7 +261,6 @@ export default {
         lineChartData.datasets[0].data.push(item.value)
         lineChartData.labels.push(String(item.date.getMonth() + 1) + '-' + String(item.date.getDate()))
       }
-      console.log(lineChartData)
       return lineChartData
     },
     getProductList() {
