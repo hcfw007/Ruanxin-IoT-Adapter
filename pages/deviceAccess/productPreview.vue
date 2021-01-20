@@ -143,7 +143,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart v-if="activeDeviceDbDData.label !== undefined" :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="activeDeviceDbDData.labels !== undefined" :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
             <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
@@ -172,7 +172,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart v-if="silentDeviceDbData.label !== undefined" :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="silentDeviceDbData.labels !== undefined" :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
             <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
@@ -231,12 +231,14 @@ export default {
     generateLineChartData(data, range) {
       if (!data) { return {} }
       let originalData = []
-      for (let item in data.data) {
+      for (let item in data) {
         originalData.push({
           date: new Date(item),
-          value: data.data[item]
+          value: data[item]
         })
       }
+      console.log(originalData)
+      if (originalData.length === 0) { return {} }
       let areaColor = '#AAD0FF'
       if (process.client) {
         let gradient = document.getElementById('hidden-secret').getContext('2d').createLinearGradient(0, 0, 0, 200)
@@ -260,6 +262,7 @@ export default {
         lineChartData.datasets[0].data.push(item.value)
         lineChartData.labels.push(String(item.date.getMonth() + 1) + '-' + String(item.date.getDate()))
       }
+      console.log(lineChartData)
       return lineChartData
     },
     getProductList() {
