@@ -14,7 +14,7 @@ const RXSystemBaseUrl = 'http://47.103.143.104:8000/api-usersystem/'
 
 export const loginURL = 'http://47.103.143.104:8080/devicemanage/#/user/login'
 export const goBackToLogin = () => {
-  location.href = loginURL
+  // location.href = loginURL
 }
 
 const instance = axios.create({
@@ -335,11 +335,10 @@ export const changePhone = putRequestFactory(RXSystemBaseUrl + 'user/changePhone
 
 // 统计信息类
 const statisticBaseUrl = 'http://47.103.143.104:8000/api-devicemanagement/'
-// 产品概览信息统计接口
-export const getDeviceData = getRequestFactory(statisticBaseUrl + 'cetc/product/count?productId=${pid}')
-export const getDeviceList = (vueObj, dataItemName, data) => {
+
+const fakeGetPostFactory = url => async (vueObj, dataItemName, data = {}) => {
   let flag = 'origin'
-  instance.post(statisticBaseUrl + 'cetc/devices', data).then((response) => {
+  await instance.post(statisticBaseUrl + url, data).then((response) => {
     let responseData = response.data
     if (typeof responseData === 'string') {
       responseData = JSON.parse(responseData)
@@ -373,38 +372,8 @@ export const getDeviceList = (vueObj, dataItemName, data) => {
   return flag
 }
 
-export const getDeviceDbDData = (vueObj, dataItemName, data) => {
-  let flag = 'origin'
-  instance.post(statisticBaseUrl + 'cetc/product/countByProductKey', data).then((response) => {
-    let responseData = response.data
-    if (typeof responseData === 'string') {
-      responseData = JSON.parse(responseData)
-    }
-    if (responseData.code === 200) {
-      vueObj[dataItemName] = responseData.data
-      flag = true
-    } else {
-      vueObj.$toast(responseData.msg)
-      flag = false
-    }
-  }).catch((err) => {
-    if (err.message.includes('401')) {
-      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
-        customCss: {
-          'background-color': '#E6A23C',
-          color: '#fff'
-        }
-      })
-      setTimeout(goBackToLogin, 3000)
-      return
-    }
-    vueObj.$toast('无法连接服务器，错误信息为' + err.message + '， 请刷新重试', {
-      customCss: {
-        'background-color': '#E6A23C',
-        color: '#fff'
-      }
-    })
-    flag = false
-  })
-  return flag
-}
+// 产品概览信息统计接口
+export const getDeviceData = fakeGetPostFactory(statisticBaseUrl + 'cetc/product/count')
+export const getDeviceList = fakeGetPostFactory(statisticBaseUrl + 'cetc/devices')
+
+export const getDeviceDbDData = fakeGetPostFactory(statisticBaseUrl + 'cetc/product/countByProductKey')

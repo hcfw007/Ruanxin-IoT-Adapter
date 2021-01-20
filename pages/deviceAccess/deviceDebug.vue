@@ -128,6 +128,7 @@ export default {
       return
     }
     this.getDeviceList()
+    this.updateFunctionList(this.currentProduct.pid)
   },
   methods: {
     getDeviceList() {
@@ -167,14 +168,14 @@ export default {
       this.debugInfo.value = JSON.stringify(valueObj, null, 2)
     },
     handleDeviceChange(val) {
-      let device = this.getDeviceFromPid(val)
-      if (device) {
-        this.debugInfo.device = device
-        this.debugInfo.deviceId = device.id
-      } else {
-        this.showIDInput = true
-      }
-      this.updateFunctionList(device.pid)
+      // let device = this.getDeviceFromPid(val)
+      // if (device) {
+      //   this.debugInfo.device = device
+      //   this.debugInfo.deviceId = device.id
+      // } else {
+      //   this.showIDInput = true
+      // }
+      // this.updateFunctionList(device.pid)
     },
     getDeviceFromPid(pid) {
       for (let item of this.productList) {
@@ -193,10 +194,18 @@ export default {
       setTimeout(() => {
         this.shakeproof = false
       }, 2000)
+      let sn = this.debugInfo.sensorId
+      let device = null
+      for (let item of this.deviceList.result) {
+        if (item.sensorId === sn) {
+          device = item
+        }
+      }
 
       let data = {
-        pid: this.debugInfo.devicePid,
-        sn: this.debugInfo.deviceId
+        pid: this.currentProduct.pid,
+        sn: device.sensorId,
+        sensorType: device.sensorType
       }
 
       if (this.debugInfo.messageType === 'down') {
