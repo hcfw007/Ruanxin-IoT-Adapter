@@ -143,10 +143,10 @@
           <el-form-item label="协议类型" prop="protocol_type">
             <el-select v-model="newProduct.protocol_type" placeholder="请选择设备协议类型" :disabled="productDrawerMode === '编辑'">
               <el-option label="MQTT协议" value="MQTT" />
-              <el-option label="CoAP协议" value="CoAP" />
+              <!-- <el-option label="CoAP协议" value="CoAP" />
               <el-option label="Https协议" value="HTTPS" />
               <el-option label="TCP协议" value="TCP" />
-              <el-option label="自定义协议" value="CUSTOM" />
+              <el-option label="自定义协议" value="CUSTOM" /> -->
             </el-select>
           </el-form-item>
           <el-form-item label="设备节点" prop="device_node">
