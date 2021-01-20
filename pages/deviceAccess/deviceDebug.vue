@@ -18,7 +18,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="功能点">
-            <el-select v-model="debugInfo.functinIndex" placeholder="请选择功能点" :loading="gettingFunction" @change="handleFunctionChange">
+            <el-select v-model="debugInfo.functionIndex" placeholder="请选择功能点" :loading="gettingFunction" @change="handleFunctionChange">
               <el-option v-for="fun in filteredFunctionList" :key="'fun' + fun.id" :label="fun.name" :value="fun.index" />
             </el-select>
           </el-form-item>
@@ -96,7 +96,7 @@ export default {
         sensorId: '',
         messageType: 'down',
         function: '',
-        functinIndex: '',
+        functionIndex: '',
         dataType: 'String',
         value: '',
         requestType: 'once',
@@ -146,6 +146,7 @@ export default {
     },
     handleMessageTypeChange(val) {
       this.debugInfo.function = ''
+      this.debugInfo.functionIndex = ''
     },
     handleFunctionChange(val) {
       this.debugInfo.function = this.getFunctionFromIndex(val)
