@@ -373,7 +373,7 @@ const fakeGetPostFactory = url => async (vueObj, dataItemName, data = {}) => {
 }
 
 // 产品概览信息统计接口
-export const getDeviceData = fakeGetPostFactory(statisticBaseUrl + 'cetc/product/count')
-export const getDeviceList = fakeGetPostFactory(statisticBaseUrl + 'cetc/devices')
+export const getDeviceData = fakeGetPostFactory('cetc/product/count')
+export const getDeviceList = fakeGetPostFactory('cetc/devices')
 
-export const getDeviceDbDData = fakeGetPostFactory(statisticBaseUrl + 'cetc/product/countByProductKey')
+export const getDeviceDbDData = fakeGetPostFactory('cetc/product/countByProductKey')
