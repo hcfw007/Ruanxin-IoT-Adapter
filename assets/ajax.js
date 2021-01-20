@@ -14,7 +14,7 @@ const RXSystemBaseUrl = 'http://47.103.143.104:8000/api-usersystem/'
 
 export const loginURL = 'http://47.103.143.104:8080/devicemanage/#/user/login'
 export const goBackToLogin = () => {
-  // location.href = loginURL
+  location.href = loginURL
 }
 
 const instance = axios.create({
