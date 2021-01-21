@@ -21,7 +21,7 @@
         </div>
       </el-col>
       <el-col :span="14" class="function-info-operators text-right">
-        <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button>
+        <!-- <el-button :loading="uploadingImportedFile" class="function-button" @click="chooseImportFile">导入功能点</el-button> -->
         <el-button class="function-button" @click="exportFunction">导出功能点</el-button>
         <el-button type="primary" class="sdk-button" @click="displaySDKDialog = true">下载SDK</el-button>
         <input id="import" type="file" style="display: none" accept="application/json" @change="handleImportUpload($event)">
@@ -40,7 +40,7 @@
                   标准功能无法满足你的需求时，你可以添加自定义功能
                 </span>
               </el-col>
-              <el-col :span="6" class="text-right">
+              <el-col :span="6" class="text-right" style="padding-right: 20px">
                 <div class="add-function-button" @click="addFunction()">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">标准功能点</div>
@@ -53,7 +53,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="productFunctionList.functions" border>
+                <el-table :data="pagedFunctionList" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -62,7 +62,11 @@
                   </el-table-column>
                   <el-table-column prop="name" label="功能点名称" />
                   <el-table-column prop="subject" label="字段名称" />
-                  <el-table-column prop="type" label="数据类型" />
+                  <el-table-column label="数据类型">
+                    <template slot-scope="scope">
+                      {{ scope.row.type | dataTypeFilter }}
+                    </template>
+                  </el-table-column>
                   <el-table-column label="传输类型">
                     <template slot-scope="scope">
                       {{ transferTypeTransfer(scope.row.up, scope.row.down) }}
@@ -79,6 +83,18 @@
                 </el-table>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="24" class="text-right">
+                <el-pagination
+                  background
+                  layout="total, prev, pager, next"
+                  :total="productFunctionList.functions.length"
+                  :current-page.sync="paginationInfo.functionList.currentPage"
+                  :page-size.sync="paginationInfo.functionList.pageSize"
+                  @current-change="handlePageChange($event, 'functionList')"
+                />
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="组合功能点" name="combined-function">
             <el-row>
@@ -90,7 +106,7 @@
                   可以将多个独立功能点组合，进行上报或者下发。
                 </span>
               </el-col>
-              <el-col :span="6" class="text-right">
+              <el-col :span="6" class="text-right" style="padding-right: 20px">
                 <div class="add-function-button" @click="addCombinedFunction()">
                   <div class="add-function-icon">+</div>
                   <div class="add-function-text">组合功能点</div>
@@ -99,7 +115,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="combinedFunctionList.functions" border>
+                <el-table :data="pagedCombinedFunctionList" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -122,6 +138,18 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24" class="text-right">
+                <el-pagination
+                  background
+                  layout="total, prev, pager, next"
+                  :total="combinedFunctionList.functions.length"
+                  :current-page.sync="paginationInfo.combinedFunctionList.currentPage"
+                  :page-size.sync="paginationInfo.combinedFunctionList.pageSize"
+                  @current-change="handlePageChange($event, 'combinedFunctionList')"
+                />
               </el-col>
             </el-row>
           </el-tab-pane>
@@ -233,12 +261,14 @@
               </el-select>
             </el-form-item>
             <section v-if="customFunction.type === 'BOOLEAN'">
-              <el-form-item label="True - " required>
-                <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-              </el-form-item>
-              <el-form-item label="False - " required>
-                <el-input v-model="functionSpecFieldsByType.boolean.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-              </el-form-item>
+              <el-form ref="functionBooleanForm" :model="functionSpecFieldsByType.boolean" label-width="120px" :rules="functionRules.booleanRule">
+                <el-form-item label="True - " prop="true_value">
+                  <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+                </el-form-item>
+                <el-form-item label="False - " prop="false_value">
+                  <el-input v-model="functionSpecFieldsByType.boolean.false_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+                </el-form-item>
+              </el-form>
             </section>
             <section v-if="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
               <el-form-item label="取值范围" required>
@@ -264,7 +294,7 @@
             </section>
             <section v-if="customFunction.type === 'EXCEPTION'">
               <el-form-item label="故障值" required>
-                <enum-editor v-model="functionSpecFieldsByType.exception.items" type-label="故障值" />
+                <enum-editor v-model="functionSpecFieldsByType.exception.items" type-label="故障" type="exception" />
               </el-form-item>
             </section>
             <section v-if="customFunction.type === 'STRING'">
@@ -301,7 +331,7 @@
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <span class="clickable-text" @click="editParam(param, index)">编辑</span>
-                  <span class="clickable-text" @click="customFunction.params.slice(index, 1)">删除</span>
+                  <span class="clickable-text" @click="customFunction.params.splice(index, 1)">删除</span>
                 </el-col>
               </el-row>
               <el-row class="add-param-row">
@@ -330,7 +360,7 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRule">
+        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRules.publicNameSubjectRule">
           <el-form-item label="参数名称" prop="name">
             <el-input v-model="currentParam.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
@@ -347,12 +377,14 @@
             </el-select>
           </el-form-item>
           <section v-if="currentParam.type === 'BOOLEAN'">
-            <el-form-item label="True - " required>
-              <el-input v-model="currentParam.boolean_type.true_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-            </el-form-item>
-            <el-form-item label="False - " required>
-              <el-input v-model="currentParam.boolean_type.false_value" placeholder="1-20位，中文、英文、数字及特殊字符_-，必须以中文、英文或数字开头" />
-            </el-form-item>
+            <el-form ref="paramBooleanForm" :model="currentParam.boolean_type" label-width="120px" :rules="paramRules.booleanRule">
+              <el-form-item label="True - " prop="true_value">
+                <el-input v-model="currentParam.boolean_type.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+              </el-form-item>
+              <el-form-item label="False - " prop="false_value">
+                <el-input v-model="currentParam.boolean_type.false_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
+              </el-form-item>
+            </el-form>
           </section>
           <section v-if="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
             <el-form-item label="取值范围" required>
@@ -455,7 +487,7 @@
 <script>
 import { getDeviceFunctionList, getSystemFunctionList } from '~/assets/getters'
 import { getProductFunctionList, getFunctionList, postProductFunctionList, deleteProductFunction, postProductCustomFunction, editProductFunction, getCombinedFunctionList, postCombinedFunction, exportFunction, importFunction, editCombinedFunction, downloadSDK } from '~/assets/ajax'
-import { functionConfig, functionRules, paramRule } from '~/assets/config'
+import { functionConfig, functionRules, paramRules } from '~/assets/config'
 
 const basicDeepCopy = (obj) => {
   if (!obj) { return {} }
@@ -520,7 +552,17 @@ export default {
       paramDrawerMode: '添加',
       combinedFunctionDrawerMode: '添加',
       functionRules,
-      paramRule
+      paramRules,
+      paginationInfo: {
+        functionList: {
+          pageSize: 10,
+          currentPage: 1
+        },
+        combinedFunctionList: {
+          pageSize: 10,
+          currentPage: 1
+        }
+      }
       // functionListFilteredByCombinedTransferType: []
     }
   },
@@ -538,6 +580,14 @@ export default {
     functionListFilteredByProductCategory() {
       let categoryId = this.currentProduct.category_id
       return this.functionList.functions.filter(ele => ele.category_id === categoryId)
+    },
+    pagedFunctionList() {
+      let data = this.paginationInfo.functionList
+      return this.productFunctionList.functions.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
+    },
+    pagedCombinedFunctionList() {
+      let data = this.paginationInfo.combinedFunctionList
+      return this.combinedFunctionList.functions.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
     }
   },
   created() {
@@ -548,6 +598,9 @@ export default {
     this.getProductFunctionList()
   },
   methods: {
+    handlePageChange(val, listName) {
+      this.paginationInfo[listName].currentPage = val
+    },
     exportFunction() {
       let pid = this.currentProduct.pid
       exportFunction(pid).catch((err) => {
@@ -723,8 +776,13 @@ export default {
       // 表单校验
       let pass = true
       await this.$refs.paramForm.validate((valid) => {
-        pass = valid
+        pass = valid && pass
       })
+      if (this.currentParam.type === 'BOOLEAN') {
+        await this.$refs.paramBooleanForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
       if (!pass) { return }
       let param = this.currentParam
       if (this.paramDrawerMode === '编辑') {
@@ -752,7 +810,7 @@ export default {
     addCustomFunction() {
       // 点击添加自定义功能点
       // 初始化自定义功能点数据结构
-      this.customFunction = Object.assign({}, functionConfig.customFunctionProto)
+      this.customFunction = basicDeepCopy(functionConfig.customFunctionProto)
       this.functionSpecFieldsByType = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
       // 显示添加自定义功能点的drawer
       this.customFunctionDrawerMode = '添加'
@@ -778,8 +836,13 @@ export default {
       // 表单校验
       let pass = true
       await this.$refs.customFunctionForm.validate((valid) => {
-        pass = valid
+        pass = valid && pass
       })
+      if (this.customFunction.fn_type === 'COMMON' && this.customFunction.type === 'BOOLEAN') {
+        await this.$refs.functionBooleanForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
       if (!pass) { return }
       // 按钮载入动画
       this.postingCustomFunction = true

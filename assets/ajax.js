@@ -19,7 +19,7 @@ export const goBackToLogin = () => {
 
 const instance = axios.create({
   baseURL,
-  timeout: 10000,
+  // timeout: 10000,
   headers
 })
 
@@ -143,11 +143,15 @@ const patchRequestFactory = url => async (vueObj, data = {}, successToastMessage
   return flag
 }
 
-const getRequestFactory = url => async (vueObj, dataItemName, data = {}, urlReplacementItem = {}) => {
+const getRequestFactory = url => async (vueObj, dataItemName, data, urlReplacementItem = {}) => {
   let flag = 'origin'
   let _url = url
   for (let item in urlReplacementItem) {
     _url = _url.replace('${' + item + '}', urlReplacementItem[item])
+  }
+  let headers = {}
+  if (data) {
+    headers['content-type'] = 'application/json'
   }
   await instance.get(_url, { data }).then((response) => {
     let responseData = response.data
@@ -328,3 +332,48 @@ export const getVerifyImage = (phone) => {
 export const getSMSCode = putRequestFactory(RXSystemBaseUrl + 'user/changePhoneSendAuthCode')
 // 修改手机号
 export const changePhone = putRequestFactory(RXSystemBaseUrl + 'user/changePhone')
+
+// 统计信息类
+const statisticBaseUrl = 'http://47.103.143.104:8000/api-devicemanagement/'
+
+const fakeGetPostFactory = url => async (vueObj, dataItemName, data = {}) => {
+  let flag = 'origin'
+  await instance.post(statisticBaseUrl + url, data).then((response) => {
+    let responseData = response.data
+    if (typeof responseData === 'string') {
+      responseData = JSON.parse(responseData)
+    }
+    if (responseData.code === 200) {
+      vueObj[dataItemName] = responseData.data
+      flag = true
+    } else {
+      vueObj.$toast(responseData.msg)
+      flag = false
+    }
+  }).catch((err) => {
+    if (err.message.includes('401')) {
+      vueObj.$toast('登录失效或已过期，3秒后返回登录页面！', {
+        customCss: {
+          'background-color': '#E6A23C',
+          color: '#fff'
+        }
+      })
+      setTimeout(goBackToLogin, 3000)
+      return
+    }
+    vueObj.$toast('无法连接服务器，错误信息为' + err.message + '， 请刷新重试', {
+      customCss: {
+        'background-color': '#E6A23C',
+        color: '#fff'
+      }
+    })
+    flag = false
+  })
+  return flag
+}
+
+// 产品概览信息统计接口
+export const getDeviceData = fakeGetPostFactory('cetc/product/count')
+export const getDeviceList = fakeGetPostFactory('cetc/devices')
+
+export const getDeviceDbDData = fakeGetPostFactory('cetc/product/countByProductKey')

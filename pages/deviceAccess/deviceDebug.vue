@@ -4,8 +4,8 @@
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
-            <el-select v-model="debugInfo.devicePid" filterable allow-create placeholder="请选择或输入设备PiD" @change="handleDeviceChange($event)">
-              <el-option v-for="product in productList" :key="'product' + product.id" :label="product.name" :value="product.pid" />
+            <el-select v-model="debugInfo.sensorId" filterable allow-create placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
+              <el-option v-for="device in deviceList.resultList" :key="'device' + device.sensorId" :label="device.sensorName" :value="device.sensorId" />
             </el-select>
           </el-form-item>
           <el-form-item v-if="showIDInput" label="设备ID">
@@ -18,7 +18,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="功能点">
-            <el-select v-model="debugInfo.functinIndex" placeholder="请选择功能点" :loading="gettingFunction" @change="handleFunctionChange">
+            <el-select v-model="debugInfo.functionIndex" placeholder="请选择功能点" :loading="gettingFunction" @change="handleFunctionChange">
               <el-option v-for="fun in filteredFunctionList" :key="'fun' + fun.id" :label="fun.name" :value="fun.index" />
             </el-select>
           </el-form-item>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getProductList, getFullFunctionList, dispatchCommand } from '~/assets/ajax'
+import { getDeviceList, getFullFunctionList, dispatchCommand } from '~/assets/ajax'
 
 export default {
   data() {
@@ -93,16 +93,18 @@ export default {
       debugInfo: {
         device: {},
         devicePid: '',
-        deviceId: '',
+        sensorId: '',
         messageType: 'down',
         function: '',
-        functinIndex: '',
+        functionIndex: '',
         dataType: 'String',
         value: '',
         requestType: 'once',
         requestInterval: 3
       },
-      productList: [],
+      deviceList: {
+        resultList: []
+      },
       functionData: {},
       messageLogList: [],
       productFunctionList: {
@@ -122,11 +124,15 @@ export default {
     }
   },
   created() {
-    this.getProductList()
+    if (!this.checkProduct()) {
+      return
+    }
+    this.getDeviceList()
+    this.updateFunctionList(this.currentProduct.pid)
   },
   methods: {
-    getProductList() {
-      getProductList(this, 'productList')
+    getDeviceList() {
+      getDeviceList(this, 'deviceList', { productId: this.currentProduct.pid })
     },
     async updateFunctionList(pid) {
       this.gettingFunction = true
@@ -140,6 +146,7 @@ export default {
     },
     handleMessageTypeChange(val) {
       this.debugInfo.function = ''
+      this.debugInfo.functionIndex = ''
     },
     handleFunctionChange(val) {
       this.debugInfo.function = this.getFunctionFromIndex(val)
@@ -162,14 +169,14 @@ export default {
       this.debugInfo.value = JSON.stringify(valueObj, null, 2)
     },
     handleDeviceChange(val) {
-      let device = this.getDeviceFromPid(val)
-      if (device) {
-        this.debugInfo.device = device
-        this.debugInfo.deviceId = device.id
-      } else {
-        this.showIDInput = true
-      }
-      this.updateFunctionList(device.pid)
+      // let device = this.getDeviceFromPid(val)
+      // if (device) {
+      //   this.debugInfo.device = device
+      //   this.debugInfo.deviceId = device.id
+      // } else {
+      //   this.showIDInput = true
+      // }
+      // this.updateFunctionList(device.pid)
     },
     getDeviceFromPid(pid) {
       for (let item of this.productList) {
@@ -188,10 +195,18 @@ export default {
       setTimeout(() => {
         this.shakeproof = false
       }, 2000)
+      let sn = this.debugInfo.sensorId
+      let device = null
+      for (let item of this.deviceList.resultList) {
+        if (item.sensorId === sn) {
+          device = item
+        }
+      }
 
       let data = {
-        pid: this.debugInfo.devicePid,
-        sn: this.debugInfo.deviceId
+        pid: this.currentProduct.pid,
+        sn: device.sensorId,
+        sensorType: device.sensorType
       }
 
       if (this.debugInfo.messageType === 'down') {

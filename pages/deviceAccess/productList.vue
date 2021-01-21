@@ -5,9 +5,9 @@
         <h3 class="page-title">
           标准协议快速开发指南
         </h3>
-        <span class="page-title-link">
+        <!-- <span class="page-title-link">
           前往开发指南 &gt;
-        </span>
+        </span> -->
         <span class="pange-title-hint">
           注：自定义协议产品需在第五步后额外进行部署适配器的操作
         </span>
@@ -37,7 +37,7 @@
         <el-row>
           <el-col :span="24">
             <el-table
-              :data="productList"
+              :data="pagedProductList"
               border
             >
               <el-table-column
@@ -61,9 +61,12 @@
                 label="产品ID"
               />
               <el-table-column
-                prop="protocol_type"
                 label="协议类型"
-              />
+              >
+                <template slot-scope="scope">
+                  {{ scope.row.protocol_type | protocolFilter }}
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="user_name"
                 label="创建人"
@@ -85,7 +88,14 @@
               >
                 <template slot-scope="scope">
                   <img src="@/static/images/icons/view.png" alt="" class="table-mini-image clickable" title="查看" @click="setAndView(scope.row)">
-                  <img src="@/static/images/icons/edit.png" alt="" class="table-mini-image clickable" title="编辑" @click="editProduct(scope.row)">
+                  <img
+                    src="@/static/images/icons/edit.png"
+                    alt=""
+                    class="table-mini-image clickable"
+                    title="编辑"
+                    :class="{disabled: scope.row.is_release}"
+                    @click="editProduct(scope.row)"
+                  >
                   <el-popconfirm title="确定要删除吗？" :disabled="scope.row.is_release" @confirm="deleteProduct(scope.row)">
                     <img
                       slot="reference"
@@ -107,6 +117,18 @@
                 </template>
               </el-table-column>
             </el-table>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24" class="text-right">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :total="productList.length"
+              :current-page.sync="paginationInfo.productList.currentPage"
+              :page-size.sync="paginationInfo.productList.pageSize"
+              @current-change="handlePageChange($event, 'productList')"
+            />
           </el-col>
         </el-row>
       </el-col>
@@ -133,10 +155,10 @@
           <el-form-item label="协议类型" prop="protocol_type">
             <el-select v-model="newProduct.protocol_type" placeholder="请选择设备协议类型" :disabled="productDrawerMode === '编辑'">
               <el-option label="MQTT协议" value="MQTT" />
-              <el-option label="CoAP协议" value="CoAP" />
+              <!-- <el-option label="CoAP协议" value="CoAP" />
               <el-option label="Https协议" value="HTTPS" />
               <el-option label="TCP协议" value="TCP" />
-              <el-option label="自定义协议" value="CUSTOM" />
+              <el-option label="自定义协议" value="CUSTOM" /> -->
             </el-select>
           </el-form-item>
           <el-form-item label="设备节点" prop="device_node">
@@ -148,12 +170,15 @@
           </el-form-item>
           <el-form-item label="联网方式" prop="connection">
             <el-checkbox-group v-model="newProduct.connection" :disabled="productDrawerMode === '编辑'">
+              <el-checkbox label="LoRa">LoRa</el-checkbox>
+              <el-checkbox label="无线">Wifi</el-checkbox>
+              <el-checkbox label="有线">有线</el-checkbox>
+              <el-checkbox label="蓝牙">蓝牙</el-checkbox>
+              <el-checkbox label="蜂窝">蜂窝</el-checkbox>
               <el-checkbox label="_2G">2G</el-checkbox>
               <el-checkbox label="_4G">4G</el-checkbox>
-              <el-checkbox label="NBIoT">NBIoT</el-checkbox>
-              <el-checkbox label="WIFI">Wifi</el-checkbox>
-              <el-checkbox label="ETHERNET">以太网</el-checkbox>
-              <el-checkbox label="OTHER">其他</el-checkbox>
+              <el-checkbox label="NB">NB</el-checkbox>
+              <el-checkbox label="其他">其他</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="产品型号" prop="model">
@@ -189,12 +214,22 @@ export default {
       newProduct: {},
       postingNewProduct: false,
       productDrawerMode: '添加',
-      productFormRule
+      productFormRule,
+      paginationInfo: {
+        productList: {
+          pageSize: 10,
+          currentPage: 1
+        }
+      }
     }
   },
   computed: {
     categoryFilteredByIndustry() {
       return this.categoryList.filter(ele => ele.industry === this.newProduct.industry_id)
+    },
+    pagedProductList() {
+      let data = this.paginationInfo.productList
+      return this.productList.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
     }
   },
   created() {
@@ -202,6 +237,10 @@ export default {
     this.getStaticList()
   },
   methods: {
+    handlePageChange(val, listName) {
+      console.log(val, listName)
+      this.paginationInfo[listName].currentPage = val
+    },
     async releaseProduct(product) {
       if (product.is_release) {
         this.$toast('此产品已发布，无需重复发布', {
@@ -230,6 +269,7 @@ export default {
       this.creatingProduct = true
     },
     editProduct(product) {
+      if (product.is_release) { return }
       // 根据原型的项目取出所需数据
       let _product = {}
       for (let item in productConfig.productProto) {

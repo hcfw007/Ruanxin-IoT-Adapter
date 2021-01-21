@@ -218,7 +218,7 @@ span:focus
       border-bottom: 1px solid #fff
 
 // 输入
-input, textarea
+input:not(.el-range-input), textarea
   border: 1px solid #999 !important
 
 .is-error

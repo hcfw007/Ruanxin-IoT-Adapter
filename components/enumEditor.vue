@@ -1,25 +1,33 @@
 <template>
   <div class="emun-editor">
     <el-row>
-      <el-col :span="16">
+      <el-col :span="8">
         <el-input
-          v-model="input"
-          :placeholder="`请输入${ typeLabel }`"
+          v-model="keyInput"
+          :placeholder="`${ typeLabel }标识(Key)`"
           class="emun-input"
           :class="{'error': error}"
-          @change="validateInput"
           @focus="error = false"
         />
         <div v-if="error" class="el-form-item__error">{{ errorMessage }}</div>
       </el-col>
-      <el-col :span="8" style="text-align: right">
+      <el-col :span="8" :offset="1">
+        <el-input
+          v-model="valueInput"
+          :placeholder="`${ typeLabel }值(Value)`"
+          class="emun-input"
+          :class="{'error': error}"
+          @focus="error = false"
+        />
+      </el-col>
+      <el-col :span="7" style="text-align: right">
         <span class="add-emun" @click="addEmun">+ 添加{{ typeLabel }}</span>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="24" class="emun-item-container">
         <div v-for="(item, index) in value" :key="'emun-item' + String(index)" class="emun-item" @click="removeEmun(index)">
-          {{ item }} ×
+          {{ item.key }} - {{ item.value }} ×
         </div>
       </el-col>
     </el-row>
@@ -35,12 +43,17 @@ export default {
     },
     typeLabel: {
       type: String,
-      default: '枚举值'
+      default: '枚举'
+    },
+    type: {
+      type: String,
+      default: 'enum'
     }
   },
   data() {
     return {
-      input: '',
+      keyInput: '',
+      valueInput: '',
       errorMessage: '',
       currentArray: [],
       error: false
@@ -51,32 +64,53 @@ export default {
     value() {
       // 当外部调用的数组发生变化时，要重新初始化组件。
       if (this.value !== this.currentArray) {
-        this.input = ''
-        this.error = false
+        this.keyInput = ''
+        this.valueInput = ''
         this.currentArray = this.value
       }
     }
   },
   methods: {
     addEmun() {
-      this.validateInput(this.input)
+      this.validateInput()
       if (this.error) { return }
-      this.value.push(this.input)
-      this.input = ''
+      this.value.push({
+        key: this.keyInput,
+        value: this.valueInput
+      })
+      this.keyInput = ''
+      this.valueInput = ''
     },
     removeEmun(index) {
       this.value.splice(index, 1)
     },
-    validateInput(val) {
-      if (this.input.length === 0) {
+    validateInput() {
+      if (this.keyInput.length === 0 || this.valueInput.length === 0) {
         this.error = true
         this.errorMessage = '添加内容为空，请输入'
         return true
       }
-      if (this.value.includes(val)) {
+      if (!/^[0-9]+$/.test(this.keyInput)) {
         this.error = true
-        this.errorMessage = '添加重复内容，请检查'
+        this.errorMessage = 'Key只能为整数，请检查'
         return true
+      }
+      if (!/^[a-zA-Z0-9\u4E00-\u9FA5]{1,20}$/.test(this.valueInput)) {
+        this.error = true
+        this.errorMessage = 'Value支持中文、字母及数字，不超过20个字符并且非空'
+        return true
+      }
+      for (let item of this.value) {
+        if (item.key === this.keyInput) {
+          this.error = true
+          this.errorMessage = '添加重复Key，请检查'
+          return true
+        }
+        if (item.value === this.valueInput) {
+          this.error = true
+          this.errorMessage = '添加重复Value，请检查'
+          return true
+        }
       }
       return false
     }

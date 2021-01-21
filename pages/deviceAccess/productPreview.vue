@@ -70,7 +70,7 @@
           设备总数
         </div>
         <div class="device-data-value">
-          {{ productList.length }}
+          {{ deviceData.total }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -78,7 +78,7 @@
           在线设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.onlineDevice }}
+          {{ deviceData.live }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -86,7 +86,7 @@
           今日活跃设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.activeDevice }}
+          {{ deviceData.acticed }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -94,7 +94,7 @@
           沉默设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.silentDevice }}
+          {{ deviceData.silence }}
         </div>
       </el-col>
     </el-row>
@@ -133,6 +133,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :clearable="false"
             />
           </el-col>
           <el-col :span="5" class="text-right">
@@ -142,7 +143,8 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="activeDeviceDbDData.labels !== undefined" :chart-data="activeDeviceDbDData" style="height: 300px; width: 100% position: relative;" />
+            <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
       </el-col>
@@ -160,6 +162,7 @@
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              :clearable="false"
             />
           </el-col>
           <el-col :span="5" class="text-right">
@@ -169,7 +172,8 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <line-chart :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
+            <line-chart v-if="silentDeviceDbData.labels !== undefined" :chart-data="silentDeviceDbData" style="height: 300px; width: 100% position: relative;" />
+            <h4 v-else>暂无数据</h4>
           </el-col>
         </el-row>
       </el-col>
@@ -178,10 +182,10 @@
 </template>
 
 <script>
-import { getDeviceData, getProjectData, getActiveDeviceDbDData, getSilentDeviceDbDData } from '~/assets/getters'
+import { getProjectData } from '~/assets/getters'
 import { colors } from '~/assets/config'
 import { dateComparer } from '~/assets/util'
-import { getProductList } from '~/assets/ajax'
+import { getProductList, getDeviceData, getDeviceDbDData } from '~/assets/ajax'
 
 export default {
   data() {
@@ -201,10 +205,10 @@ export default {
   },
   computed: {
     activeDeviceDbDData() {
-      return this.generateLineChartData(this.originalActiveDeviceDbDData, this.activeDeviceDateRange)
+      return this.generateLineChartData(this.originalActiveDeviceDbDData.data, this.activeDeviceDateRange)
     },
     silentDeviceDbData() {
-      return this.generateLineChartData(this.originalSilentDeviceDbDData, this.silentDeviceDateRange)
+      return this.generateLineChartData(this.originalSilentDeviceDbDData.data, this.silentDeviceDateRange)
     }
   },
   created() {
@@ -213,7 +217,6 @@ export default {
     }
     this.getProductList()
     this.getDeviceData()
-    this.getProjectData()
     this.getDeviceDbDData()
     this.activeDeviceDateRange = [
       new Date(new Date() - 29 * 24 * 60 * 60 * 1000),
@@ -225,8 +228,16 @@ export default {
     ]
   },
   methods: {
-    generateLineChartData(originalData, range) {
-      if (!originalData || !originalData.length) { return {} }
+    generateLineChartData(data, range) {
+      if (!data) { return {} }
+      let originalData = []
+      for (let item in data) {
+        originalData.push({
+          date: new Date(item),
+          value: data[item]
+        })
+      }
+      if (originalData.length === 0) { return {} }
       let areaColor = '#AAD0FF'
       if (process.client) {
         let gradient = document.getElementById('hidden-secret').getContext('2d').createLinearGradient(0, 0, 0, 200)
@@ -255,48 +266,55 @@ export default {
     getProductList() {
       getProductList(this, 'productList')
     },
-    getDeviceData() {
-      getDeviceData().then((data) => {
-        this.deviceData = data
-      })
-    },
-    getProjectData() {
-      getProjectData().then((data) => {
-        let totalValue = 0
-        let projectDoughnutData = {
-          datasets: [{
-            data: [],
-            backgroundColor: colors['chart-colors'],
-            weight: 10,
-            borderWidth: 2
-          }],
-          labels: []
-        }
+    async getDeviceData() {
+      await getDeviceData(this, 'deviceData', { productId: this.currentProduct.pid })
+      let project = this.deviceData.project
+      let data = []
+      for (let item in project) {
+        data.push({
+          name: item,
+          value: project[item]
+        })
+      }
+      data.sort((a, b) => b.value - a.value)
+      let totalValue = 0
+      let projectDoughnutData = {
+        datasets: [{
+          data: [],
+          backgroundColor: colors['chart-colors'],
+          weight: 10,
+          borderWidth: 2
+        }],
+        labels: []
+      }
+      if (data.length > 5) {
+        let _data = []
+        let other = 0
         for (let index in data) {
-          let item = data[index]
-          projectDoughnutData.datasets[0].data.push(item.value)
-          projectDoughnutData.labels.push(item.name)
-          totalValue += item.value
-          item.color = colors['chart-colors'][index]
+          if (index < 4) {
+            _data.push(data[index])
+          } else {
+            other += data[index].value
+          }
         }
-        this.projectDoughnutData = projectDoughnutData
-        this.totalValue = totalValue
-        this.projectData = data
-      })
+        _data.push({ name: '其他', value: other })
+        data = _data
+      }
+      for (let index in data) {
+        let item = data[index]
+        projectDoughnutData.datasets[0].data.push(item.value)
+        projectDoughnutData.labels.push(item.name)
+        totalValue += item.value
+        item.color = colors['chart-colors'][index]
+      }
+      this.projectDoughnutData = projectDoughnutData
+      this.totalValue = totalValue
+      this.projectData = data
     },
     getDeviceDbDData() {
-      getActiveDeviceDbDData().then((data) => {
-        data.sort((a, b) => {
-          return a.date - b.date
-        })
-        this.originalActiveDeviceDbDData = data
-      })
-      getSilentDeviceDbDData().then((data) => {
-        data.sort((a, b) => {
-          return a.date - b.date
-        })
-        this.originalSilentDeviceDbDData = data
-      })
+      // TODO wait till api fixed
+      getDeviceDbDData(this, 'originalActiveDeviceDbDData', { productId: this.currentProduct.pid, type: 'live' })
+      getDeviceDbDData(this, 'originalSilentDeviceDbDData', { productId: this.currentProduct.pid, type: 'silence' })
     },
     copyToClipboard(text) {
       let input = document.createElement('input')
