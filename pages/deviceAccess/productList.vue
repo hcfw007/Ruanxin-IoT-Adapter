@@ -120,10 +120,10 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="24" class="text-right">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total, prev, pager, next"
               :total="productList.length"
               :current-page.sync="paginationInfo.productList.currentPage"
               :page-size.sync="paginationInfo.productList.pageSize"
