@@ -38,14 +38,14 @@ const userPasswordRule = {
   newPassword1: [
     {
       required: true,
-      message: '请输入旧密码',
+      message: '请输入新密码',
       trigger: 'blur'
     }
   ],
   newPassword2: [
     {
       required: true,
-      message: '请输入旧密码',
+      message: '请再次输入新密码',
       trigger: 'blur'
     }
   ]

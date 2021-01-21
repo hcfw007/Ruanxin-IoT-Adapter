@@ -37,7 +37,7 @@
         <el-row>
           <el-col :span="24">
             <el-table
-              :data="productList"
+              :data="pagedProductList"
               border
             >
               <el-table-column
@@ -117,6 +117,18 @@
                 </template>
               </el-table-column>
             </el-table>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24" class="text-right">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :total="productList.length"
+              :current-page.sync="paginationInfo.productList.currentPage"
+              :page-size.sync="paginationInfo.productList.pageSize"
+              @current-change="handlePageChange($event, 'productList')"
+            />
           </el-col>
         </el-row>
       </el-col>
@@ -202,12 +214,22 @@ export default {
       newProduct: {},
       postingNewProduct: false,
       productDrawerMode: '添加',
-      productFormRule
+      productFormRule,
+      paginationInfo: {
+        productList: {
+          pageSize: 10,
+          currentPage: 1
+        }
+      }
     }
   },
   computed: {
     categoryFilteredByIndustry() {
       return this.categoryList.filter(ele => ele.industry === this.newProduct.industry_id)
+    },
+    pagedProductList() {
+      let data = this.paginationInfo.productList
+      return this.productList.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
     }
   },
   created() {
@@ -215,6 +237,10 @@ export default {
     this.getStaticList()
   },
   methods: {
+    handlePageChange(val, listName) {
+      console.log(val, listName)
+      this.paginationInfo[listName].currentPage = val
+    },
     async releaseProduct(product) {
       if (product.is_release) {
         this.$toast('此产品已发布，无需重复发布', {

@@ -53,7 +53,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="productFunctionList.functions" border>
+                <el-table :data="pagedFunctionList" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -83,6 +83,18 @@
                 </el-table>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="24" class="text-right">
+                <el-pagination
+                  background
+                  layout="total, prev, pager, next"
+                  :total="productFunctionList.functions.length"
+                  :current-page.sync="paginationInfo.functionList.currentPage"
+                  :page-size.sync="paginationInfo.functionList.pageSize"
+                  @current-change="handlePageChange($event, 'functionList')"
+                />
+              </el-col>
+            </el-row>
           </el-tab-pane>
           <el-tab-pane label="组合功能点" name="combined-function">
             <el-row>
@@ -103,7 +115,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-table :data="combinedFunctionList.functions" border>
+                <el-table :data="pagedCombinedFunctionList" border>
                   <el-table-column prop="index" label="功能ID" />
                   <el-table-column label="功能类型">
                     <template slot-scope="scope">
@@ -126,6 +138,18 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24" class="text-right">
+                <el-pagination
+                  background
+                  layout="total, prev, pager, next"
+                  :total="combinedFunctionList.functions.length"
+                  :current-page.sync="paginationInfo.combinedFunctionList.currentPage"
+                  :page-size.sync="paginationInfo.combinedFunctionList.pageSize"
+                  @current-change="handlePageChange($event, 'combinedFunctionList')"
+                />
               </el-col>
             </el-row>
           </el-tab-pane>
@@ -528,7 +552,17 @@ export default {
       paramDrawerMode: '添加',
       combinedFunctionDrawerMode: '添加',
       functionRules,
-      paramRules
+      paramRules,
+      paginationInfo: {
+        functionList: {
+          pageSize: 10,
+          currentPage: 1
+        },
+        combinedFunctionList: {
+          pageSize: 10,
+          currentPage: 1
+        }
+      }
       // functionListFilteredByCombinedTransferType: []
     }
   },
@@ -546,6 +580,14 @@ export default {
     functionListFilteredByProductCategory() {
       let categoryId = this.currentProduct.category_id
       return this.functionList.functions.filter(ele => ele.category_id === categoryId)
+    },
+    pagedFunctionList() {
+      let data = this.paginationInfo.functionList
+      return this.productFunctionList.functions.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
+    },
+    pagedCombinedFunctionList() {
+      let data = this.paginationInfo.combinedFunctionList
+      return this.combinedFunctionList.functions.slice((data.currentPage - 1) * data.pageSize, (data.currentPage - 1) * data.pageSize + data.pageSize)
     }
   },
   created() {
@@ -556,6 +598,9 @@ export default {
     this.getProductFunctionList()
   },
   methods: {
+    handlePageChange(val, listName) {
+      this.paginationInfo[listName].currentPage = val
+    },
     exportFunction() {
       let pid = this.currentProduct.pid
       exportFunction(pid).catch((err) => {
