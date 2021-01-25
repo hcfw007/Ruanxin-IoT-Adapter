@@ -14,6 +14,7 @@ const RXSystemBaseUrl = 'http://47.103.143.104:8000/api-usersystem/'
 
 export const loginURL = 'http://47.103.143.104:8080/devicemanage/#/user/login'
 export const goBackToLogin = () => {
+  localStorage.clear()
   location.href = loginURL
 }
 
@@ -159,7 +160,9 @@ const getRequestFactory = url => async (vueObj, dataItemName, data, urlReplaceme
       responseData = JSON.parse(responseData)
     }
     if (responseData.code === 200) {
-      vueObj[dataItemName] = responseData.data
+      if (dataItemName) {
+        vueObj[dataItemName] = responseData.data
+      }
       flag = true
     } else {
       vueObj.$toast(responseData.msg)
@@ -311,6 +314,8 @@ export const dispatchCommand = (data, type) =>
   instance.post(type === 'down' ? 'devices/write/commands' : 'devices/read/commands', data)
 
 // 用户相关，使用软信接口
+// logout
+export const logout = getRequestFactory(RXSystemBaseUrl + 'user/logout')
 // 修改用户姓名
 export const editRealName = putRequestFactory(RXSystemBaseUrl + 'user/myInfo')
 export const editPassword = putRequestFactory(RXSystemBaseUrl + 'user/changePassword')
