@@ -241,7 +241,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="功能点名称" prop="name">
-            <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" :disabled="customFunctionDrawerMode === '编辑'" />
+            <el-input v-model="customFunction.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
           <el-form-item label="字段名称" prop="subject">
             <el-input v-model="customFunction.subject" placeholder="支持字母、数字、下划线，以字母开头，不超过20个字符" maxlength="20" />
@@ -260,7 +260,7 @@
                 <el-option label="日期型" value="DATE" />
               </el-select>
             </el-form-item>
-            <section v-if="customFunction.type === 'BOOLEAN'">
+            <section v-show="customFunction.type === 'BOOLEAN'">
               <el-form ref="functionBooleanForm" :model="functionSpecFieldsByType.boolean" label-width="120px" :rules="functionRules.booleanRule">
                 <el-form-item label="True - " prop="true_value">
                   <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
@@ -270,39 +270,41 @@
                 </el-form-item>
               </el-form>
             </section>
-            <section v-if="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
-              <el-form-item label="取值范围" required>
-                <el-col :span="11">
-                  <el-input v-model="functionSpecFieldsByType.number.min" placeholder="最小值" />
-                </el-col>
-                <el-col :span="2" class="text-center">-</el-col>
-                <el-col :span="11">
-                  <el-input v-model="functionSpecFieldsByType.number.max" placeholder="最大值" />
-                </el-col>
-              </el-form-item>
-              <el-form-item label="间距" required>
-                <el-input v-model="functionSpecFieldsByType.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
-              </el-form-item>
-              <el-form-item label="单位">
-                <el-input v-model="functionSpecFieldsByType.number.unit" placeholder="请输入单位" />
-              </el-form-item>
+            <section v-show="customFunction.type === 'INTEGER' || customFunction.type === 'FLOAT'">
+              <el-form ref="functionNumberForm" :model="functionSpecFieldsByType.number" label-width="120px" :rules="functionRules.numberRule">
+                <el-form-item label="取值范围" required>
+                  <el-col :span="11">
+                    <el-input v-model="functionSpecFieldsByType.number.min" placeholder="最小值" />
+                  </el-col>
+                  <el-col :span="2" class="text-center">-</el-col>
+                  <el-col :span="11">
+                    <el-input v-model="functionSpecFieldsByType.number.max" placeholder="最大值" />
+                  </el-col>
+                </el-form-item>
+                <el-form-item label="间距" required>
+                  <el-input v-model="functionSpecFieldsByType.number.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+                </el-form-item>
+                <el-form-item label="单位" prop="unit">
+                  <el-input v-model="functionSpecFieldsByType.number.unit" placeholder="请输入单位" />
+                </el-form-item>
+              </el-form>
             </section>
-            <section v-if="customFunction.type === 'ENUM'">
+            <section v-show="customFunction.type === 'ENUM'">
               <el-form-item label="枚举值" required>
                 <enum-editor v-model="functionSpecFieldsByType.enum.items" />
               </el-form-item>
             </section>
-            <section v-if="customFunction.type === 'EXCEPTION'">
+            <section v-show="customFunction.type === 'EXCEPTION'">
               <el-form-item label="故障值" required>
                 <enum-editor v-model="functionSpecFieldsByType.exception.items" type-label="故障" type="exception" />
               </el-form-item>
             </section>
-            <section v-if="customFunction.type === 'STRING'">
+            <section v-show="customFunction.type === 'STRING'">
               <el-form-item label="最大长度">
                 <span>最大长度不超过255字节</span>
               </el-form-item>
             </section>
-            <section v-if="customFunction.type === 'BUFFER'">
+            <section v-show="customFunction.type === 'BUFFER'">
               <el-form-item label="最大长度">
                 <span>最大长度不超过255字节</span>
               </el-form-item>
@@ -376,7 +378,7 @@
               <el-option label="字符串型" value="STRING" />
             </el-select>
           </el-form-item>
-          <section v-if="currentParam.type === 'BOOLEAN'">
+          <section v-show="currentParam.type === 'BOOLEAN'">
             <el-form ref="paramBooleanForm" :model="currentParam.boolean_type" label-width="120px" :rules="paramRules.booleanRule">
               <el-form-item label="True - " prop="true_value">
                 <el-input v-model="currentParam.boolean_type.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
@@ -386,29 +388,31 @@
               </el-form-item>
             </el-form>
           </section>
-          <section v-if="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
-            <el-form-item label="取值范围" required>
-              <el-col :span="11">
-                <el-input v-model="currentParam.num_type.min" placeholder="最小值" />
-              </el-col>
-              <el-col :span="2" class="text-center">-</el-col>
-              <el-col :span="11">
-                <el-input v-model="currentParam.num_type.max" placeholder="最大值" />
-              </el-col>
-            </el-form-item>
-            <el-form-item label="间距" required>
-              <el-input v-model="currentParam.num_type.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
-            </el-form-item>
-            <el-form-item label="单位">
-              <el-input v-model="currentParam.num_type.unit" placeholder="请输入单位" />
-            </el-form-item>
+          <section v-show="currentParam.type === 'INTEGER' || currentParam.type === 'FLOAT'">
+            <el-form ref="paramNumberForm" :model="currentParam.num_type" label-width="120px" :rules="paramRules.numberRule">
+              <el-form-item label="取值范围" required>
+                <el-col :span="11">
+                  <el-input v-model="currentParam.num_type.min" placeholder="最小值" />
+                </el-col>
+                <el-col :span="2" class="text-center">-</el-col>
+                <el-col :span="11">
+                  <el-input v-model="currentParam.num_type.max" placeholder="最大值" />
+                </el-col>
+              </el-form-item>
+              <el-form-item label="间距" required>
+                <el-input v-model="currentParam.num_type.step" placeholder="请输入数据精度，如身高需要精确到0.1，则输入0.1" />
+              </el-form-item>
+              <el-form-item label="单位" prop="unit">
+                <el-input v-model="currentParam.num_type.unit" placeholder="请输入单位" />
+              </el-form-item>
+            </el-form>
           </section>
-          <section v-if="currentParam.type === 'ENUM'">
+          <section v-show="currentParam.type === 'ENUM'">
             <el-form-item label="枚举值" required>
               <enum-editor v-model="currentParam.enum_type.items" />
             </el-form-item>
           </section>
-          <section v-if="currentParam.type === 'STRING'">
+          <section v-show="currentParam.type === 'STRING'">
             <el-form-item label="最大长度">
               <span>最大长度不超过255字节</span>
             </el-form-item>
@@ -525,6 +529,21 @@ export default {
       addingParam: false,
       uploadingImportedFile: false,
       currentParam: {
+        type: 'BOOLEAN',
+        // 数值型
+        num_type: {
+          min: 0, // 最小值
+          max: 100, // 最大值
+          step: 1, // 步长
+          unit: '' // 单位
+        },
+        enum_type: {
+          items: [] // 枚举值
+        },
+        boolean_type: {
+          true_value: '',
+          false_value: ''
+        }
       },
       currentParamIndex: 0,
       customFunction: {
@@ -719,6 +738,8 @@ export default {
       // 写入功能点内容
       this.customFunctionTransferType = transferType
       this.customFunction = fun
+      // 清空数据类型
+      this.functionSpecFieldsByType = basicDeepCopy(functionConfig.functionSpecFieldsByTypeProto)
       // 写入特定类型的数据
       let type = row.type.toLowerCase()
       if (type === 'integer' || type === 'float') { type = 'number' }
@@ -783,6 +804,11 @@ export default {
           pass = valid && pass
         })
       }
+      if (this.currentParam.type === 'FLOAT' || this.currentParam.type === 'INTEGER') {
+        await this.$refs.paramNumberForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
       if (!pass) { return }
       let param = this.currentParam
       if (this.paramDrawerMode === '编辑') {
@@ -840,6 +866,11 @@ export default {
       })
       if (this.customFunction.fn_type === 'COMMON' && this.customFunction.type === 'BOOLEAN') {
         await this.$refs.functionBooleanForm.validate((valid) => {
+          pass = valid && pass
+        })
+      }
+      if (this.customFunction.fn_type === 'COMMON' && (this.customFunction.type === 'FLOAT' || this.customFunction.type === 'INTEGER')) {
+        await this.$refs.functionNumberForm.validate((valid) => {
           pass = valid && pass
         })
       }

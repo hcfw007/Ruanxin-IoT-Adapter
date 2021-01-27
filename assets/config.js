@@ -301,15 +301,27 @@ const booleanRule = {
     }
   ]
 }
+
+const numberRule = {
+  unit: [
+    {
+      max: 20,
+      message: '不超过20个字符',
+      trigger: 'change'
+    }
+  ]
+}
 // 功能点表单验证
 
 export const functionRules = {
   combinedFunctionRule: publicNameSubjectRule,
   customFunctionRule: publicNameSubjectRule,
-  booleanRule
+  booleanRule,
+  numberRule
 }
 
 export const paramRules = {
   publicNameSubjectRule,
-  booleanRule
+  booleanRule,
+  numberRule
 }

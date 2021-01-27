@@ -17,7 +17,7 @@
           <i class="el-icon-message-solid" />
         </el-badge>
         <el-divider direction="vertical" /> -->
-        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span class="username">{{ user.realName }}</span></nuxt-link></span>
+        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span id="navbar-username" class="username">{{ user.realName }}</span></nuxt-link></span>
         <span class="quit" style="margin-left: 10px" @click="logout"><i class="el-icon-switch-button" style="margin-right: 10px" />退出</span>
         <!-- <el-avatar icon="el-icon-user-solid" /> -->
       </el-col>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+/* eslint-disable nuxt/no-globals-in-created */
 import { menuStructure } from '~/assets/config'
 import { goBackToLogin, logout } from '~/assets/ajax'
 
