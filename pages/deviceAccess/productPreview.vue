@@ -40,7 +40,7 @@
           {{ currentProduct.protocol_type }}
         </div>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="6">
         <div class="product-network-label product-label">
           联网方式
         </div>
@@ -78,15 +78,15 @@
           在线设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.live }}
+          {{ deviceData.acticed }}
         </div>
       </el-col>
       <el-col :span="6">
         <div class="device-data-label">
-          今日活跃设备数
+          活跃设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.acticed }}
+          {{ deviceData.live }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -358,6 +358,7 @@ export default {
   .product-value
     font-size: 18px
     margin-top: 15px
+    overflow-wrap: anywhere
 
   .product-operators
     margin-top: 20px

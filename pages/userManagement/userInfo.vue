@@ -155,6 +155,7 @@ export default {
     async refreshUserInfo() {
       await getUserInfo(this, 'user')
       localStorage.setItem('userInfo', JSON.stringify(this.user))
+      document.getElementById('navbar-username').innerHTML = this.user.realName
     },
     resetRealNameDialog() {
       this.dialogModel.realName.name = this.user.realName
@@ -270,6 +271,7 @@ export default {
       this.loadingControl.postingMobile = false
       if (result) {
         this.dialogControl.displayMobileDialog = false
+        this.refreshUserInfo()
       }
     }
   }

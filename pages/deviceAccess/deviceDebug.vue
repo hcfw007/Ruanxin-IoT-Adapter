@@ -4,8 +4,8 @@
       <el-col :span="12" class="debug-form">
         <el-form ref="debugForm" :model="debugInfo" label-width="120px">
           <el-form-item label="调试设备">
-            <el-select v-model="debugInfo.sensorId" filterable allow-create placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
-              <el-option v-for="device in deviceList.resultList" :key="'device' + device.sensorId" :label="device.sensorName" :value="device.sensorId" />
+            <el-select v-model="debugInfo.sensorId" filterable placeholder="请选择或输入设备编号" @change="handleDeviceChange($event)">
+              <el-option v-for="device in deviceList.resultList" :key="'device' + device.sensorId" :label="device.sensorId" :value="device.sensorId" />
             </el-select>
           </el-form-item>
           <el-form-item v-if="showIDInput" label="设备ID">

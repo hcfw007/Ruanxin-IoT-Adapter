@@ -3,7 +3,10 @@
     <el-row class="nav-row">
       <el-col :span="12" style="margin-top: 30px">
         <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="(item, index) in path" :key="'path' + index">
+          <el-breadcrumb-item
+            v-for="(item, index) in path"
+            :key="'path' + index"
+          >
             {{ item.name }}
           </el-breadcrumb-item>
         </el-breadcrumb>
@@ -14,8 +17,8 @@
           <i class="el-icon-message-solid" />
         </el-badge>
         <el-divider direction="vertical" /> -->
-        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span class="username">{{ user.realName }}</span></nuxt-link></span>
-        <span class="quit" style="margin-left: 10px"><a :href="loginURL"><i class="el-icon-switch-button" style="margin-right: 10px" />退出</a></span>
+        <span class="user">欢迎，<nuxt-link to="/userManagement/userInfo"><span id="navbar-username" class="username">{{ user.realName }}</span></nuxt-link></span>
+        <span class="quit" style="margin-left: 10px" @click="logout"><i class="el-icon-switch-button" style="margin-right: 10px" />退出</span>
         <!-- <el-avatar icon="el-icon-user-solid" /> -->
       </el-col>
     </el-row>
@@ -23,15 +26,15 @@
 </template>
 
 <script>
+/* eslint-disable nuxt/no-globals-in-created */
 import { menuStructure } from '~/assets/config'
-import { loginURL, goBackToLogin } from '~/assets/ajax'
+import { goBackToLogin, logout } from '~/assets/ajax'
 
 export default {
   data() {
     return {
       path: [],
-      user: {},
-      loginURL
+      user: {}
     }
   },
   watch: {
@@ -44,6 +47,9 @@ export default {
     this.getUser()
   },
   methods: {
+    logout() {
+      logout(this).then(goBackToLogin())
+    },
     getUser() {
       try {
         let user = localStorage.getItem('userInfo')
@@ -66,10 +72,12 @@ export default {
       let tree = menuStructure
       let paths = this.$route.path.split('/')
       let p = 1
-      let path = [{
-        name: '首页',
-        link: '/'
-      }]
+      let path = [
+        {
+          name: '首页',
+          link: '/'
+        }
+      ]
       while (p < paths.length && tree.children) {
         for (let item of tree.children) {
           if (item.id === paths[p]) {
@@ -116,6 +124,7 @@ navbarHeight = 70px // height of navbar content
 
   .el-avatar
     vertical-align: middle
+
 img
   display: inline-block
 </style>
