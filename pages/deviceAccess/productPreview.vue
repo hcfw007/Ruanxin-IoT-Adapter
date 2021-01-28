@@ -78,7 +78,7 @@
           在线设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.live }}
+          {{ deviceData.acticed }}
         </div>
       </el-col>
       <el-col :span="6">
@@ -86,7 +86,7 @@
           活跃设备数
         </div>
         <div class="device-data-value">
-          {{ deviceData.acticed }}
+          {{ deviceData.live }}
         </div>
       </el-col>
       <el-col :span="6">
