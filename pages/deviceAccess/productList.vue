@@ -238,7 +238,6 @@ export default {
   },
   methods: {
     handlePageChange(val, listName) {
-      console.log(val, listName)
       this.paginationInfo[listName].currentPage = val
     },
     async releaseProduct(product) {
