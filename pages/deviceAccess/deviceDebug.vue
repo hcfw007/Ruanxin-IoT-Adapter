@@ -224,9 +224,9 @@ export default {
           return
         }
       } else if (this.debugInfo.function.meta_type !== 'COMBINE') {
-        data.params = {
+        data.params = [{
           index: this.debugInfo.function.index
-        }
+        }]
       }
 
       if (this.debugInfo.function.meta_type === 'COMBINE') {

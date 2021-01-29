@@ -241,9 +241,9 @@ export const getProductList = getRequestFactory('/products/select')
 // 修改产品
 export const editProduct = postRequestFactory('/products/update')
 // 删除产品
-export const deleteProduct = deleteRequestFactory('/products/delete/${id}')
+export const deleteProduct = postRequestFactory('/products/delete/${id}/delete')
 // 发布产品
-export const releaseProduct = patchRequestFactory('/products/release/${id}')
+export const releaseProduct = postRequestFactory('/products/release/${id}/patch')
 
 // 获取产品的功能点
 export const getProductFunctionList = getRequestFactory('/products/${productPid}/functions?meta_type=BASE')
@@ -260,13 +260,13 @@ export const postProductFunctionList = postRequestFactory('/products/${productPi
 // 保存自定义功能点
 export const postProductCustomFunction = postRequestFactory('/products/${productPid}/functions/custom')
 // 删除功能点（根据combination id）
-export const deleteProductFunction = deleteRequestFactory('/functions/${combinationId}')
+export const deleteProductFunction = postRequestFactory('/functions/${combinationId}/delete')
 // 修改自定义功能点
-export const editProductFunction = putRequestFactory('/products/${productPid}/functions/base/${combinationId}')
+export const editProductFunction = postRequestFactory('/products/${productPid}/functions/base/${combinationId}/put')
 // 创建组合功能点
 export const postCombinedFunction = postRequestFactory('/products/${id}/functions/combine')
 // 编辑组合功能点
-export const editCombinedFunction = patchRequestFactory('/products/${pid}/functions/combine/${combinationId}')
+export const editCombinedFunction = postRequestFactory('/products/${pid}/functions/combine/${combinationId}/patch')
 
 // 对下载文件名进行base64解码
 const downloadProcessor = (response) => {
