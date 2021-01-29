@@ -252,7 +252,7 @@ const publicNameSubjectRule = {
     },
     {
       pattern: /^[()（）a-zA-Z0-9\u4E00-\u9FA5]*$/,
-      message: '只允许使用中文、英文、数字',
+      message: '只允许使用中文、英文、数字和括号',
       trigger: 'change'
     }
   ],
