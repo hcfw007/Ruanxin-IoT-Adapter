@@ -261,7 +261,7 @@
               </el-select>
             </el-form-item>
             <section v-show="customFunction.type === 'BOOLEAN'">
-              <el-form ref="functionBooleanForm" :model="functionSpecFieldsByType.boolean" label-width="120px" :rules="functionRules.booleanRule">
+              <el-form ref="functionBooleanForm" :model="functionSpecFieldsByType.boolean" label-width="120px" :rules="{ true_value: [...functionRules.booleanRule.true_value, tfValidator('function')], false_value: [...functionRules.booleanRule.false_value, tfValidator('function')]}">
                 <el-form-item label="True - " prop="true_value">
                   <el-input v-model="functionSpecFieldsByType.boolean.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
                 </el-form-item>
@@ -379,7 +379,7 @@
             </el-select>
           </el-form-item>
           <section v-show="currentParam.type === 'BOOLEAN'">
-            <el-form ref="paramBooleanForm" :model="currentParam.boolean_type" label-width="120px" :rules="paramRules.booleanRule">
+            <el-form ref="paramBooleanForm" :model="currentParam.boolean_type" label-width="120px" :rules="{ true_value: [...paramRules.booleanRule.true_value, tfValidator('param')], false_value: [...paramRules.booleanRule.false_value, tfValidator('param')]}">
               <el-form-item label="True - " prop="true_value">
                 <el-input v-model="currentParam.boolean_type.true_value" placeholder="仅支持中文、字母及数字，不超过20个字符" />
               </el-form-item>
@@ -617,6 +617,30 @@ export default {
     this.getProductFunctionList()
   },
   methods: {
+    tfValidator(level) {
+      let _level = level
+      let that = this
+      return {
+        validator(rules, value, cb) {
+          let trueValue, falseValue
+          if (_level === 'function') {
+            trueValue = that.functionSpecFieldsByType.boolean.true_value
+            falseValue = that.functionSpecFieldsByType.boolean.false_value
+          } else {
+            trueValue = that.currentParam.boolean_type.true_value
+            falseValue = that.currentParam.boolean_type.false_value
+          }
+          if (trueValue === '' || falseValue === '') {
+            cb()
+          }
+          if (trueValue === falseValue) {
+            cb(new Error('真值与假值不能相等'))
+          } else {
+            cb()
+          }
+        }
+      }
+    },
     handlePageChange(val, listName) {
       this.paginationInfo[listName].currentPage = val
     },
