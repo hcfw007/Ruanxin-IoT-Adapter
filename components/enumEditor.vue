@@ -101,7 +101,7 @@ export default {
         return true
       }
       for (let item of this.value) {
-        if (item.key === this.keyInput) {
+        if (String(item.key) === String(this.keyInput)) {
           this.error = true
           this.errorMessage = '添加重复Key，请检查'
           return true
