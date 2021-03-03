@@ -227,7 +227,7 @@
       </div>
     </el-drawer>
     <el-drawer
-      :title="customFunctionDrawerMode + '自定义功能点'"
+      :title="customFunctionDrawerMode + '基础功能点'"
       :visible.sync="addingCustomFunction"
       direction="rtl"
       :wrapper-closable="false"
@@ -362,7 +362,7 @@
       :wrapper-closable="false"
     >
       <div class="drawer-content">
-        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="paramRules.publicNameSubjectRule">
+        <el-form ref="paramForm" :model="currentParam" label-width="120px" :rules="{ name: [...paramRules.paramNameSubjectRule.name, paramDuplicationValidator('name')], subject: [...paramRules.paramNameSubjectRule.subject, paramDuplicationValidator('subject')] }">
           <el-form-item label="参数名称" prop="name">
             <el-input v-model="currentParam.name" placeholder="不超过20个字符" maxlength="20" />
           </el-form-item>
@@ -638,6 +638,26 @@ export default {
           } else {
             cb()
           }
+        }
+      }
+    },
+    paramDuplicationValidator(field) {
+      let that = this
+      let _field = field
+      return {
+        validator(rules, value, cb) {
+          let params = that.customFunction.params
+          for (let index in params) {
+            if (that.paramDrawerMode === '编辑' && Number(that.currentParamIndex) === Number(index)) {
+              continue
+            }
+            let param = params[index]
+            if (value === param[_field]) {
+              cb(new Error('已有重复值，请检查'))
+              return
+            }
+          }
+          cb()
         }
       }
     },
